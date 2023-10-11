@@ -1,0 +1,27 @@
+
+Хранилище данных
+    |
+Adapter
+    |
+Передатчик
+    |
+Adapter
+    |
+Хранилище данных
+
+
+
+new Adapter1
+new Adapter2
+new
+
+
+Хранилище данных (API, DB, File, ...)
+    API
+        ApiClient
+
+Adapter
+
+Передатчик
+
+
