@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Tests\Repository;
+namespace App\Tests\Connector\Woocommerce\Repository\Api;
 
-use App\Repository\CustomerWoocommerceApiRepository;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use App\Connector\Woocommerce\Repository\Api\CustomerRepository;
+use App\Tests\AppBase;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class CustomerWoocommerceApiRepositoryTest extends KernelTestCase
+class CustomerRepositoryTest extends AppBase
 {
     public function testGetSomeCustomers()
     {
@@ -14,7 +14,7 @@ class CustomerWoocommerceApiRepositoryTest extends KernelTestCase
         $container = self::getContainer();
         $client = $container->get(HttpClientInterface::class);
 
-        $repository = new CustomerWoocommerceApiRepository($client);
+        $repository = new CustomerRepository($client);
         $customers = $repository->fetch(0, 10);
 
         $this->assertCount(9, $customers);//todo fix woo api

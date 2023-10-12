@@ -3,21 +3,10 @@
 namespace App\Tests\Iterator;
 
 use App\Iterator\AwaitingIterator;
-use App\Repository\Interface\RepositoryReadInterface;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use App\Tests\AppBase;
 
-class AwaitingIteratorTest extends KernelTestCase
+class AwaitingIteratorTest extends AppBase
 {
-    const REPOSITORY_SEVEN_VALUES = [
-        'value1',
-        'value2',
-        'value3',
-        'value4',
-        'value5',
-        'value6',
-        'value7',
-    ];
-
     public function testCurrent()
     {
         $batchSize = 2;
@@ -58,17 +47,5 @@ class AwaitingIteratorTest extends KernelTestCase
         }
 
         $this->assertEquals(3, $iterator->key());
-    }
-
-    private function createRepository(array $values): RepositoryReadInterface
-    {
-        $repository = $this->createMock(RepositoryReadInterface::class);
-        $repository->method('fetch')
-            ->will($this->returnCallback(
-                function ($start, $end) use ($values) {
-                    return array_slice($values, $start, $end - $start);
-                }
-            ));
-        return $repository;
     }
 }

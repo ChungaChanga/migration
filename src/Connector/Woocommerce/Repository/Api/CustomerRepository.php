@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Repository;
+namespace App\Connector\Woocommerce\Repository\Api;
 
 
-use App\Repository\Interface\RepositoryReadInterface;
+use App\ConnectorInterface\Repository\RepositoryReadInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class CustomerWoocommerceApiRepository implements RepositoryReadInterface
+class CustomerRepository implements RepositoryReadInterface
 {
     public function __construct(
         private HttpClientInterface $client,

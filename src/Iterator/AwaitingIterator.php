@@ -2,7 +2,7 @@
 
 namespace App\Iterator;
 
-use App\Repository\Interface\RepositoryReadInterface;
+use App\ConnectorInterface\Repository\RepositoryReadInterface;
 use Iterator;
 class AwaitingIterator implements Iterator
 {
