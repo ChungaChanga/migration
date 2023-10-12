@@ -2,7 +2,7 @@
 
 namespace App\Core\Entity;
 
-use App\Exception\ValidateEntityExeption;
+use App\Core\Exception\ValidateEntityExeption;
 
 class Customer implements EntityInterface
 {

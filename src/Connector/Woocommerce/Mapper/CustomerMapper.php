@@ -3,7 +3,7 @@
 namespace App\Connector\Woocommerce\Mapper;
 
 use App\Core\Entity\Customer;
-use App\Mapper\MapperReadInterface;
+use App\Core\Mapper\MapperReadInterface;
 
 class CustomerMapper implements MapperReadInterface
 {

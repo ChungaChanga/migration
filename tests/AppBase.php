@@ -2,7 +2,7 @@
 
 namespace App\Tests;
 
-use App\ConnectorInterface\Repository\RepositoryReadInterface;
+use App\Core\ConnectorInterface\Repository\RepositoryReadInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 abstract class AppBase extends KernelTestCase

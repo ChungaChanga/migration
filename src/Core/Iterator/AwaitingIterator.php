@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Iterator;
+namespace App\Core\Iterator;
 
-use App\ConnectorInterface\Repository\RepositoryReadInterface;
+use App\Core\ConnectorInterface\Repository\RepositoryReadInterface;
 use Iterator;
 class AwaitingIterator implements Iterator
 {

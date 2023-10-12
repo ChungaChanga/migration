@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exception;
+namespace App\Core\Exception;
 
 class ValidateEntityExeption extends \Exception
 {

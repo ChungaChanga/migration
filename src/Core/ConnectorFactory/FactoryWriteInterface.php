@@ -1,9 +1,9 @@
 <?php
 
-namespace App\ConnectorFactory;
+namespace App\Core\ConnectorFactory;
 
-use App\ConnectorInterface\Repository\RepositoryWriteInterface;
-use App\Mapper\MapperWriteInterface;
+use App\Core\ConnectorInterface\Repository\RepositoryWriteInterface;
+use App\Core\Mapper\MapperWriteInterface;
 
 interface FactoryWriteInterface
 {

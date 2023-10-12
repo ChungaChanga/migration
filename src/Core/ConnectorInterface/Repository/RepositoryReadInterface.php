@@ -1,6 +1,6 @@
 <?php
 
-namespace App\ConnectorInterface\Repository;
+namespace App\Core\ConnectorInterface\Repository;
 
 interface RepositoryReadInterface
 {

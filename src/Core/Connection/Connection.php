@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Connection;
+namespace App\Core\Connection;
 
-use App\ConnectorFactory\FactoryReadInterface;
-use App\ConnectorFactory\FactoryWriteInterface;
-use App\Iterator\AwaitingIterator;
+use App\Core\ConnectorFactory\FactoryReadInterface;
+use App\Core\ConnectorFactory\FactoryWriteInterface;
+use App\Core\Iterator\AwaitingIterator;
 
 class Connection
 {

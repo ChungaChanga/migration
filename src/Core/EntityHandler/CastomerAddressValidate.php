@@ -1,6 +1,6 @@
 <?php
 
-namespace App\EntityHandler;
+namespace App\Core\EntityHandler;
 
 class CastomerAddressValidate
 {

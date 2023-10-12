@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Tests\Iterator;
+namespace App\Tests\Core\Iterator;
 
-use App\Iterator\AwaitingIterator;
+use App\Core\Iterator\AwaitingIterator;
 use App\Tests\AppBase;
 
 class AwaitingIteratorTest extends AppBase

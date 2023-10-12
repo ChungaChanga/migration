@@ -3,7 +3,7 @@
 namespace App\Connector\Woocommerce\Repository\Api;
 
 
-use App\ConnectorInterface\Repository\RepositoryReadInterface;
+use App\Core\ConnectorInterface\Repository\RepositoryReadInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class CustomerRepository implements RepositoryReadInterface
