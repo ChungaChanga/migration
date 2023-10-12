@@ -2,15 +2,15 @@
 
 namespace App\Core\Connection;
 
-use App\Core\ConnectorFactory\FactoryReadInterface;
-use App\Core\ConnectorFactory\FactoryWriteInterface;
+use App\Core\ConnectorFactory\FactoryReaderInterface;
+use App\Core\ConnectorFactory\FactoryWriterInterface;
 use App\Core\Iterator\AwaitingIterator;
 
 class Connection
 {
     public function transferEntities(
-        FactoryReadInterface $sourceFactory,
-        FactoryWriteInterface $destinationFactory,
+        FactoryReaderInterface $sourceFactory,
+        FactoryWriterInterface $destinationFactory,
     )
     {
         $sourceRepository = $sourceFactory->createRepository();

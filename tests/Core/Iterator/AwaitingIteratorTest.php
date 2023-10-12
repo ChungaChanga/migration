@@ -10,7 +10,7 @@ class AwaitingIteratorTest extends AppBase
     public function testCurrent()
     {
         $batchSize = 2;
-        $repository = $this->createRepository(self::REPOSITORY_SEVEN_VALUES);
+        $repository = $this->createReadRepository(self::REPOSITORY_SEVEN_VALUES);
         $iterator = new AwaitingIterator($repository, $batchSize);
 
         foreach ($iterator as $k => $v) {
@@ -38,7 +38,7 @@ class AwaitingIteratorTest extends AppBase
     public function testNext()
     {
         $batchSize = 2;
-        $repository = $this->createRepository(self::REPOSITORY_SEVEN_VALUES);
+        $repository = $this->createReadRepository(self::REPOSITORY_SEVEN_VALUES);
         $iterator = new AwaitingIterator($repository, $batchSize);
 
         for ($i = 0; $i < 10; $i++) {
