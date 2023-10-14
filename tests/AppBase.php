@@ -2,8 +2,8 @@
 
 namespace App\Tests;
 
+use App\Connector\Memory\Repository\CustomerRepository;
 use App\Core\ConnectorInterface\Repository\RepositoryInterface;
-use App\Core\ConnectorInterface\Repository\RepositoryReadInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 abstract class AppBase extends KernelTestCase
@@ -18,36 +18,15 @@ abstract class AppBase extends KernelTestCase
         'value7',
     ];
 
-    protected function createReadRepository(array $values): RepositoryReadInterface
-    {
-        $repository = $this->createMock(RepositoryReadInterface::class);
-        $repository->method('fetch')
-            ->will($this->returnCallback(
-                function ($start, $end) use ($values) {
-                    return array_slice($values, $start, $end - $start);
-                }
-            ));
-        return $repository;
-    }
-
-    protected function createRepository(array $values): RepositoryInterface
-    {
-        $storageValues = [];
-
-        $repository = $this->createMock(RepositoryInterface::class);
-        $repository->method('create')
-            ->will($this->returnCallback(
-                function (array $entities) use (&$storageValues) {
-                    $storageValues = array_merge($storageValues, $entities);
-                }
-            ));
-        $repository->method('fetch')
-            ->will($this->returnCallback(
-                function ($start, $end) use (&$storageValues) {
-                    return array_slice($storageValues, $start, $end - $start);
-                }
-            ));
-
-        return $repository;
-    }
+    const CUSTOMER_REPOSITORY_NINE_ENTITIES_STATES = [
+        ['id' => 1],
+        ['id' => 2],
+        ['id' => 3],
+        ['id' => 4],
+        ['id' => 5],
+        ['id' => 6],
+        ['id' => 7],
+        ['id' => 8],
+        ['id' => 9],
+    ];
 }

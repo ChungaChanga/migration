@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Connector\Magento\Repository\Api;
+namespace App\Connector\Magento\Repository;
 
 use App\Core\ConnectorInterface\Repository\RepositoryWriteInterface;
 

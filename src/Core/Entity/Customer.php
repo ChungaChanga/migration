@@ -6,6 +6,7 @@ use App\Core\Exception\ValidateEntityExeption;
 
 class Customer implements EntityInterface
 {
+    const TYPE = 'customer';
     private $id;
     private $firstName;
     private $lastName;

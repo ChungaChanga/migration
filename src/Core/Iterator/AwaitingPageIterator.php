@@ -4,39 +4,47 @@ namespace App\Core\Iterator;
 
 use App\Core\ConnectorInterface\Repository\RepositoryReadInterface;
 use Iterator;
-class AwaitingIterator implements Iterator
+class AwaitingPageIterator implements Iterator
 {
     private int $position = 0;
-    private int $currentRowNumber;
+    private int $currentPage;
     private array $currentResult;
 
 
     public function __construct(
         private RepositoryReadInterface $repository,
-        private int                     $batchSize,
-        private int                     $firstRowNumber = 0,
+        private int $startPage,
+        private int $pageSize = 10,
+        private int $jumpSize = 0,
+        private int $endPage = PHP_INT_MAX,
     )
     {
-        $this->currentRowNumber = $firstRowNumber;
+        $this->currentPage = $this->startPage;
     }
 
     public function current(): mixed
     {
-        $this->setCurrentResult($this->repository->fetch(
-            $this->currentRowNumber,
-            $this->currentRowNumber + $this->batchSize
-        ));
+        $result = $this->repository->fetchPage(
+            $this->currentPage,
+            $this->pageSize
+        );
+
+        if ($this->isPartialResult($result)) {
+            $this->setCurrentResult([]);//waiting for the full page
+        } else {
+            $this->setCurrentResult($result);
+        }
+
         return $this->getCurrentResult();
     }
 
     public function next(): void
     {
         if ($this->isPartialResult($this->getCurrentResult())) {
-            $this->currentRowNumber += count($this->getCurrentResult());
-        } else {
-            $this->currentRowNumber += $this->batchSize;
-            ++$this->position;
+            return;
         }
+        $this->currentPage++;
+        $this->position++;
     }
 
     public function key(): mixed
@@ -51,13 +59,13 @@ class AwaitingIterator implements Iterator
 
     public function rewind(): void
     {
-        $this->currentRowNumber = $this->firstRowNumber;
+        $this->currentPage = $this->startPage;
         $this->position = 0;
     }
 
     private function isPartialResult(array $result): bool
     {
-        if (count($result) < $this->batchSize) {
+        if (count($result) < $this->pageSize) {
             return true;
         }
         return false;

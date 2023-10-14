@@ -6,14 +6,14 @@ use App\Connector\Memory\Repository\CustomerRepository;
 use App\Core\Iterator\AwaitingIterator;
 use App\Tests\AppBase;
 
-class AwaitingIteratorTest extends AppBase
+class AwaitingPageIteratorTest extends AppBase
 {
     public function testCurrent()
     {
-        $batchSize = 2;
+        $pageSize = 2;
         $repository = new CustomerRepository();
         $repository->create(self::REPOSITORY_SEVEN_VALUES);
-        $iterator = new AwaitingIterator($repository, $batchSize);
+        $iterator = $repository->createAwaitingPageIterator(0, $pageSize);
 
         foreach ($iterator as $k => $v) {
             switch ($k) {
@@ -39,10 +39,10 @@ class AwaitingIteratorTest extends AppBase
 
     public function testNext()
     {
-        $batchSize = 2;
+        $pageSize = 2;
         $repository = new CustomerRepository();
         $repository->create(self::REPOSITORY_SEVEN_VALUES);
-        $iterator = new AwaitingIterator($repository, $batchSize);
+        $iterator = $repository->createAwaitingPageIterator(0, $pageSize);
 
         for ($i = 0; $i < 10; $i++) {
             $iterator->current();
