@@ -12,14 +12,22 @@ use App\Core\Mapper\MapperInterface;
 
 class CustomerConnector implements ConnectorInterface, EntityTypeInterface
 {
-    public function createRepository(): RepositoryInterface
+    private ?RepositoryInterface $repository = null;
+    private ?MapperInterface $mapper = null;
+    public function getRepository(): RepositoryInterface
     {
-        return new CustomerRepository();//todo
+        if (null === $this->repository) {
+            $this->repository = new CustomerRepository();//todo
+        }
+        return $this->repository;
     }
 
-    public function createMapper(): MapperInterface
+    public function getMapper(): MapperInterface
     {
-        return new CustomerMapper();//todo
+        if (null === $this->mapper) {
+            $this->mapper = new CustomerMapper();//todo
+        }
+        return $this->mapper;
     }
 
     public function getType(): string

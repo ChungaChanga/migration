@@ -7,6 +7,6 @@ use App\Core\Mapper\MapperReadInterface;
 
 interface ConnectorReaderInterface
 {
-    public function createRepository(): RepositoryReadInterface;
-    public function createMapper(): MapperReadInterface;
+    public function getRepository(): RepositoryReadInterface;
+    public function getMapper(): MapperReadInterface;
 }

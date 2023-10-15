@@ -7,6 +7,6 @@ use App\Core\Mapper\MapperInterface;
 
 interface ConnectorInterface extends ConnectorReaderInterface, ConnectorWriterInterface
 {
-    public function createRepository(): RepositoryInterface;
-    public function createMapper(): MapperInterface;
+    public function getRepository(): RepositoryInterface;
+    public function getMapper(): MapperInterface;
 }

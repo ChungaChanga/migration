@@ -7,7 +7,7 @@ use App\Core\ConnectorInterface\Connector\ConnectorWriterInterface;
 use App\Core\Entity\EntityTypeInterface;
 use App\Core\Exception\ConnectionTypeException;
 
-class Connection
+class Connection implements ConnectionInterface
 {
     public function __construct(
         private ConnectorReaderInterface $sourceConnector,

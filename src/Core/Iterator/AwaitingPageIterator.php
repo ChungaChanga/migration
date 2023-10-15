@@ -4,20 +4,24 @@ namespace App\Core\Iterator;
 
 use App\Core\ConnectorInterface\Repository\RepositoryReadInterface;
 use Iterator;
+use InvalidArgumentException;
+
 class AwaitingPageIterator implements Iterator
 {
-    private int $position = 0;
     private int $currentPage;
     private array $currentResult;
 
 
     public function __construct(
         private RepositoryReadInterface $repository,
-        private int $startPage,
+        private int $startPage = 1,
         private int $pageSize = 10,
         private int $jumpSize = 0,
     )
     {
+        if ($startPage < 1) {
+            throw new InvalidArgumentException('Start Page can not be less than 1');
+        }
         $this->currentPage = $this->startPage;
     }
 
@@ -43,12 +47,11 @@ class AwaitingPageIterator implements Iterator
             return;
         }
         $this->currentPage++;
-        $this->position++;
     }
 
     public function key(): mixed
     {
-        return $this->position;
+        return $this->currentPage;
     }
 
     public function valid(): bool
@@ -59,7 +62,6 @@ class AwaitingPageIterator implements Iterator
     public function rewind(): void
     {
         $this->currentPage = $this->startPage;
-        $this->position = 0;
     }
 
     private function isPartialResult(array $result): bool

@@ -21,6 +21,6 @@ class CustomerRepository extends RepositoryReadAbstract implements RepositoryInt
 
     public function fetchPage(int $page, int $pageSize): array
     {
-        return array_slice($this->entities, $page * $pageSize, $pageSize);
+        return array_slice($this->entities, ($page - 1) * $pageSize, $pageSize);
     }
 }

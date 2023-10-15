@@ -15,7 +15,7 @@ class BatchStrategy implements StrategyInterface
         private int $batchSize,
         private int $endBatchNumber = PHP_INT_MAX,
         private int $jumpSize = 0,
-        private int $delaySeconds = 1
+        private int $delaySeconds = 0
     )
     {
         if ($startBatchNumber < 0) {
@@ -34,10 +34,10 @@ class BatchStrategy implements StrategyInterface
 
     public function start()
     {
-        $sourceRepository = $this->connection->getSourceConnector()->createRepository();
-        $sourceMapper = $this->connection->getSourceConnector()->createMapper();
-        $destinationRepository = $this->connection->getDestinationConnector()->createRepository();
-        $destinationMapper = $this->connection->getDestinationConnector()->createMapper();
+        $sourceRepository = $this->connection->getSourceConnector()->getRepository();
+        $sourceMapper = $this->connection->getSourceConnector()->getMapper();
+        $destinationRepository = $this->connection->getDestinationConnector()->getRepository();
+        $destinationMapper = $this->connection->getDestinationConnector()->getMapper();
         $iterator = $this->createIterator($sourceRepository);
 
         foreach ($iterator as $currentBatchNumber => $sourceEntitiesState) {

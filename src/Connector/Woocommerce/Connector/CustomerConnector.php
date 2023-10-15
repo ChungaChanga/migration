@@ -17,12 +17,12 @@ class CustomerConnector implements ConnectorReaderInterface, EntityTypeInterface
         private HttpClientInterface $client,
     ) {
     }
-    public function createRepository(): RepositoryReadInterface
+    public function getRepository(): RepositoryReadInterface
     {
         return new CustomerRepository($this->client);//todo
     }
 
-    public function createMapper(): MapperReadInterface
+    public function getMapper(): MapperReadInterface
     {
         return new CustomerMapper();//todo
     }

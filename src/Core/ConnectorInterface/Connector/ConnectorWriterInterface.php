@@ -7,6 +7,6 @@ use App\Core\Mapper\MapperWriteInterface;
 
 interface ConnectorWriterInterface
 {
-    public function createRepository(): RepositoryWriteInterface;
-    public function createMapper(): MapperWriteInterface;
+    public function getRepository(): RepositoryWriteInterface;
+    public function getMapper(): MapperWriteInterface;
 }
