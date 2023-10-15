@@ -15,7 +15,7 @@ class CustomerRepositoryTest extends AppBase
         $client = $container->get(HttpClientInterface::class);
 
         $repository = new CustomerRepository($client);
-        $customers = $repository->fetch(0, 10);
+        $customers = $repository->fetch(1, 10);
 
         $this->assertCount(9, $customers);//todo fix woo api
     }
@@ -27,7 +27,7 @@ class CustomerRepositoryTest extends AppBase
         $client = $container->get(HttpClientInterface::class);
 
         $repository = new CustomerRepository($client);
-        $customers = $repository->fetchPage(0, 10);
+        $customers = $repository->fetchPage(1, 10);
 
         $this->assertCount(9, $customers);//todo fix woo api
     }

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Core\ConnectorFactory;
+namespace App\Core\ConnectorInterface\Connector;
 
 use App\Core\ConnectorInterface\Repository\RepositoryReadInterface;
 use App\Core\Mapper\MapperReadInterface;
 
-interface FactoryReaderInterface
+interface ConnectorReaderInterface
 {
     public function createRepository(): RepositoryReadInterface;
     public function createMapper(): MapperReadInterface;

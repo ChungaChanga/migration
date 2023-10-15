@@ -12,9 +12,8 @@ abstract class RepositoryReadAbstract implements RepositoryReadInterface
         int $startPage,
         int $pageSize = 10,
         int $jumpSize = 0,
-        int $endPage = PHP_INT_MAX
     ): AwaitingPageIterator
     {
-        return new AwaitingPageIterator($this, $startPage, $pageSize, $jumpSize, $endPage);
+        return new AwaitingPageIterator($this, $startPage, $pageSize, $jumpSize);
     }
 }

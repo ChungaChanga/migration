@@ -1,17 +1,16 @@
 <?php
 
-namespace App\Connector\Memory\Factory;
+namespace App\Connector\Memory\Connector;
 
 use App\Connector\Memory\Mapper\CustomerMapper;
 use App\Connector\Memory\Repository\CustomerRepository;
-use App\Core\ConnectorFactory\FactoryInterface;
+use App\Core\ConnectorInterface\Connector\ConnectorInterface;
 use App\Core\ConnectorInterface\Repository\RepositoryInterface;
-use App\Core\ConnectorInterface\Repository\RepositoryReadInterface;
 use App\Core\Entity\Customer;
+use App\Core\Entity\EntityTypeInterface;
 use App\Core\Mapper\MapperInterface;
-use App\Core\Mapper\MapperReadInterface;
 
-class CustomerFactory implements FactoryInterface
+class CustomerConnector implements ConnectorInterface, EntityTypeInterface
 {
     public function createRepository(): RepositoryInterface
     {
@@ -21,5 +20,10 @@ class CustomerFactory implements FactoryInterface
     public function createMapper(): MapperInterface
     {
         return new CustomerMapper();//todo
+    }
+
+    public function getType(): string
+    {
+        return Customer::TYPE;
     }
 }

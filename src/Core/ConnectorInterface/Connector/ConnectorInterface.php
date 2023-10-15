@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Core\ConnectorFactory;
+namespace App\Core\ConnectorInterface\Connector;
 
 use App\Core\ConnectorInterface\Repository\RepositoryInterface;
 use App\Core\Mapper\MapperInterface;
 
-interface FactoryInterface extends FactoryReaderInterface, FactoryWriterInterface
+interface ConnectorInterface extends ConnectorReaderInterface, ConnectorWriterInterface
 {
     public function createRepository(): RepositoryInterface;
     public function createMapper(): MapperInterface;

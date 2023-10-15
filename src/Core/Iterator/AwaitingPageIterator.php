@@ -16,7 +16,6 @@ class AwaitingPageIterator implements Iterator
         private int $startPage,
         private int $pageSize = 10,
         private int $jumpSize = 0,
-        private int $endPage = PHP_INT_MAX,
     )
     {
         $this->currentPage = $this->startPage;

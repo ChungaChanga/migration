@@ -1,15 +1,17 @@
 <?php
 
-namespace App\Connector\Woocommerce\Factory;
+namespace App\Connector\Woocommerce\Connector;
 
 use App\Connector\Woocommerce\Mapper\CustomerMapper;
 use App\Connector\Woocommerce\Repository\CustomerRepository;
-use App\Core\ConnectorFactory\FactoryReaderInterface;
+use App\Core\ConnectorInterface\Connector\ConnectorReaderInterface;
 use App\Core\ConnectorInterface\Repository\RepositoryReadInterface;
+use App\Core\Entity\Customer;
+use App\Core\Entity\EntityTypeInterface;
 use App\Core\Mapper\MapperReadInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class Factory implements FactoryReaderInterface
+class CustomerConnector implements ConnectorReaderInterface, EntityTypeInterface
 {
     public function __construct(
         private HttpClientInterface $client,
@@ -23,6 +25,11 @@ class Factory implements FactoryReaderInterface
     public function createMapper(): MapperReadInterface
     {
         return new CustomerMapper();//todo
+    }
+
+    public function getType(): string
+    {
+        return Customer::TYPE;//todo
     }
 
 }

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Tests\Core\Connection;
+namespace App\Tests\Core\Transfer\Strategy;
 
 use App\Connector\Memory\Connector\CustomerConnector;
 use App\Core\Connection\Connection;
 use App\Core\ConnectorInterface\Repository\RepositoryInterface;
 use App\Tests\AppBase;
 
-class ConnectionTest extends AppBase
+class BatchStrategyTest extends AppBase
 {
     public function testTransferEntitiesCount()
     {
