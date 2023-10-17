@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\Mapper;
+namespace App\Core\ConnectorInterface\Mapper;
 
 interface MapperInterface extends MapperReadInterface, MapperWriteInterface
 {

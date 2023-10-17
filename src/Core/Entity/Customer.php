@@ -2,7 +2,7 @@
 
 namespace App\Core\Entity;
 
-use App\Core\Exception\ValidateEntityExeption;
+use App\Core\Exception\ValidateEntityException;
 
 class Customer implements EntityInterface
 {
@@ -14,13 +14,13 @@ class Customer implements EntityInterface
     public function validate()
     {
         if (empty($this->id) && $this->id !== 0) {
-            throw new ValidateEntityExeption('wrong id value');
+            throw new ValidateEntityException('wrong id value');
         }
         if (empty($this->firstName)) {
-            throw new ValidateEntityExeption('wrong first name value');
+            throw new ValidateEntityException('wrong first name value');
         }
         if (empty($this->lastName)) {
-            throw new ValidateEntityExeption('wrong last name value');
+            throw new ValidateEntityException('wrong last name value');
         }
     }
 

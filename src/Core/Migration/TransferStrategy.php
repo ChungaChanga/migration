@@ -17,7 +17,12 @@ class TransferStrategy
     {
     }
 
-    public function transferBatch(SplObjectStorage $entities)
+    /**
+     * Unsafe operation (write to destination repository)
+     * @param SplObjectStorage $entities
+     * @return void
+     */
+    public function transfer(SplObjectStorage $entities)
     {
         $destinationEntitiesState = [];
         foreach ($entities as $entity) {

@@ -5,10 +5,10 @@ namespace App\Connector\Woocommerce\Connector;
 use App\Connector\Woocommerce\Mapper\CustomerMapper;
 use App\Connector\Woocommerce\Repository\CustomerRepository;
 use App\Core\ConnectorInterface\Connector\ConnectorReaderInterface;
+use App\Core\ConnectorInterface\Mapper\MapperReadInterface;
 use App\Core\ConnectorInterface\Repository\RepositoryReadInterface;
 use App\Core\Entity\Customer;
 use App\Core\Entity\EntityTypeInterface;
-use App\Core\Mapper\MapperReadInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class CustomerConnector implements ConnectorReaderInterface, EntityTypeInterface

@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Core\ConnectorRepository;
+namespace App\Core\ConnectorAbstract\Repository;
 
 use App\Core\ConnectorInterface\Repository\RepositoryReadInterface;
-use App\Core\Iterator\AwaitingIterator;
 use App\Core\Iterator\AwaitingPageIterator;
 
 abstract class RepositoryReadAbstract implements RepositoryReadInterface

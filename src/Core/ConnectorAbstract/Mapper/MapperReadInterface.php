@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\Mapper;
+namespace App\Core\ConnectorInterface\Mapper;
 
 use App\Core\Entity\EntityInterface;
 

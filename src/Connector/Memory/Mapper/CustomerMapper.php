@@ -2,9 +2,9 @@
 
 namespace App\Connector\Memory\Mapper;
 
+use App\Core\ConnectorInterface\Mapper\MapperInterface;
 use App\Core\Entity\Customer;
 use App\Core\Entity\EntityInterface;
-use App\Core\Mapper\MapperInterface;
 
 class CustomerMapper implements MapperInterface
 {

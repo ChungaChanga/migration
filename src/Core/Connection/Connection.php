@@ -5,7 +5,7 @@ namespace App\Core\Connection;
 use App\Core\ConnectorInterface\Connector\ConnectorReaderInterface;
 use App\Core\ConnectorInterface\Connector\ConnectorWriterInterface;
 use App\Core\Entity\EntityTypeInterface;
-use App\Core\Exception\ConnectionTypeException;
+use Exception;
 
 class Connection implements ConnectionInterface
 {
@@ -33,7 +33,7 @@ class Connection implements ConnectionInterface
     )
     {
         if ($sourceConnector->getType() !== $destinationConnector->getType()) {
-            throw new ConnectionTypeException('Connections types must be equal');//todo refactoring
+            throw new Exception('Connections types must be equal');//todo refactoring
         }
     }
 }

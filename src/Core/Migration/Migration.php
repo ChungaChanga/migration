@@ -4,6 +4,7 @@ namespace App\Core\Migration;
 
 use App\Core\Connection\ConnectionInterface;
 use App\Core\ConnectorInterface\Repository\RepositoryReadInterface;
+use App\Core\EntityHandler\HandlerInterface;
 use InvalidArgumentException;
 use Iterator;
 
@@ -11,6 +12,7 @@ class Migration
 {
     public function __construct(
         private ConnectionInterface $connection,
+        private HandlerInterface $entityHandler,
         private TransferStrategy $strategy,
         private int $startBatchNumber,
         private int $batchSize,
@@ -50,7 +52,9 @@ class Migration
                 $entityStorage->attach($sourceMapper->fromState($state));
             }
 
-            $this->strategy->transferBatch($entityStorage);
+            $this->entityHandler->handle($entityStorage);
+
+            $this->strategy->transfer($entityStorage);
 
             $entityStorage->removeAll($entityStorage);
         }

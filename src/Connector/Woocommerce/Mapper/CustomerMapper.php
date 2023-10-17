@@ -2,8 +2,8 @@
 
 namespace App\Connector\Woocommerce\Mapper;
 
+use App\Core\ConnectorInterface\Mapper\MapperReadInterface;
 use App\Core\Entity\Customer;
-use App\Core\Mapper\MapperReadInterface;
 
 class CustomerMapper implements MapperReadInterface
 {
