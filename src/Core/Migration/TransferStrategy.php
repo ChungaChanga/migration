@@ -2,11 +2,7 @@
 
 namespace App\Core\Migration;
 
-use App\Core\Connection\ConnectionInterface;
-use App\Core\ConnectorInterface\Connector\ConnectorWriterInterface;
-use App\Core\ConnectorInterface\Repository\RepositoryReadInterface;
-use InvalidArgumentException;
-use Iterator;
+use App\Core\ConnectorAbstract\Connector\ConnectorWriterInterface;
 use SplObjectStorage;
 
 class TransferStrategy

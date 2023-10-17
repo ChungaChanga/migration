@@ -2,7 +2,8 @@
 
 namespace App\Connector\Magento\Repository;
 
-use App\Core\ConnectorInterface\Repository\RepositoryWriteInterface;
+
+use App\Core\ConnectorAbstract\Repository\RepositoryWriteInterface;
 
 class CustomerRepository implements RepositoryWriteInterface
 {

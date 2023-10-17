@@ -2,8 +2,9 @@
 
 namespace App\Core\ConnectorAbstract\Connector;
 
-use App\Core\ConnectorInterface\Mapper\MapperWriteInterface;
-use App\Core\ConnectorInterface\Repository\RepositoryWriteInterface;
+
+use App\Core\ConnectorAbstract\Mapper\MapperWriteInterface;
+use App\Core\ConnectorAbstract\Repository\RepositoryWriteInterface;
 
 interface ConnectorWriterInterface
 {

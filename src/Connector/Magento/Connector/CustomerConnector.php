@@ -4,9 +4,9 @@ namespace App\Connector\Magento\Connector;
 
 use App\Connector\Magento\Mapper\CustomerMapper;
 use App\Connector\Magento\Repository\CustomerRepository;
-use App\Core\ConnectorInterface\Connector\ConnectorWriterInterface;
-use App\Core\ConnectorInterface\Mapper\MapperWriteInterface;
-use App\Core\ConnectorInterface\Repository\RepositoryWriteInterface;
+use App\Core\ConnectorAbstract\Connector\ConnectorWriterInterface;
+use App\Core\ConnectorAbstract\Mapper\MapperWriteInterface;
+use App\Core\ConnectorAbstract\Repository\RepositoryWriteInterface;
 use App\Core\Entity\Customer;
 use App\Core\Entity\EntityTypeInterface;
 

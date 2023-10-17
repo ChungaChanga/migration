@@ -4,9 +4,9 @@ namespace App\Connector\Memory\Connector;
 
 use App\Connector\Memory\Mapper\CustomerMapper;
 use App\Connector\Memory\Repository\CustomerRepository;
-use App\Core\ConnectorInterface\Connector\ConnectorInterface;
-use App\Core\ConnectorInterface\Mapper\MapperInterface;
-use App\Core\ConnectorInterface\Repository\RepositoryInterface;
+use App\Core\ConnectorAbstract\Connector\ConnectorInterface;
+use App\Core\ConnectorAbstract\Mapper\MapperInterface;
+use App\Core\ConnectorAbstract\Repository\RepositoryInterface;
 use App\Core\Entity\Customer;
 use App\Core\Entity\EntityTypeInterface;
 

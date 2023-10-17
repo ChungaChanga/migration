@@ -2,7 +2,7 @@
 
 namespace App\Connector\Memory\Mapper;
 
-use App\Core\ConnectorInterface\Mapper\MapperInterface;
+use App\Core\ConnectorAbstract\Mapper\MapperInterface;
 use App\Core\Entity\Customer;
 use App\Core\Entity\EntityInterface;
 

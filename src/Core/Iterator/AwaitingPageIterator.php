@@ -2,7 +2,7 @@
 
 namespace App\Core\Iterator;
 
-use App\Core\ConnectorInterface\Repository\RepositoryReadInterface;
+use App\Core\ConnectorAbstract\Repository\RepositoryReadInterface;
 use Iterator;
 use InvalidArgumentException;
 

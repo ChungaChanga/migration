@@ -3,7 +3,7 @@
 namespace App\Core\Migration;
 
 use App\Core\Connection\ConnectionInterface;
-use App\Core\ConnectorInterface\Repository\RepositoryReadInterface;
+use App\Core\ConnectorAbstract\Repository\RepositoryReadInterface;
 use App\Core\EntityHandler\HandlerInterface;
 use InvalidArgumentException;
 use Iterator;

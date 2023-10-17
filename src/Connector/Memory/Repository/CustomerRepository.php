@@ -2,8 +2,8 @@
 
 namespace App\Connector\Memory\Repository;
 
+use App\Core\ConnectorAbstract\Repository\RepositoryInterface;
 use App\Core\ConnectorAbstract\Repository\RepositoryReadAbstract;
-use App\Core\ConnectorInterface\Repository\RepositoryInterface;
 
 class CustomerRepository extends RepositoryReadAbstract implements RepositoryInterface
 {

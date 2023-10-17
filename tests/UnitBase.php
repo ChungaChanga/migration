@@ -2,8 +2,9 @@
 
 namespace App\Tests;
 
+use App\Core\Entity\Customer;
 use PHPUnit\Framework\TestCase;
-
+use SplObjectStorage;
 abstract class UnitBase extends TestCase
 {
     const REPOSITORY_SEVEN_VALUES = [
@@ -27,4 +28,15 @@ abstract class UnitBase extends TestCase
         ['id' => 8],
         ['id' => 9],
     ];
+
+    protected static function createCustomerEntitiesStorage(): SplObjectStorage
+    {
+        $entities = new SplObjectStorage();
+        foreach (self::CUSTOMER_REPOSITORY_NINE_ENTITIES_STATES as $v) {
+            $customer = new Customer();
+            $customer->setId($v['id']);
+            $entities->attach($customer);
+        }
+        return $entities;
+    }
 }
