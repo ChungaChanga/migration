@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\ConnectorInterface\Connector;
+namespace App\Core\ConnectorAbstract\Connector;
 
 use App\Core\ConnectorInterface\Mapper\MapperReadInterface;
 use App\Core\ConnectorInterface\Repository\RepositoryReadInterface;

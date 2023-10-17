@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Core\ConnectorInterface\Repository;
+namespace App\Core\ConnectorAbstract\Repository;
 
 interface RepositoryWriteInterface
 {
