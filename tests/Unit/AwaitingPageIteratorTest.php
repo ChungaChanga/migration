@@ -1,37 +1,35 @@
 <?php
 
-namespace App\Tests\Core\Iterator;
+namespace App\Tests\Unit;
 
 use App\Connector\Memory\Repository\CustomerRepository;
-use App\Core\Iterator\AwaitingIterator;
-use App\Tests\AppBase;
+use App\Tests\UnitBase;
 
-class AwaitingIteratorTest extends AppBase
+class AwaitingPageIteratorTest extends UnitBase
 {
     public function testCurrent()
     {
-        $batchSize = 2;
+        $pageSize = 2;
         $repository = new CustomerRepository();
         $repository->create(self::REPOSITORY_SEVEN_VALUES);
-        $iterator = new AwaitingIterator($repository, $batchSize);
+        $iterator = $repository->createAwaitingPageIterator(1, $pageSize);
 
         foreach ($iterator as $k => $v) {
             switch ($k) {
-                case 0:
+                case 1:
                     $this->assertEquals('value1', $v[0]);
                     $this->assertEquals('value2', $v[1]);
                 break;
-                case 1:
+                case 2:
                     $this->assertEquals('value3', $v[0]);
                     $this->assertEquals('value4', $v[1]);
                     break;
-                case 2:
+                case 3:
                     $this->assertEquals('value5', $v[0]);
                     $this->assertEquals('value6', $v[1]);
                     break;
-                case 3:
-                    $this->assertEquals('value7', $v[0]);
-                    $this->assertArrayNotHasKey(1, $v);
+                case 4:
+                    $this->assertEmpty($v);
                     break 2;
             }
         }
@@ -39,16 +37,16 @@ class AwaitingIteratorTest extends AppBase
 
     public function testNext()
     {
-        $batchSize = 2;
+        $pageSize = 2;
         $repository = new CustomerRepository();
         $repository->create(self::REPOSITORY_SEVEN_VALUES);
-        $iterator = new AwaitingIterator($repository, $batchSize);
+        $iterator = $repository->createAwaitingPageIterator(1, $pageSize);
 
         for ($i = 0; $i < 10; $i++) {
             $iterator->current();
             $iterator->next();
         }
 
-        $this->assertEquals(3, $iterator->key());
+        $this->assertEquals(4, $iterator->key());
     }
 }

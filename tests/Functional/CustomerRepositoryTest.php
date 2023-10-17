@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Tests\Connector\Woocommerce\Repository;
+namespace App\Tests\Functional;
 
 use App\Connector\Woocommerce\Repository\CustomerRepository;
-use App\Tests\AppBase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class CustomerRepositoryTest extends AppBase
+class CustomerRepositoryTest extends KernelTestCase
 {
     public function testFetch()
     {

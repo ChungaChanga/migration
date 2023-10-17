@@ -11,10 +11,9 @@ class CustomerMapper implements MapperReadInterface
     {
         $customer = new Customer();
 
-        $customer->setId($state['ID']);
-        $customer->setFirstName($state['first_name']);
-        $customer->setLastName($state['last_name']);
-
+        $customer->setId($state['Id']);
+        $customer->setFirstName($state['Fullname']);//todo
+//        $customer->setLastName($state['last_name']);
         return $customer;
     }
 }

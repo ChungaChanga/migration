@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Core\Transfer\Strategy;
+namespace App\Core\Migration;
 
 use App\Core\Connection\ConnectionInterface;
 use App\Core\ConnectorInterface\Repository\RepositoryReadInterface;
-use Iterator;
 use InvalidArgumentException;
+use Iterator;
 
-class BatchStrategy implements StrategyInterface
+class Migration
 {
     public function __construct(
         private ConnectionInterface $connection,
+        private TransferStrategy $strategy,
         private int $startBatchNumber,
         private int $batchSize,
         private int $endBatchNumber = PHP_INT_MAX,
@@ -27,17 +28,14 @@ class BatchStrategy implements StrategyInterface
         if ($delaySeconds < 0) {
             throw new InvalidArgumentException('Delay Seconds can not be a negative number');
         }
-        if ($startBatchNumber >= $endBatchNumber) {
-            throw new InvalidArgumentException('Start Batch Number must be more than End Batch Number');
+        if ($startBatchNumber > $endBatchNumber) {
+            throw new InvalidArgumentException('Start Batch Number can not be more than End Batch Number');
         }
     }
-
     public function start()
     {
         $sourceRepository = $this->connection->getSourceConnector()->getRepository();
         $sourceMapper = $this->connection->getSourceConnector()->getMapper();
-        $destinationRepository = $this->connection->getDestinationConnector()->getRepository();
-        $destinationMapper = $this->connection->getDestinationConnector()->getMapper();
         $iterator = $this->createIterator($sourceRepository);
 
         foreach ($iterator as $currentBatchNumber => $sourceEntitiesState) {
@@ -47,22 +45,38 @@ class BatchStrategy implements StrategyInterface
             if ($this->delaySeconds > 0) {
                 sleep($this->delaySeconds);
             }
-
             $entityStorage = new \SplObjectStorage();
             foreach ($sourceEntitiesState as $state) {
                 $entityStorage->attach($sourceMapper->fromState($state));
             }
 
-            //handle by decorator\visitor?
-
-            $destinationEntitiesState = [];
-            foreach ($entityStorage as $entity) {
-                $destinationEntitiesState[] = $destinationMapper->getState($entity);
-            }
-            $destinationRepository->create($destinationEntitiesState);
+            $this->strategy->transferBatch($entityStorage);
 
             $entityStorage->removeAll($entityStorage);
         }
+    }
+
+    public function getState(): MigrationState
+    {
+        return new MigrationState(
+            $this->startBatchNumber,
+            $this->batchSize,
+            $this->endBatchNumber,
+            $this->jumpSize,
+            $this->delaySeconds,
+        );
+    }
+
+    public static function fromState(ConnectionInterface $connection, MigrationState $state): static
+    {
+        return new static(
+//            $connection,
+//            $state->getStartBatchNumber(),
+//            $state->getBatchSize(),
+//            $state->getEndBatchNumber(),
+//            $state->getJumpSize(),
+//            $state->getDelaySeconds(),
+        );
     }
 
     protected function createIterator(RepositoryReadInterface $repository): Iterator
@@ -73,5 +87,4 @@ class BatchStrategy implements StrategyInterface
             $this->jumpSize
         );
     }
-
 }

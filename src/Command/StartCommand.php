@@ -7,7 +7,10 @@ namespace App\Command;
 require 'vendor/autoload.php';
 
 
-use App\Connector\WoocommerceApiRepository;
+use App\Connector\Memory\Connector\CustomerConnector as MemoryCustomerConnector;
+use App\Connector\Woocommerce\Connector\CustomerConnector as WoocommerceCustomerConnector;
+use App\Core\Connection\Connection;
+use App\Core\Migration\TransferStrategy;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,16 +21,37 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 #[AsCommand(name: 'migration:start')]
 class StartCommand extends Command
 {
-    public function __construct(
-        private HttpClientInterface $client,
-    ){
+    public function __construct(private HttpClientInterface $client)
+    {
         parent::__construct();
     }
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $connector = new WoocommerceApiRepository($this->client);
-        $customers = $connector->getCustomers(5);
-        var_dump($customers);
+        $connection = new Connection(
+            new WoocommerceCustomerConnector($this->client),
+            new MemoryCustomerConnector()
+        );
+
+        $transferStrategy = new TransferStrategy(
+            $connection,
+            1,
+            9,
+            1,
+        );
+
+        $transferStrategy->start();
+
+        $iterator = $connection->getDestinationConnector()->getRepository()
+            ->createAwaitingPageIterator(1, 2);
+
+        foreach ($iterator as $k => $v) {
+            if ($k > 4) {
+                break;
+            }
+            echo '-------- ' . $k . PHP_EOL;
+            print_r($v);
+        }
+
         return Command::SUCCESS;
     }
 }

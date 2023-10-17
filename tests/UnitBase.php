@@ -2,11 +2,9 @@
 
 namespace App\Tests;
 
-use App\Connector\Memory\Repository\CustomerRepository;
-use App\Core\ConnectorInterface\Repository\RepositoryInterface;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use PHPUnit\Framework\TestCase;
 
-abstract class AppBase extends KernelTestCase
+abstract class UnitBase extends TestCase
 {
     const REPOSITORY_SEVEN_VALUES = [
         'value1',
