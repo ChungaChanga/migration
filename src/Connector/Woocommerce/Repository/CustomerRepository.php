@@ -11,6 +11,9 @@ class CustomerRepository extends RepositoryReadAbstract
 {
     public function __construct(
         private HttpClientInterface $client,
+        private string $url,
+        private string $key,
+        private string $secret,
     )
     {
     }
@@ -18,9 +21,9 @@ class CustomerRepository extends RepositoryReadAbstract
     {
         $response = $this->client->request(
             'GET',
-            'https://dl.loc/wc-api/v3/customers',
+            $this->url,
             [
-                'auth_basic' => [$_ENV['WOOCOMMERCE_API_KEY'], $_ENV['WOOCOMMERCE_API_SECRET']],
+                'auth_basic' => [$this->key, $this->secret],
             ]
         );
         return $response->toArray()['customers'];
@@ -30,16 +33,20 @@ class CustomerRepository extends RepositoryReadAbstract
     {
         $response = $this->client->request(
             'GET',
-            'https://dl.loc/wc-api/v3/customers',
+            $this->url,
             [
-                'auth_basic' => [$_ENV['WOOCOMMERCE_API_KEY'], $_ENV['WOOCOMMERCE_API_SECRET']],
+                'auth_basic' => [$this->key, $this->secret],
                 'query' => [
                     'page' => $page,
                     'per_page' => $pageSize,
                 ],
             ]
         );
-        return $response->toArray()['customers'];
+        $result = $response->toArray();
+        if (empty($result)) {
+            return [];
+        }
+        return $result['customers'];
     }
 
     public function createAwaitingPageIterator(

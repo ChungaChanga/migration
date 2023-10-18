@@ -27,8 +27,14 @@ class StartCommand extends Command
     }
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $woocommerceConnector = new WoocommerceCustomerConnector(
+            $this->client,
+            $_ENV['WOOCOMMERCE_API_URL_CUSTOMERS'],
+            $_ENV['WOOCOMMERCE_API_KEY'],
+            $_ENV['WOOCOMMERCE_API_SECRET']
+        );
         $connection = new Connection(
-            new WoocommerceCustomerConnector($this->client),
+            $woocommerceConnector,
             new MemoryCustomerConnector()
         );
 

@@ -9,6 +9,7 @@ class CustomerMapper implements MapperReadInterface
 {
     public function fromState(array $state): Customer
     {
+
         $customer = new Customer();
 
         $customer->setId($state['Id']);

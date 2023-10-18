@@ -49,4 +49,9 @@ class AwaitingPageIteratorTest extends UnitBase
 
         $this->assertEquals(4, $iterator->key());
     }
+
+//    public function testAwaiting()
+//    {
+//        self::createSelfExpandingRepository();
+//    }
 }

@@ -39,4 +39,9 @@ abstract class UnitBase extends TestCase
         }
         return $entities;
     }
+
+    protected static function createSelfExpandingRepository()
+    {
+
+    }
 }
