@@ -2,7 +2,7 @@
 
 namespace App\Tests\Functional;
 
-use App\Connector\Woocommerce\Repository\CustomerRepository;
+use App\Connector\WoocommerceDto\Repository\Repository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -14,7 +14,7 @@ class CustomerRepositoryTest extends KernelTestCase
         $container = self::getContainer();
         $client = $container->get(HttpClientInterface::class);
 
-        $repository = new CustomerRepository(
+        $repository = new Repository(
             $client,
             $_ENV['WOOCOMMERCE_API_URL_CUSTOMERS'],
             $_ENV['WOOCOMMERCE_API_KEY'],
