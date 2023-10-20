@@ -8,7 +8,7 @@ require 'vendor/autoload.php';
 
 
 use App\Connector\Memory\Connector\CustomerConnector as MemoryCustomerConnector;
-use App\Connector\Woocommerce\Connector\CustomerConnector as WoocommerceCustomerConnector;
+use App\Connector\WoocommerceDto\Connector\Connector as WoocommerceCustomerConnector;
 use App\Core\Connection\Connection;
 use App\Core\Migration\TransferStrategy;
 use Symfony\Component\Console\Attribute\AsCommand;

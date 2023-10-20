@@ -4,20 +4,18 @@ namespace App\Connector\Magento\Connector;
 
 use App\Connector\Magento\Mapper\CustomerMapper;
 use App\Connector\Magento\Repository\CustomerRepository;
-use App\Core\ConnectorAbstract\Connector\ConnectorWriterInterface;
-use App\Core\ConnectorAbstract\Mapper\MapperWriteInterface;
-use App\Core\ConnectorAbstract\Repository\RepositoryWriteInterface;
-use App\Core\Entity\Customer;
-use App\Core\Entity\EntityTypeInterface;
+use Chungachanga\AbstractMigration\Connector\ConnectorWriterInterface;
+use Chungachanga\AbstractMigration\Mapper\MapperWriteInterface;
+use Chungachanga\AbstractMigration\Repository\RepositoryWriteInterface;
 
-class CustomerConnector implements ConnectorWriterInterface, EntityTypeInterface
+class CustomerConnector implements ConnectorWriterInterface
 {
     private ?RepositoryWriteInterface $repository = null;
     private ?MapperWriteInterface $mapper = null;
     public function getRepository(): RepositoryWriteInterface
     {
         if (null === $this->repository) {
-            $this->repository = new CustomerRepository();//todo
+            $this->repository = new CustomerRepositor();//todo
         }
         return $this->repository;
     }
