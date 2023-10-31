@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Connector\WoocommerceDto\Connector;
+namespace App\Connector\Woocommerce\Connector;
 
-use App\Connector\WoocommerceDto\Mapper\Mapper;
-use App\Connector\WoocommerceDto\Repository\Repository;
+use App\Connector\Woocommerce\Mapper\CustomerMapper;
+use App\Connector\Woocommerce\Repository\CustomerRepository;
 use Chungachanga\AbstractMigration\Connector\ConnectorReaderInterface;
 use Chungachanga\AbstractMigration\Mapper\MapperReadInterface;
 use Chungachanga\AbstractMigration\Repository\RepositoryReadInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class Connector implements ConnectorReaderInterface
+class CustomerConnector implements ConnectorReaderInterface
 {
     private ?RepositoryReadInterface $repository = null;
     private ?MapperReadInterface $mapper = null;
@@ -23,7 +23,7 @@ class Connector implements ConnectorReaderInterface
     public function getRepository(): RepositoryReadInterface
     {
         if (null === $this->repository) {
-            $this->repository = new Repository(
+            $this->repository = new CustomerRepository(
                 $this->client,
                 $this->repositoryUrl,
                 $this->repositoryKey,
@@ -36,14 +36,14 @@ class Connector implements ConnectorReaderInterface
     public function getMapper(): MapperReadInterface
     {
         if (null === $this->mapper) {
-            $this->mapper = new Mapper();//todo
+            $this->mapper = new CustomerMapper();//todo
         }
         return $this->mapper;
     }
 
     public function getType(): string
     {
-        return Customer::TYPE;//todo
+        return 'customer';//todo
     }
 
 }

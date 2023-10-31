@@ -2,17 +2,22 @@
 
 namespace App\Connector\Magento\Mapper;
 
-use App\Core\ConnectorAbstract\Mapper\MapperWriteInterface;
-use App\Core\Entity\Customer;
-use App\Core\Entity\EntityInterface;
+
+use App\Entity\Customer;
+use Chungachanga\AbstractMigration\Mapper\MapperWriteInterface;
 
 class CustomerMapper implements MapperWriteInterface
 {
-    public function getState(EntityInterface $entity): array
+    /**
+     * @param Customer $entity
+     * @return array
+     */
+    public function getState($entity): array
     {
-        /**@var Customer $entity */
         return [
-            'id' => $entity->getId()
+            'email' => $entity->getEmail(),//required
+            'firstname' => $entity->getFirstName(),//required
+            'lastname' => $entity->getLastName(),//required
         ];
     }
 }

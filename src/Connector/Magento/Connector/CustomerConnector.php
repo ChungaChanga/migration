@@ -15,7 +15,7 @@ class CustomerConnector implements ConnectorWriterInterface
     public function getRepository(): RepositoryWriteInterface
     {
         if (null === $this->repository) {
-            $this->repository = new CustomerRepositor();//todo
+            $this->repository = new CustomerRepository();//todo
         }
         return $this->repository;
     }
@@ -30,6 +30,6 @@ class CustomerConnector implements ConnectorWriterInterface
 
     public function getType(): string
     {
-        return Customer::TYPE;
+        return 'customer';
     }
 }
