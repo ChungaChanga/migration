@@ -18,6 +18,7 @@ class CustomerMapper implements MapperReadInterface
         $name = explode(' ', $state['Fullname']);
         $customer->setFirstName($name[0] ?? '');//todo
         $customer->setLastName($name[1] ?? '');//todo
+        $customer->setEmail($state['Email']);//todo
 
         return $customer;
     }

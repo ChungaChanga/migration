@@ -4,7 +4,7 @@ services:
   web:
     image: nginx:alpine
     ports:
-      - "80:80"
+      - "8081:80"
     volumes:
       - ./docker/nginx/sites-available/:/etc/nginx/conf.d/
       - ./logs/nginx:/var/log/nginx
@@ -12,6 +12,8 @@ services:
 ###> doctrine/doctrine-bundle ###
   database:
     image: postgres:${POSTGRES_VERSION:-15}-alpine
+    ports:
+      - "32768:5432"
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-app}
       # You should definitely change the password in production

@@ -39,7 +39,7 @@ class StartCommand extends Command
 //            new MemoryCustomerConnector()
 //        );
 //
-//        $transferStrategy = new TransferStrategy(
+//        $transferStrategy = new CustomerTransferStrategy(
 //            $connection,
 //            1,
 //            9,

@@ -8,24 +8,12 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
-class Product extends EntityAbstract
+class Product extends AbstractEntity
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column]
-    private ?int $sourceId = null;
-
-    #[ORM\Column]
-    private ?int $destId = null;
-
-    #[ORM\Column(length: 255)]
     private ?string $destSku = null;
-
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: OrderItem::class)]
     private Collection $orderItems;
+
 
     public function __construct()
     {
@@ -46,18 +34,6 @@ class Product extends EntityAbstract
     public function setSourceId(int $sourceId): static
     {
         $this->sourceId = $sourceId;
-
-        return $this;
-    }
-
-    public function getDestId(): ?int
-    {
-        return $this->destId;
-    }
-
-    public function setDestId(int $destId): static
-    {
-        $this->destId = $destId;
 
         return $this;
     }
@@ -100,6 +76,18 @@ class Product extends EntityAbstract
                 $orderItem->setProduct(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDestId(): ?string
+    {
+        return $this->destId;
+    }
+
+    public function setDestId(string $destId): static
+    {
+        $this->destId = $destId;
 
         return $this;
     }

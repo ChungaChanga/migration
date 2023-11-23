@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Functional;
+namespace App\Tests\Integration\Connector\Woocommerce\Repository;
 
 use App\Connector\Woocommerce\Repository\CustomerRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -21,6 +21,7 @@ class CustomerRepositoryTest extends KernelTestCase
             $_ENV['WOOCOMMERCE_API_SECRET']
         );
 
+        set_time_limit(5);
         $customers = $repository->fetchPage(1, 10);
 
         $this->assertCount(10, $customers);//todo fix woo api

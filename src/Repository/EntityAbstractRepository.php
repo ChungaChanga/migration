@@ -2,27 +2,27 @@
 
 namespace App\Repository;
 
-use App\Entity\EntityAbstract;
+use App\Entity\AbstractEntity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<EntityAbstract>
+ * @extends ServiceEntityRepository<AbstractEntity>
  *
- * @method EntityAbstract|null find($id, $lockMode = null, $lockVersion = null)
- * @method EntityAbstract|null findOneBy(array $criteria, array $orderBy = null)
- * @method EntityAbstract[]    findAll()
- * @method EntityAbstract[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method AbstractEntity|null find($id, $lockMode = null, $lockVersion = null)
+ * @method AbstractEntity|null findOneBy(array $criteria, array $orderBy = null)
+ * @method AbstractEntity[]    findAll()
+ * @method AbstractEntity[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class EntityAbstractRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, EntityAbstract::class);
+        parent::__construct($registry, AbstractEntity::class);
     }
 
 //    /**
-//     * @return EntityAbstract[] Returns an array of EntityAbstract objects
+//     * @return AbstractEntity[] Returns an array of AbstractEntity objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -36,7 +36,7 @@ class EntityAbstractRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?EntityAbstract
+//    public function findOneBySomeField($value): ?AbstractEntity
 //    {
 //        return $this->createQueryBuilder('e')
 //            ->andWhere('e.exampleField = :val')

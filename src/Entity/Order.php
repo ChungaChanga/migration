@@ -9,23 +9,12 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
-class Order extends EntityAbstract
+class Order extends AbstractEntity
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column]
-    private ?int $sourceId = null;
-
-    #[ORM\Column]
-    private ?int $destId = null;
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
     private ?Customer $customer = null;
 
-    #[ORM\Column(nullable: true)]
     private ?float $total = null;
 
     #[ORM\OneToMany(mappedBy: 'orderEntity', targetEntity: OrderItem::class, orphanRemoval: true)]
@@ -33,37 +22,12 @@ class Order extends EntityAbstract
 
     public function __construct()
     {
-        $this->products = new ArrayCollection();
         $this->items = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getSourceId(): ?int
-    {
-        return $this->sourceId;
-    }
-
-    public function setSourceId(int $sourceId): static
-    {
-        $this->sourceId = $sourceId;
-
-        return $this;
-    }
-
-    public function getDestId(): ?int
-    {
-        return $this->destId;
-    }
-
-    public function setDestId(int $destId): static
-    {
-        $this->destId = $destId;
-
-        return $this;
     }
 
     public function getCustomer(): ?Customer

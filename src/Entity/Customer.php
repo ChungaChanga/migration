@@ -9,28 +9,16 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
-class Customer extends EntityAbstract
+class Customer extends AbstractEntity
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column]
-    private ?int $sourceId = null;
-
-    #[ORM\Column]
-    private ?int $destId = null;
 
     #[ORM\OneToMany(mappedBy: 'customer', targetEntity: Order::class)]
     private Collection $orders;
 
     private ?string $firstName = null;
 
-    #[ORM\Column(length: 255)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 255)]
     private ?string $lastName = null;
 
     public function __construct()
@@ -41,30 +29,6 @@ class Customer extends EntityAbstract
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getSourceId(): ?int
-    {
-        return $this->sourceId;
-    }
-
-    public function setSourceId(int $sourceId): static
-    {
-        $this->sourceId = $sourceId;
-
-        return $this;
-    }
-
-    public function getDestId(): ?int
-    {
-        return $this->destId;
-    }
-
-    public function setDestId(int $destId): static
-    {
-        $this->destId = $destId;
-
-        return $this;
     }
 
     /**

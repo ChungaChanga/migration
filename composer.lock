@@ -12,7 +12,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ChungaChanga/abstract-migration.git",
-                "reference": "fed967567e030a984795a6b5b1b9b75fcff069f2"
+                "reference": "4b2dc4f3ca95f891832948a4fbdefa4ab5b4c543"
             },
             "require-dev": {
                 "phpstan/phpstan": "^1.10",
@@ -31,7 +31,7 @@
                     "email": "aatuline@gmail.com"
                 }
             ],
-            "time": "2023-10-26T15:23:55+00:00"
+            "time": "2023-11-22T20:04:14+00:00"
         },
         {
             "name": "doctrine/cache",
