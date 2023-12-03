@@ -43,7 +43,7 @@ class CustomerMigrationTest extends KernelTestCase
             static::class,
             1,
             10,
-            2,
+            1,
         );
 
         $migration = new Migration(
