@@ -1,14 +1,16 @@
-version: '3'
+version: '3.7'
 
 services:
   web:
     image: nginx:alpine
-    ports:
-      - "8081:80"
+#    ports:
+#      - "80:80"
     volumes:
       - ./docker/nginx/sites-available/:/etc/nginx/conf.d/
       - ./logs/nginx:/var/log/nginx
       - ./:/var/www/project/
+    networks:
+      - internal
 ###> doctrine/doctrine-bundle ###
   database:
     image: postgres:${POSTGRES_VERSION:-15}-alpine
@@ -24,9 +26,14 @@ services:
       # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
       # - ./docker/db/data:/var/lib/postgresql/data:rw
 ###< doctrine/doctrine-bundle ###
+networks:
+  internal:
+    name: internal
+    driver: bridge
 
 volumes:
 ###> doctrine/doctrine-bundle ###
   database_data:
 ###< doctrine/doctrine-bundle ###
+
 

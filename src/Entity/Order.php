@@ -25,11 +25,6 @@ class Order extends AbstractEntity
         $this->items = new ArrayCollection();
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
     public function getCustomer(): ?Customer
     {
         return $this->customer;

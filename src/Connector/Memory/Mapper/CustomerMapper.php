@@ -27,4 +27,10 @@ class CustomerMapper implements MapperFullInterface
         ];
     }
 
+    public function validateState(array $state)
+    {
+        // TODO: Implement validateState() method.
+    }
+
+
 }

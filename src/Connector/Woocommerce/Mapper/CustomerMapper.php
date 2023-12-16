@@ -22,4 +22,9 @@ class CustomerMapper implements MapperReadInterface
 
         return $customer;
     }
+
+    public function validateState(array $state)
+    {
+        // TODO: Implement validateState() method.
+    }
 }

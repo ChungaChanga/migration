@@ -2,12 +2,11 @@
 
 namespace App\Connector\Woocommerce\Repository;
 
-
 use Chungachanga\AbstractMigration\Iterator\AwaitingPageIterator;
 use Chungachanga\AbstractMigration\Repository\RepositoryReadAbstract;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class CustomerRepository extends AbstractRepository
+class OrderRepository extends AbstractRepository
 {
     public function fetchPage(int $page, int $pageSize): array
     {
@@ -26,6 +25,6 @@ class CustomerRepository extends AbstractRepository
         if (empty($result)) {
             return [];
         }
-        return $result['customers'];
+        return $result['orders'];
     }
 }

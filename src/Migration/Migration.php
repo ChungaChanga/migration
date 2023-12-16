@@ -36,7 +36,6 @@ class Migration implements MigrationInterface
                 sleep($this->state->getDelaySeconds());
             }
             foreach ($sourceEntitiesState as $state) {
-
                 $this->entityCollection->add($sourceMapper->fromState($state));
             }
 

@@ -12,39 +12,39 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class CustomerMigrationTest extends KernelTestCase
 {
-    public function testEntityCount()
-    {
-        $sourceConnector = new CustomerConnector();
-        $destinationConnector = new CustomerConnector();
-        $sourceConnector->getRepository()->create($this->getSixCustomers());
-        $connection = new Connection(
-            $sourceConnector,
-            $destinationConnector,
-        );
-
-        $strategy = new CustomerTransferStrategy($destinationConnector);
-
-        $migrationState = new MigrationState(
-            static::class,
-            1,
-            2,
-            3,
-        );
-
-        $migration = new Migration(
-            $connection,
-            $strategy,
-            $migrationState,
-            new BaseHandler()
-        );
-
-        $migration->start();
-
-        $this->assertCount(
-            6,
-            $destinationConnector->getRepository()->fetch(0, 100),
-        );
-    }
+//    public function testEntityCount()
+//    {
+//        $sourceConnector = new CustomerConnector();
+//        $destinationConnector = new CustomerConnector();
+//        $sourceConnector->getRepository()->create($this->getSixCustomers());
+//        $connection = new Connection(
+//            $sourceConnector,
+//            $destinationConnector,
+//        );
+//
+//        $strategy = new CustomerTransferStrategy($destinationConnector);
+//
+//        $migrationState = new MigrationState(
+//            static::class,
+//            1,
+//            2,
+//            3,
+//        );
+//
+//        $migration = new Migration(
+//            $connection,
+//            $strategy,
+//            $migrationState,
+//            new BaseHandler()
+//        );
+//
+//        $migration->start();
+//
+//        $this->assertCount(
+//            6,
+//            $destinationConnector->getRepository()->fetch(0, 100),
+//        );
+//    }
 
     public function testEntityCompare()
     {

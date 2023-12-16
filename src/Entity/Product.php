@@ -14,6 +14,8 @@ class Product extends AbstractEntity
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: OrderItem::class)]
     private Collection $orderItems;
 
+    private ?string $sku = null;
+
 
     public function __construct()
     {
@@ -88,6 +90,18 @@ class Product extends AbstractEntity
     public function setDestId(string $destId): static
     {
         $this->destId = $destId;
+
+        return $this;
+    }
+
+    public function getSku(): ?string
+    {
+        return $this->sku;
+    }
+
+    public function setSku(?string $sku): static
+    {
+        $this->sku = $sku;
 
         return $this;
     }
