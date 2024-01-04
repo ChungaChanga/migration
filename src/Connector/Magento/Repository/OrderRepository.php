@@ -10,4 +10,9 @@ class OrderRepository implements RepositoryWriteInterface
     {
         return (string)rand(1000, 5000);
     }
+
+    public function createOne($entity): string
+    {
+
+    }
 }

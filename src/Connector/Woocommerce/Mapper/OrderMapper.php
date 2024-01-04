@@ -5,7 +5,7 @@ namespace App\Connector\Woocommerce\Mapper;
 use App\Entity\Order;
 use App\Entity\OrderItem;
 use App\Entity\Product;
-use App\Exception\ValidateEntityStateException;
+use App\Exception\InvalidStateException;
 use Chungachanga\AbstractMigration\Mapper\MapperReadInterface;
 
 class OrderMapper implements MapperReadInterface
@@ -29,7 +29,7 @@ class OrderMapper implements MapperReadInterface
                 if (!array_key_exists('product_data', $itemState) ||
                     empty($itemState['product_data']))
                 {
-                    throw new ValidateEntityStateException('product_data is required for line item', $state);
+                    throw new InvalidStateException('product_data is required for line item', $state);
                 }
             }
         }

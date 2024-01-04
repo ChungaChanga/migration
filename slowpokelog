@@ -1,0 +1,31 @@
+tests
+    wc customers data provider
+        correct data
+        wrong data
+    wc orders data provider
+    Mock WC repository
+    Mock Magento repository
+
+
+апи возвращает ошибку
+    любой ответ, кроме данных
+энтити менеджер возвращает ошибку
+    дубль
+
+
+валидный кастомер
+минимальное допустимое значение id
+максимально допустимое значение id
+
+
+слишком большое id
+слишком маленькое id
+максимальное граничное значение id
+минимальное граничное значение id
+дубль по id
+дубль по email
+
+
+<?php declare(strict_types=1);
+
+react promise

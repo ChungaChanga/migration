@@ -36,8 +36,8 @@ class CustomerTransferStrategy implements TransferStrategyInterface
 
                 $entity->setTransferStatus(EntityTransferStatus::Processing);
                 $this->entityManager->flush();
-
-                $destId = $repository->createOne($mapper->getState($entity));
+                $s = $mapper->getState($entity);
+                $destId = $repository->createOne($s);
 
                 $entity->setTransferStatus(EntityTransferStatus::Done);
                 $entity->setDestId($destId);

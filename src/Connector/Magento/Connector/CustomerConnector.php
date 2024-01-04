@@ -23,6 +23,11 @@ class CustomerConnector implements ConnectorWriterInterface
     {
 
     }
+
+    public function createOne($entity)//todo interface and type
+    {
+
+    }
     public function getRepository(): RepositoryWriteInterface
     {
         if (null === $this->repository) {

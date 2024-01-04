@@ -15,6 +15,12 @@ class CustomerRepository extends RepositoryReadAbstract implements RepositoryFul
         $this->entities = array_merge($this->entities, $entities);
     }
 
+    public function createOne($entity)//todo interface and type
+    {
+        $this->entities[] = $entity;
+        return count($this->entities) - 1;
+    }
+
     public function fetch(int $start, int $end): array
     {
         return array_slice($this->entities, $start, $end - $start);

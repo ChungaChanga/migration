@@ -8,7 +8,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class CustomerRepositoryTest extends KernelTestCase
 {
-    public function testFetchPage()
+    public function testFetchPageCount()
     {
         self::bootKernel();
         $container = self::getContainer();
