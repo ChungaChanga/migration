@@ -4,7 +4,7 @@ namespace App\Connector\Memory\Repository;
 
 
 use Chungachanga\AbstractMigration\Repository\RepositoryFullInterface;
-use Chungachanga\AbstractMigration\Repository\RepositoryReadAbstract;
+use App\Connector\RepositoryReadAbstract;
 
 class CustomerRepository extends RepositoryReadAbstract implements RepositoryFullInterface
 {
@@ -28,6 +28,8 @@ class CustomerRepository extends RepositoryReadAbstract implements RepositoryFul
 
     public function fetchPage(int $page, int $pageSize): array
     {
-        return array_slice($this->entities, ($page - 1) * $pageSize, $pageSize);
+        $this->validatePage($page);
+        $res = array_slice($this->entities, ($page - 1) * $pageSize, $pageSize);
+        return $res;
     }
 }

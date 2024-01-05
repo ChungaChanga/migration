@@ -9,7 +9,7 @@ class MigrationState
         private string $name,
         private int $startBatchNumber,
         private int $batchSize,
-        private int $endBatchNumber = PHP_INT_MAX,
+        private bool $isNeedWaiting = true,
         private int $jumpSize = 0,
         private int $delaySeconds = 0
 
@@ -23,9 +23,6 @@ class MigrationState
         }
         if ($delaySeconds < 0) {
             throw new InvalidArgumentException('Delay Seconds can not be a negative number');
-        }
-        if ($startBatchNumber > $endBatchNumber) {
-            throw new InvalidArgumentException('Start Batch Number can not be more than End Batch Number');
         }
     }
 
@@ -59,14 +56,14 @@ class MigrationState
         $this->batchSize = $batchSize;
     }
 
-    public function getEndBatchNumber(): int
+    public function getIsNeedWaiting(): bool
     {
-        return $this->endBatchNumber;
+        return $this->isNeedWaiting;
     }
 
-    public function setEndBatchNumber(int $endBatchNumber): void
+    public function setIsNeedWaiting(bool $isNeedWaiting): void
     {
-        $this->endBatchNumber = $endBatchNumber;
+        $this->isNeedWaiting = $isNeedWaiting;
     }
 
     public function getJumpSize(): int

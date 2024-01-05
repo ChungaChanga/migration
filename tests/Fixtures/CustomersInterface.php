@@ -5,8 +5,6 @@ namespace App\Tests\Fixtures;
 interface CustomersInterface
 {
     //valid
-    public function countZero(): array;
-    public function countFive(): array;
     public function first(): array;
     public function second(): array;
     public function third(): array;

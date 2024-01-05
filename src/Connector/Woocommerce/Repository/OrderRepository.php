@@ -2,8 +2,8 @@
 
 namespace App\Connector\Woocommerce\Repository;
 
-use Chungachanga\AbstractMigration\Iterator\AwaitingPageIterator;
-use Chungachanga\AbstractMigration\Repository\RepositoryReadAbstract;
+use App\Iterator\AwaitingPageIterator;
+use App\Connector\RepositoryReadAbstract;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class OrderRepository extends AbstractRepository

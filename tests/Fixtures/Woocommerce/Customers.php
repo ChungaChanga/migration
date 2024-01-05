@@ -6,21 +6,6 @@ use App\Tests\Fixtures\CustomersInterface;
 
 class Customers implements CustomersInterface
 {
-    public function countZero(): array
-    {
-        return [];
-    }
-
-    public function countFive(): array
-    {
-        return [
-            $this->first(),
-            $this->second(),
-            $this->third(),
-            $this->fourth(),
-            $this->fifth(),
-        ];
-    }
 
     public function first(): array
     {

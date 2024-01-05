@@ -31,9 +31,7 @@ class Migration implements MigrationInterface
 
         foreach ($iterator as $currentBatchNumber => $sourceEntitiesState) {
             $this->entityCollection->clear();
-            if ($currentBatchNumber >= $this->state->getEndBatchNumber()) {
-                break;
-            }
+
             if (MigrationStatus::Pause === $this->status) {
                 yield $currentBatchNumber;
             }
@@ -43,6 +41,10 @@ class Migration implements MigrationInterface
             }
             foreach ($sourceEntitiesState as $state) {
                 $this->entityCollection->add($sourceMapper->fromState($state));
+            }
+
+            if ($this->entityCollection->isEmpty() && false === $this->state->getIsNeedWaiting()) {
+                break;
             }
 
             $this->entityHandler->handle($this->entityCollection);

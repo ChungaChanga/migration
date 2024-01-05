@@ -29,4 +29,5 @@ class CustomerRepositoryTest extends TestBase
         $this->expectExceptionMessage('start page is must be more than 0 for Woocommerce api');
         $repository->createAwaitingPageIterator(0);
     }
+
 }
