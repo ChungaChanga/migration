@@ -16,15 +16,15 @@ use App\Tests\Fixtures\Woocommerce\Customers as WoocommerceCustomers;
 use App\Tests\TestBase;
 use App\TransferStrategy\CustomerTransferStrategy;
 use Chungachanga\AbstractMigration\Connection\Connection;
-use Chungachanga\AbstractMigration\Connector\ConnectorReaderInterface;
-use Chungachanga\AbstractMigration\Connector\ConnectorWriterInterface;
+use Chungachanga\AbstractMigration\Connector\ConnectorReadInterface;
+use Chungachanga\AbstractMigration\Connector\ConnectorWriteInterface;
 use Chungachanga\AbstractMigration\EntityHandler\BaseHandler;
 use Doctrine\ORM\EntityManagerInterface;
 
 class CustomerTest extends TestBase
 {
-    private ConnectorReaderInterface $sourceConnectorMock;
-    private ConnectorWriterInterface $destConnectorMock;
+    private ConnectorReadInterface $sourceConnectorMock;
+    private ConnectorWriteInterface $destConnectorMock;
     private EntityManagerInterface $entityManagerMock;
     private CustomersInterface $fixturesWoocommerce;
     private CustomersInterface $fixturesMagento;

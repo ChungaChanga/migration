@@ -109,3 +109,6 @@
 172.22.0.1 - - [18/Dec/2023:13:07:15 +0000] "GET /customer/ HTTP/1.1" 200 5509 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 172.22.0.1 - - [18/Dec/2023:13:07:18 +0000] "GET /customer/53/edit HTTP/1.1" 200 1734 "http://mgr.loc/customer/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 172.22.0.1 - - [31/Dec/2023:08:16:02 +0000] "GET /customer/ HTTP/1.1" 200 5515 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+172.22.0.1 - - [05/Jan/2024:12:36:31 +0000] "GET /customer/ HTTP/1.1" 500 168635 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+172.22.0.1 - - [05/Jan/2024:12:37:13 +0000] "GET /customer/ HTTP/1.1" 200 67533 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+172.22.0.1 - - [05/Jan/2024:12:37:13 +0000] "GET /_wdt/bcb5a7 HTTP/1.1" 200 17825 "http://mgr.loc/customer/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"

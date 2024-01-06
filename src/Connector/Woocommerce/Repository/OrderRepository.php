@@ -2,7 +2,7 @@
 
 namespace App\Connector\Woocommerce\Repository;
 
-use App\Iterator\AwaitingPageIterator;
+use App\Iterator\AwaitingRepositoryIterator;
 use App\Connector\RepositoryReadAbstract;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 

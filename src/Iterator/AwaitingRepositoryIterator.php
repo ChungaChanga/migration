@@ -6,7 +6,7 @@ use Chungachanga\AbstractMigration\Repository\RepositoryReadInterface;
 use Iterator;
 use InvalidArgumentException;
 
-class AwaitingPageIterator implements Iterator
+class AwaitingRepositoryIterator implements Iterator
 {
     private int $currentPage;
     private array $currentResult;
