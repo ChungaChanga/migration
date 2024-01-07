@@ -5,8 +5,8 @@ namespace App\Migration;
 use Chungachanga\AbstractMigration\Connection\ConnectionInterface;
 use Chungachanga\AbstractMigration\EntityHandler\HandlerInterface;
 use Chungachanga\AbstractMigration\Migration\MigrationInterface;
-use Chungachanga\AbstractMigration\Repository\RepositoryReadInterface;
 use Chungachanga\AbstractMigration\Migration\TransferStrategyInterface;
+use Chungachanga\AbstractMigration\Repository\RepositoryReadInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Iterator;
 

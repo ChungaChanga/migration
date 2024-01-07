@@ -2,7 +2,7 @@
 //
 //namespace App\Tests\Functional;
 //
-//use App\Connector\Memory\Connector\CustomerConnector;
+//use App\ConnectorRead\Memory\ConnectorRead\ConnectorRead;
 //use App\Migration\Migration;
 //use App\Migration\MigrationState;
 //use App\TransferStrategy\CustomerTransferStrategy;
@@ -14,8 +14,8 @@
 //{
 ////    public function testEntityCount()
 ////    {
-////        $sourceConnector = new CustomerConnector();
-////        $destinationConnector = new CustomerConnector();
+////        $sourceConnector = new ConnectorRead();
+////        $destinationConnector = new ConnectorRead();
 ////        $sourceConnector->getRepository()->create($this->getSixCustomers());
 ////        $connection = new Connection(
 ////            $sourceConnector,
@@ -48,8 +48,8 @@
 //
 //    public function testEntityCompare()
 //    {
-//        $sourceConnector = new CustomerConnector();
-//        $destinationConnector = new CustomerConnector();
+//        $sourceConnector = new ConnectorRead();
+//        $destinationConnector = new ConnectorRead();
 //        $sourceConnector->getRepository()->create($this->getSixCustomers());
 //        $connection = new Connection(
 //            $sourceConnector,

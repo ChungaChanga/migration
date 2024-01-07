@@ -3,6 +3,7 @@
 namespace App\Migration;
 
 use InvalidArgumentException;
+
 class MigrationState
 {
     public function __construct(

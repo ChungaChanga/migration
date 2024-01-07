@@ -5,9 +5,8 @@
  */
 namespace App\Tests\Unit\Migration\Woocommerce\Magento;
 
-use App\Connector\Magento\Connector\CustomerConnector as MagentoCustomerConnector;
-use App\Connector\Memory\Repository\CustomerRepository;
-use App\Connector\Woocommerce\Connector\CustomerConnector as WooCustomerConnector;
+use App\Connector\Memory\Connector;
+use App\Connector\Memory\ConnectorElementsFactory;
 use App\Migration\Migration;
 use App\Migration\MigrationState;
 use App\Tests\Fixtures\CustomersInterface;
@@ -38,32 +37,61 @@ class CustomerTest extends TestBase
 
     public function setUp(): void
     {
-        $sourceRepository = new CustomerRepository();
-        $this->sourceConnectorMock = $this->getMockBuilder(WooCustomerConnector::class)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
-            ->onlyMethods(['getRepository'])
-            ->getMock();
-        $this->sourceConnectorMock->method('getRepository')
-            ->will($this->returnValue($sourceRepository));
+        $entityType = 'customer';//fixme enum
 
-        $destRepository = new CustomerRepository();
-        $this->destConnectorMock = $this->getMockBuilder(MagentoCustomerConnector::class)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
-            ->onlyMethods(['getRepository'])
-            ->getMock();
-        $this->destConnectorMock->method('getRepository')
-            ->will($this->returnValue($destRepository));
+        $sourceFactory = new ConnectorElementsFactory($entityType);
+
+        $this->sourceConnector = new Connector(
+            $sourceFactory->createRepository(),
+            $sourceFactory->createMapper()
+        );
+
+        $destFactory = new ConnectorElementsFactory($entityType);
+        $this->destConnector = new Connector(
+            $sourceFactory->createRepository(),
+            $sourceFactory->createMapper()
+        );
 
         $this->entityManagerMock = $this->getMockBuilder(EntityManagerInterface::class)
             ->getMock();
     }
 
+//    /**
+//     * @dataProvider  validCountProvider
+//     */
+//    public function testCustomersCountNotWaiting($customers, $customersCount)
+//    {
+//        $isNeedWaiting = false;
+//
+//        $this->sourceConnectorMock->getRepository()->create($customers);
+//        $connection = new Connection(
+//            $this->sourceConnectorMock,
+//            $this->destConnectorMock,
+//        );
+//
+//        $strategy = new CustomerTransferStrategy($this->destConnectorMock, $this->entityManagerMock);
+//
+//        $migrationState = new MigrationState(
+//            static::class,
+//            1,
+//            10,
+//            $isNeedWaiting,
+//        );
+//
+//        $migration = new Migration(
+//            $connection,
+//            $strategy,
+//            $migrationState,
+//            new BaseHandler()
+//        );
+//
+//        $migration->start();
+//        $connection->getDestinationConnector()->getRepository();
+//        $this->assertCount(
+//            $customersCount,
+//            $connection->getDestinationConnector()->getRepository()->fetchPage(1, 99999)
+//        );
+//    }
     /**
      * @dataProvider  validCountProvider
      */
@@ -71,7 +99,7 @@ class CustomerTest extends TestBase
     {
         $isNeedWaiting = false;
 
-        $this->sourceConnectorMock->getRepository()->create($customers);
+        $this->sourceConnectorMock->getWritingIterator($customers);
         $connection = new Connection(
             $this->sourceConnectorMock,
             $this->destConnectorMock,
@@ -101,6 +129,67 @@ class CustomerTest extends TestBase
         );
     }
 
+
+    public function testTmp()
+    {
+        /**
+         * Config
+         * source
+         * destination
+         * entityType
+         * pageStartNumber
+         * pageSize
+         * pageJump
+         *
+         * ConnectionFactory
+         * createSourceConnectorFactory()
+         * createDestConnectorFactory()
+         *
+         * ConnectorReadType
+         * getReadingIterator()
+         *
+         *  ConnectorWriteType
+         *  //trigger event entity.created
+         *  create($entities)
+         *
+         * MigrationState
+         * name
+         * lastPage
+         * pageSize
+         * pageJump
+         *
+         * Migration
+         * name
+         *
+         * __constructor
+         *      //todo resume?
+         *      name = source + destination + entityType
+         *      if (fetchState)
+         * getName(): string
+         * fetchState(): MigrationState
+         * start()
+         *
+         * $connectionFactory = new ConnectionFactory('woocommerce', 'magento', 'customers');
+         * ReadConnectorFactory $sourceConnectorFactory = $connectionFactory->createSourceConnectorFactory();
+         * WriteConnectorFactory $destConnectorFactory = $connectionFactory->createDestConnectorFactory();
+         * ReadConnectorInterface $sourceConnector = new ConnectorReadType($sourceConnectorFactory)
+         * WriteConnectorInterface $destConnector = new ConnectorWriteType($destConnectorFactory)
+         *
+         * $migration = new Migration($config);
+         *
+         * migration->start($state);
+         *
+         *
+         *
+         *
+         *
+         *
+         *
+         *
+         *
+         *
+         */
+    }
 
 
     public function validCountProvider()

@@ -2,14 +2,14 @@
 declare(strict_types=1);
 namespace App\Tests\Unit\Connector\Woocommerce;
 
+use App\Connector\ConnectorRead as WooCustomerConnector;
 use App\Connector\Magento\Connector\CustomerConnector as MagentoCustomerConnector;
 use App\Connector\Memory\Repository\CustomerRepository;
-use App\Connector\Woocommerce\Connector\CustomerConnector as WooCustomerConnector;
 use App\Migration\Migration;
 use App\Migration\MigrationState;
 use App\Tests\Fixtures\CustomersInterface;
-use App\Tests\Fixtures\Woocommerce\Customers as WoocommerceCustomers;
 use App\Tests\Fixtures\Magento\Customers as MagentoCustomers;
+use App\Tests\Fixtures\Woocommerce\Customers as WoocommerceCustomers;
 use App\Tests\TestBase;
 use App\TransferStrategy\CustomerTransferStrategy;
 use Chungachanga\AbstractMigration\Connection\Connection;

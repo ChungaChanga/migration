@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Connector\Memory\Repository;
+namespace App\Tests\Fake;
 
-
-use Chungachanga\AbstractMigration\Repository\RepositoryFullInterface;
 use App\Connector\RepositoryReadAbstract;
+use Chungachanga\AbstractMigration\Repository\RepositoryFullInterface;
 
-class CustomerRepository extends RepositoryReadAbstract implements RepositoryFullInterface
+class CustomerRepositoryStub extends RepositoryReadAbstract implements RepositoryFullInterface
 {
     private array $entities = [];
 

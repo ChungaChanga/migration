@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Connector\Woocommerce\Connector\CustomerConnector as WooCustomerConnector;
+use App\Connector\ConnectorRead as WooCustomerConnector;
 use App\Connector\Magento\Connector\CustomerConnector as MagentoCustomerConnector;
 use App\Migration\Migration;
 use App\Migration\MigrationState;
@@ -10,7 +10,6 @@ use App\TransferStrategy\CustomerTransferStrategy;
 use Chungachanga\AbstractMigration\Connection\Connection;
 use Chungachanga\AbstractMigration\EntityHandler\BaseHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\HttpClientInterface;

@@ -2,8 +2,8 @@
 
 namespace App\Tests\Integration\Migration;
 
+use App\Connector\ConnectorRead as WooCustomerConnector;
 use App\Connector\Magento\Connector\CustomerConnector as MagentoCustomerConnector;
-use App\Connector\Woocommerce\Connector\CustomerConnector as WooCustomerConnector;
 use App\Migration\Migration;
 use App\Migration\MigrationState;
 use App\TransferStrategy\CustomerTransferStrategy;
