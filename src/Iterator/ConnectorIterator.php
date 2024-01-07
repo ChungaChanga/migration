@@ -33,6 +33,26 @@ class ConnectorIterator implements Iterator
         $this->currentPage = $this->startPage;
     }
 
+    private function handleRepeatIterationRule(): void
+    {
+        $this->isNeedRepeatIteration = false;
+        if (true === $this->isNeedWaitingFullPage) {
+            $this->isNeedRepeatIteration = true;
+        }
+    }
+    private function handleReturnPartialResultRule($fetchResult): array
+    {
+        if (false === $this->isAllowPartialResult) {
+            return [];//waiting for the full page
+        }
+        return $fetchResult;
+    }
+    private function handleBreakRule(): void
+    {
+        if (false === $this->isNeedWaitingFullPage) {
+            $this->isNeedBreak = true;
+        }
+    }
     public function current(): ArrayCollection
     {
         //todo check memory leak
@@ -43,16 +63,10 @@ class ConnectorIterator implements Iterator
             $this->pageSize
         );
 
-        $this->isNeedRepeatIteration = false;
         if ($this->isPartialResult($fetchResult)) {
-            if (false === $this->isAllowPartialResult) {
-                $fetchResult = [];//waiting for the full page
-            }
-            if (true === $this->isNeedWaitingFullPage) {
-                $this->isNeedRepeatIteration = true;
-            } else {
-                $this->isNeedBreak = true;
-            }
+            $this->handleRepeatIterationRule();
+            $this->handleBreakRule();
+            $fetchResult = $this->handleReturnPartialResultRule($fetchResult);
         }
 
         foreach ($fetchResult as $entityState) {
