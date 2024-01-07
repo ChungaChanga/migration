@@ -4,6 +4,7 @@ namespace App\Connector\Woocommerce\Factory;
 
 use App\Connector\Woocommerce\Mapper\CustomerMapper;
 use App\Connector\Woocommerce\Repository\CustomerRepository;
+use App\Iterator\ConnectorIterator;
 use Chungachanga\AbstractMigration\Connector\ConnectorFactoryReadInterface;
 use Chungachanga\AbstractMigration\Mapper\MapperReadInterface;
 use Chungachanga\AbstractMigration\Repository\RepositoryReadInterface;
@@ -32,5 +33,15 @@ class CustomerConnectorFactory implements ConnectorFactoryReadInterface
     public function createMapper(): MapperReadInterface
     {
         return new CustomerMapper();
+    }
+
+    public function createIterator($startPage, $pageSize): \Iterator
+    {
+        return new ConnectorIterator(
+            $this->createRepository(),
+            $this->createMapper(),
+            $startPage,
+            $pageSize
+        );
     }
 }

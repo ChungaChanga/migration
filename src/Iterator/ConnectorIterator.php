@@ -4,13 +4,14 @@ namespace App\Iterator;
 
 use Chungachanga\AbstractMigration\Mapper\MapperReadInterface;
 use Chungachanga\AbstractMigration\Repository\RepositoryReadInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Iterator;
 use InvalidArgumentException;
 
 class ConnectorIterator implements Iterator
 {
     private int $currentPage;
-    private array $currentResult;
+    private ArrayCollection $currentResult;
 
 
     public function __construct(
@@ -26,16 +27,25 @@ class ConnectorIterator implements Iterator
         $this->currentPage = $this->startPage;
     }
 
-    public function current(): array
+    public function current(): ArrayCollection
     {
-        $result = $this->repository->fetchPage(
+        //todo check memory leak
+        $result = new ArrayCollection();
+
+        $fetchResult = $this->repository->fetchPage(
             $this->currentPage,
             $this->pageSize
         );
-        if ($this->isPartialResult($result)) {
-            $result = [];//waiting for the full page
+
+        if ($this->isPartialResult($fetchResult)) {
+            $fetchResult = [];//waiting for the full page
         }
-        $this->setCurrentResult($this->mapper->fromState($result));
+
+        foreach ($fetchResult as $entityState) {
+            $result->add($this->mapper->fromState($entityState));
+        }
+
+        $this->setCurrentResult($result);
         return $this->getCurrentResult();
     }
 
@@ -70,12 +80,12 @@ class ConnectorIterator implements Iterator
         return false;
     }
 
-    private function getCurrentResult(): array
+    private function getCurrentResult(): ArrayCollection
     {
         return $this->currentResult;
     }
 
-    private function setCurrentResult(array $currentResult): void
+    private function setCurrentResult(ArrayCollection $currentResult): void
     {
         $this->currentResult = $currentResult;
     }

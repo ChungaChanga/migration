@@ -9,17 +9,18 @@ use Chungachanga\AbstractMigration\Repository\RepositoryReadInterface;
 
 class ConnectorReadType
 {
-    private RepositoryReadInterface $repository;
-    private MapperReadInterface $mapper;
-    public function __construct(ConnectorFactoryReadInterface $factory)
+    private \Iterator $iterator;
+    public function __construct(
+        ConnectorFactoryReadInterface $factory,
+        int $startPage,
+        int $pageSize
+    )
     {
-        $this->repository = $factory->createRepository();
-        $this->mapper = $factory->createMapper();
+        $this->iterator = $factory->createIterator($startPage, $pageSize);
     }
 
-    public function getIterator(int $startPage, int $pageSize): \Iterator
+    public function getIterator(): \Iterator
     {
-        $iterator = new ConnectorIterator($this->repository, $startPage, $pageSize);
-        $iterator = new M
+        return $this->iterator;
     }
 }
