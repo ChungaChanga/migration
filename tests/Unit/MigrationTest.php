@@ -23,6 +23,8 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class MigrationTest extends TestBase
 {
+    private WooFactory $sourceConnectorFactory;
+    private MagentoFactory $destConnectorFactory;
     private EntityManagerInterface $entityManagerMock;
     private CustomersInterface $fixturesWoocommerce;
     private CustomersInterface $fixturesMagento;
@@ -36,6 +38,20 @@ class MigrationTest extends TestBase
 
     public function setUp(): void
     {
+        $this->sourceConnectorFactory = $this->getMockBuilder(WooFactory::class)
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->disableArgumentCloning()
+            ->disallowMockingUnknownTypes()
+            ->onlyMethods(['createRepository'])
+            ->getMock();
+        $this->destConnectorFactory = $this->getMockBuilder(MagentoFactory::class)
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->disableArgumentCloning()
+            ->disallowMockingUnknownTypes()
+            ->onlyMethods(['createRepository'])
+            ->getMock();
         $this->entityManagerMock = $this->getMockBuilder(EntityManagerInterface::class)
             ->getMock();
     }
@@ -47,38 +63,23 @@ class MigrationTest extends TestBase
         $customers, $customersCount, $startPage, $pageSize, $isAllowPartialResult
     )
     {
-        $sourceConnectorFactory = $this->getMockBuilder(WooFactory::class)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
-            ->onlyMethods(['createRepository'])
-            ->getMock();
-        $destConnectorFactory = $this->getMockBuilder(MagentoFactory::class)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
-            ->onlyMethods(['createRepository'])
-            ->getMock();
-
         $fakeSourceRepository = new CustomerRepositoryStub();
-        $sourceConnectorFactory
+        $this->sourceConnectorFactory
             ->method('createRepository')
             ->will($this->returnValue($fakeSourceRepository));
         $fakeDestRepository = new CustomerRepositoryStub();
-        $destConnectorFactory
+        $this->destConnectorFactory
             ->method('createRepository')
             ->will($this->returnValue($fakeDestRepository));
 
         $sourceConnector = new ConnectorReadType(
-            $sourceConnectorFactory,
+            $this->sourceConnectorFactory,
             $startPage,
             $pageSize,
             false,
             $isAllowPartialResult
         );
-        $destConnector = new ConnectorWriteType($destConnectorFactory);
+        $destConnector = new ConnectorWriteType($this->destConnectorFactory);
 
         $fakeSourceRepository->create($customers);
 
@@ -102,38 +103,23 @@ class MigrationTest extends TestBase
         $woocommerceCustomers, $magentoCustomers, $startPage, $pageSize, $isAllowPartialResult
     )
     {
-        $sourceConnectorFactory = $this->getMockBuilder(WooFactory::class)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
-            ->onlyMethods(['createRepository'])
-            ->getMock();
-        $destConnectorFactory = $this->getMockBuilder(MagentoFactory::class)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
-            ->onlyMethods(['createRepository'])
-            ->getMock();
-
         $fakeSourceRepository = new CustomerRepositoryStub();
-        $sourceConnectorFactory
+        $this->sourceConnectorFactory
             ->method('createRepository')
             ->will($this->returnValue($fakeSourceRepository));
         $fakeDestRepository = new CustomerRepositoryStub();
-        $destConnectorFactory
+        $this->destConnectorFactory
             ->method('createRepository')
             ->will($this->returnValue($fakeDestRepository));
 
         $sourceConnector = new ConnectorReadType(
-            $sourceConnectorFactory,
+            $this->sourceConnectorFactory,
             $startPage,
             $pageSize,
             false,
             $isAllowPartialResult
         );
-        $destConnector = new ConnectorWriteType($destConnectorFactory);
+        $destConnector = new ConnectorWriteType($this->destConnectorFactory);
 
         $fakeSourceRepository->create($woocommerceCustomers);
 
