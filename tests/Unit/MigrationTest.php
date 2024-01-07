@@ -41,13 +41,12 @@ class MigrationTest extends TestBase
     }
 
     /**
-     * @dataProvider  validCountProvider
+     * @dataProvider  countProvider
      */
     public function testCustomersCountNotWaitingFullPage(
         $customers, $customersCount, $startPage, $pageSize, $isAllowPartialResult
     )
     {
-        $isNeedWaitingFullPage = false;
         $sourceConnectorFactory = $this->getMockBuilder(WooFactory::class)
             ->disableOriginalConstructor()
             ->disableOriginalClone()
@@ -76,9 +75,8 @@ class MigrationTest extends TestBase
             $sourceConnectorFactory,
             $startPage,
             $pageSize,
-            $isNeedWaitingFullPage,
+            false,
             $isAllowPartialResult
-
         );
         $destConnector = new ConnectorWriteType($destConnectorFactory);
 
@@ -97,6 +95,60 @@ class MigrationTest extends TestBase
         );
     }
 
+    /**
+     * @dataProvider  mappingProvider
+     */
+    public function testCustomersDataNotWaitingFullPage(
+        $woocommerceCustomers, $magentoCustomers, $startPage, $pageSize, $isAllowPartialResult
+    )
+    {
+        $sourceConnectorFactory = $this->getMockBuilder(WooFactory::class)
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->disableArgumentCloning()
+            ->disallowMockingUnknownTypes()
+            ->onlyMethods(['createRepository'])
+            ->getMock();
+        $destConnectorFactory = $this->getMockBuilder(MagentoFactory::class)
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->disableArgumentCloning()
+            ->disallowMockingUnknownTypes()
+            ->onlyMethods(['createRepository'])
+            ->getMock();
+
+        $fakeSourceRepository = new CustomerRepositoryStub();
+        $sourceConnectorFactory
+            ->method('createRepository')
+            ->will($this->returnValue($fakeSourceRepository));
+        $fakeDestRepository = new CustomerRepositoryStub();
+        $destConnectorFactory
+            ->method('createRepository')
+            ->will($this->returnValue($fakeDestRepository));
+
+        $sourceConnector = new ConnectorReadType(
+            $sourceConnectorFactory,
+            $startPage,
+            $pageSize,
+            false,
+            $isAllowPartialResult
+        );
+        $destConnector = new ConnectorWriteType($destConnectorFactory);
+
+        $fakeSourceRepository->create($woocommerceCustomers);
+
+        $migration = new Migration(
+            $sourceConnector,
+            $destConnector,
+            new BaseHandler()
+        );
+
+        $migration->start();
+        foreach ($fakeDestRepository->fetchPage(1, 99999) as $k => $customerFromWoocommerce) {
+            $customerFromWoocommerce = $magentoCustomers[$k];
+            $this->assertEquals($customerFromWoocommerce, $magentoCustomers[$k]);
+        }
+    }
 
 
     public function Tmp()
@@ -161,7 +213,7 @@ class MigrationTest extends TestBase
     }
 
 
-    public function validCountProvider()
+    public function countProvider()
     {
         return [
             [
@@ -236,6 +288,95 @@ class MigrationTest extends TestBase
                     $this->fixturesWoocommerce->fifth(),
                 ],
                 4,
+                1,
+                2,
+                false,//isAllowPartialResult
+            ],
+        ];
+    }
+
+    public function mappingProvider()
+    {
+        return [
+            [
+                [
+                    $this->fixturesWoocommerce->first(),
+                ],
+                [
+                    $this->fixturesMagento->first(),
+                ],
+                1,
+                10,
+                true,//isAllowPartialResult
+            ],
+            [
+                [
+                    $this->fixturesWoocommerce->first(),
+                    $this->fixturesWoocommerce->second(),
+                    $this->fixturesWoocommerce->third(),
+                    $this->fixturesWoocommerce->fourth(),
+                ],
+                [
+                    $this->fixturesMagento->first(),
+                    $this->fixturesMagento->second(),
+                    $this->fixturesMagento->third(),
+                    $this->fixturesMagento->fourth(),
+                ],
+                1,
+                2,
+                true,//isAllowPartialResult
+            ],
+            [
+                [
+                    $this->fixturesWoocommerce->first(),
+                    $this->fixturesWoocommerce->second(),
+                    $this->fixturesWoocommerce->third(),
+                    $this->fixturesWoocommerce->fourth(),
+                    $this->fixturesWoocommerce->fifth(),
+                ],
+                [
+                    $this->fixturesMagento->first(),
+                    $this->fixturesMagento->second(),
+                    $this->fixturesMagento->third(),
+                    $this->fixturesMagento->fourth(),
+                    $this->fixturesMagento->fifth(),
+                ],
+                1,
+                2,
+                true,//isAllowPartialResult
+            ],
+            [
+                [
+                    $this->fixturesWoocommerce->first(),
+                    $this->fixturesWoocommerce->second(),
+                    $this->fixturesWoocommerce->third(),
+                    $this->fixturesWoocommerce->fourth(),
+                ],
+                [
+                    $this->fixturesMagento->first(),
+                    $this->fixturesMagento->second(),
+                    $this->fixturesMagento->third(),
+                    $this->fixturesMagento->fourth(),
+                ],
+                1,
+                2,
+                false,//isAllowPartialResult
+            ],
+            [
+                [
+                    $this->fixturesWoocommerce->first(),
+                    $this->fixturesWoocommerce->second(),
+                    $this->fixturesWoocommerce->third(),
+                    $this->fixturesWoocommerce->fourth(),
+                    $this->fixturesWoocommerce->fifth(),
+                ],
+                [
+                    $this->fixturesMagento->first(),
+                    $this->fixturesMagento->second(),
+                    $this->fixturesMagento->third(),
+                    $this->fixturesMagento->fourth(),
+                    $this->fixturesMagento->fifth(),
+                ],
                 1,
                 2,
                 false,//isAllowPartialResult
