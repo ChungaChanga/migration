@@ -20,9 +20,13 @@ class ConnectorIterator implements Iterator
         private int $startPage = 1,
         private int $pageSize = 10,
         private bool $isNeedWaitingFullPage = false,
+        private bool $isAllowPartialResult = false,
         private int $delaySeconds = 0
     )
     {
+        if (true === $isNeedWaitingFullPage && true === $isAllowPartialResult) {
+            throw new InvalidArgumentException('Prevent duplication. Only 1 argument can be true');
+        }
         if ($startPage < 1) {
             throw new InvalidArgumentException('Start Page can not be less than 1');
         }
@@ -41,8 +45,10 @@ class ConnectorIterator implements Iterator
 
         $this->isNeedRepeatIteration = false;
         if ($this->isPartialResult($fetchResult)) {
-            if (true === $this->isNeedWaitingFullPage) {
+            if (false === $this->isAllowPartialResult) {
                 $fetchResult = [];//waiting for the full page
+            }
+            if (true === $this->isNeedWaitingFullPage) {
                 $this->isNeedRepeatIteration = true;
             } else {
                 $this->isNeedBreak = true;

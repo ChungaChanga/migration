@@ -15,10 +15,17 @@ class ConnectorReadType
         int $startPage,
         int $pageSize,
         bool $isNeedWaitingFullPage = false,
+        bool $isAllowPartialResult = false,
         int $delaySeconds = 0
     )
     {
-        $this->iterator = $factory->createIterator($startPage, $pageSize, $isNeedWaitingFullPage, $delaySeconds);
+        $this->iterator = $factory->createIterator(
+            $startPage,
+            $pageSize,
+            $isNeedWaitingFullPage,
+            $isAllowPartialResult,
+            $delaySeconds
+        );
     }
 
     public function getIterator(): \Iterator

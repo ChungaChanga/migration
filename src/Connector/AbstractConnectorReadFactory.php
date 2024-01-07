@@ -13,6 +13,7 @@ abstract class AbstractConnectorReadFactory implements ConnectorFactoryReadInter
         int $startPage,
         int $pageSize,
         bool $isNeedWaitingFullPage,
+        bool $isAllowPartialResult,
         int $delaySeconds
     ): \Iterator
     {
@@ -22,6 +23,7 @@ abstract class AbstractConnectorReadFactory implements ConnectorFactoryReadInter
             $startPage,
             $pageSize,
             $isNeedWaitingFullPage,
+            $isAllowPartialResult,
             $delaySeconds
         );
     }

@@ -43,8 +43,11 @@ class MigrationTest extends TestBase
     /**
      * @dataProvider  validCountProvider
      */
-    public function testCustomersCountNotWaitingFullPage($customers, $customersCount, $startPage, $pageSize)
+    public function testCustomersCountNotWaitingFullPage(
+        $customers, $customersCount, $startPage, $pageSize, $isAllowPartialResult
+    )
     {
+        $isNeedWaitingFullPage = false;
         $sourceConnectorFactory = $this->getMockBuilder(WooFactory::class)
             ->disableOriginalConstructor()
             ->disableOriginalClone()
@@ -69,7 +72,14 @@ class MigrationTest extends TestBase
             ->method('createRepository')
             ->will($this->returnValue($fakeDestRepository));
 
-        $sourceConnector = new ConnectorReadType($sourceConnectorFactory, $startPage, $pageSize, false);
+        $sourceConnector = new ConnectorReadType(
+            $sourceConnectorFactory,
+            $startPage,
+            $pageSize,
+            $isNeedWaitingFullPage,
+            $isAllowPartialResult
+
+        );
         $destConnector = new ConnectorWriteType($destConnectorFactory);
 
         $fakeSourceRepository->create($customers);
@@ -158,7 +168,8 @@ class MigrationTest extends TestBase
                 [],
                 0,//will migrated count
                 1,//pageStart
-                5//pageSize
+                5,//pageSize,
+                true,//isAllowPartialResult
             ],
             [
                 [
@@ -166,7 +177,8 @@ class MigrationTest extends TestBase
                 ],
                 1,
                 1,
-                10
+                10,
+                true,//isAllowPartialResult
             ],
             [
                 [
@@ -177,7 +189,8 @@ class MigrationTest extends TestBase
                 ],
                 4,
                 1,
-                2
+                2,
+                true,//isAllowPartialResult
             ],
             [
                 [
@@ -189,8 +202,45 @@ class MigrationTest extends TestBase
                 ],
                 5,
                 1,
-                2
+                2,
+                true,//isAllowPartialResult
             ],
+
+            [
+                [
+                    $this->fixturesWoocommerce->first(),
+                ],
+                0,
+                1,
+                10,
+                false,//isAllowPartialResult
+            ],
+            [
+                [
+                    $this->fixturesWoocommerce->first(),
+                    $this->fixturesWoocommerce->second(),
+                    $this->fixturesWoocommerce->third(),
+                    $this->fixturesWoocommerce->fourth(),
+                ],
+                4,
+                1,
+                2,
+                false,//isAllowPartialResult
+            ],
+            [
+                [
+                    $this->fixturesWoocommerce->first(),
+                    $this->fixturesWoocommerce->second(),
+                    $this->fixturesWoocommerce->third(),
+                    $this->fixturesWoocommerce->fourth(),
+                    $this->fixturesWoocommerce->fifth(),
+                ],
+                4,
+                1,
+                2,
+                false,//isAllowPartialResult
+            ],
+
         ];
     }
 }
