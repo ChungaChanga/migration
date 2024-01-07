@@ -8,17 +8,13 @@ class MigrationState
 {
     public function __construct(
         private string $name,
-        private int $startBatchNumber,
-        private int $batchSize,
-        private bool $isNeedWaiting = true,
-        private int $jumpSize = 0,
-        private int $delaySeconds = 0
+        private int    $pageSize = 10,
+        private bool   $isNeedWaiting = true,
+        private int    $jumpSize = 0,
+        private int    $delaySeconds = 0
 
     )
     {
-        if ($startBatchNumber < 0) {
-            throw new InvalidArgumentException('Start Batch Number can not be a negative number');
-        }
         if ($jumpSize < 0) {
             throw new InvalidArgumentException('Jump Size can not be a negative number');
         }
@@ -37,24 +33,24 @@ class MigrationState
         $this->name = $name;
     }
 
-    public function getStartBatchNumber(): int
+    public function getStartPage(): int
     {
-        return $this->startBatchNumber;
+        return $this->startPage;
     }
 
-    public function setStartBatchNumber(int $startBatchNumber): void
+    public function setStartPage(int $startPage): void
     {
-        $this->startBatchNumber = $startBatchNumber;
+        $this->startPage = $startPage;
     }
 
-    public function getBatchSize(): int
+    public function getPageSize(): int
     {
-        return $this->batchSize;
+        return $this->pageSize;
     }
 
-    public function setBatchSize(int $batchSize): void
+    public function setPageSize(int $pageSize): void
     {
-        $this->batchSize = $batchSize;
+        $this->pageSize = $pageSize;
     }
 
     public function getIsNeedWaiting(): bool

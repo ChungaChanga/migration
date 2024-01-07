@@ -17,22 +17,18 @@ class Migration implements MigrationInterface
     public function __construct(
         private ConnectorReadType $sourceConnector,
         private ConnectorWriteType $destConnector,
-        private MigrationState $state,
         private HandlerInterface $entityHandler,
     )
     {
     }
-    public function start()
+    public function start(): void
     {
         /**
          * @var ArrayCollection $entities
          */
         foreach ($this->sourceConnector->getIterator() as $pageNum => $entities) {
-            if ($this->state->getDelaySeconds() > 0) {
-                sleep($this->state->getDelaySeconds());
-            }
-            if ($entities->isEmpty() && false === $this->state->getIsNeedWaiting()) {
-                break;
+            if ($entities->isEmpty()) {
+                continue;
             }
             $this->entityHandler->handle($entities);
             $this->destConnector->create($entities);

@@ -11,14 +11,16 @@ use InvalidArgumentException;
 class ConnectorIterator implements Iterator
 {
     private int $currentPage;
-    private ArrayCollection $currentResult;
-
+    private bool $isNeedRepeatIteration = false;
+    private bool $isNeedBreak = false;
 
     public function __construct(
         private RepositoryReadInterface $repository,
         private MapperReadInterface $mapper,
         private int $startPage = 1,
         private int $pageSize = 10,
+        private bool $isNeedWaitingFullPage = false,
+        private int $delaySeconds = 0
     )
     {
         if ($startPage < 1) {
@@ -37,21 +39,29 @@ class ConnectorIterator implements Iterator
             $this->pageSize
         );
 
+        $this->isNeedRepeatIteration = false;
         if ($this->isPartialResult($fetchResult)) {
-            $fetchResult = [];//waiting for the full page
+            if (true === $this->isNeedWaitingFullPage) {
+                $fetchResult = [];//waiting for the full page
+                $this->isNeedRepeatIteration = true;
+            } else {
+                $this->isNeedBreak = true;
+            }
         }
 
         foreach ($fetchResult as $entityState) {
             $result->add($this->mapper->fromState($entityState));
         }
 
-        $this->setCurrentResult($result);
-        return $this->getCurrentResult();
+        return $result;
     }
 
     public function next(): void
     {
-        if ($this->isPartialResult($this->getCurrentResult())) {
+        if ($this->delaySeconds > 0) {
+            sleep($this->delaySeconds);
+        }
+        if ($this->isNeedRepeatIteration) {
             return;
         }
         $this->currentPage++;
@@ -64,7 +74,7 @@ class ConnectorIterator implements Iterator
 
     public function valid(): bool
     {
-        return true;
+        return !$this->isNeedBreak;
     }
 
     public function rewind(): void
@@ -78,15 +88,5 @@ class ConnectorIterator implements Iterator
             return true;
         }
         return false;
-    }
-
-    private function getCurrentResult(): ArrayCollection
-    {
-        return $this->currentResult;
-    }
-
-    private function setCurrentResult(ArrayCollection $currentResult): void
-    {
-        $this->currentResult = $currentResult;
     }
 }

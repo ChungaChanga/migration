@@ -1,13 +1,19 @@
 <?php
 
-namespace App\Tests\Fake;
+namespace App\Tests\Fake\Woocommerce;
 
-use App\Connector\RepositoryReadAbstract;
+use App\Connector\Woocommerce\Repository\CustomerRepository;
 use Chungachanga\AbstractMigration\Repository\RepositoryFullInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class CustomerRepositoryStub extends RepositoryReadAbstract implements RepositoryFullInterface
+class CustomerRepositoryStub extends CustomerRepository implements RepositoryFullInterface
 {
     private array $entities = [];
+
+    public function __construct()
+    {
+
+    }
 
     public function create(array $entities)
     {

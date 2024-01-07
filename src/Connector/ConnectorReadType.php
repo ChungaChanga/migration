@@ -13,10 +13,12 @@ class ConnectorReadType
     public function __construct(
         ConnectorFactoryReadInterface $factory,
         int $startPage,
-        int $pageSize
+        int $pageSize,
+        bool $isNeedWaitingFullPage = false,
+        int $delaySeconds = 0
     )
     {
-        $this->iterator = $factory->createIterator($startPage, $pageSize);
+        $this->iterator = $factory->createIterator($startPage, $pageSize, $isNeedWaitingFullPage, $delaySeconds);
     }
 
     public function getIterator(): \Iterator

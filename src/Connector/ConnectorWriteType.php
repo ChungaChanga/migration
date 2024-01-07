@@ -17,8 +17,12 @@ class ConnectorWriteType
         $this->mapper = $factory->createMapper();
     }
 
-    public function create(Collection $entities)
+    public function create(Collection $entities): void
     {
-        // TODO: Implement getWritingIterator() method.
+        $entitiesState = [];
+        foreach ($entities as $entity) {
+            $entitiesState[] = $this->mapper->getState($entity);
+        }
+        $this->repository->create($entitiesState);
     }
 }

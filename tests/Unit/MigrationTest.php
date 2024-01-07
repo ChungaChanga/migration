@@ -3,27 +3,26 @@
 /**
  * Test migration from Woocommerce to Magento2
  */
-namespace App\Tests\Unit\Migration\Woocommerce\Magento;
+namespace App\Tests\Unit;
 
-use App\Connector\Memory\Connector;
-use App\Connector\Memory\ConnectorElementsFactory;
+use App\Connector\ConnectorReadType;
+use App\Connector\ConnectorWriteType;
+use App\Connector\Magento\Factory\CustomerConnectorFactory as MagentoFactory;
+use App\Connector\Woocommerce\Factory\CustomerConnectorFactory as WooFactory;
 use App\Migration\Migration;
 use App\Migration\MigrationState;
+use App\Tests\Fake\Woocommerce\CustomerRepositoryStub;
 use App\Tests\Fixtures\CustomersInterface;
 use App\Tests\Fixtures\Magento\Customers as MagentoCustomers;
 use App\Tests\Fixtures\Woocommerce\Customers as WoocommerceCustomers;
 use App\Tests\TestBase;
-use App\TransferStrategy\CustomerTransferStrategy;
-use Chungachanga\AbstractMigration\Connection\Connection;
-use Chungachanga\AbstractMigration\Connector\ConnectorReadInterface;
-use Chungachanga\AbstractMigration\Connector\ConnectorWriteInterface;
+use App\Tests\Unit\Migration\Woocommerce\Magento\ConnectorReadInterface;
+use App\Tests\Unit\Migration\Woocommerce\Magento\ConnectorWriteInterface;
 use Chungachanga\AbstractMigration\EntityHandler\BaseHandler;
 use Doctrine\ORM\EntityManagerInterface;
 
-class CustomerTest extends TestBase
+class MigrationTest extends TestBase
 {
-    private ConnectorReadInterface $sourceConnectorMock;
-    private ConnectorWriteInterface $destConnectorMock;
     private EntityManagerInterface $entityManagerMock;
     private CustomersInterface $fixturesWoocommerce;
     private CustomersInterface $fixturesMagento;
@@ -37,100 +36,60 @@ class CustomerTest extends TestBase
 
     public function setUp(): void
     {
-        $entityType = 'customer';//fixme enum
-
-        $sourceFactory = new ConnectorElementsFactory($entityType);
-
-        $this->sourceConnector = new Connector(
-            $sourceFactory->createRepository(),
-            $sourceFactory->createMapper()
-        );
-
-        $destFactory = new ConnectorElementsFactory($entityType);
-        $this->destConnector = new Connector(
-            $sourceFactory->createRepository(),
-            $sourceFactory->createMapper()
-        );
-
         $this->entityManagerMock = $this->getMockBuilder(EntityManagerInterface::class)
             ->getMock();
     }
 
-//    /**
-//     * @dataProvider  validCountProvider
-//     */
-//    public function testCustomersCountNotWaiting($customers, $customersCount)
-//    {
-//        $isNeedWaiting = false;
-//
-//        $this->sourceConnectorMock->getRepository()->create($customers);
-//        $connection = new Connection(
-//            $this->sourceConnectorMock,
-//            $this->destConnectorMock,
-//        );
-//
-//        $strategy = new CustomerTransferStrategy($this->destConnectorMock, $this->entityManagerMock);
-//
-//        $migrationState = new MigrationState(
-//            static::class,
-//            1,
-//            10,
-//            $isNeedWaiting,
-//        );
-//
-//        $migration = new Migration(
-//            $connection,
-//            $strategy,
-//            $migrationState,
-//            new BaseHandler()
-//        );
-//
-//        $migration->start();
-//        $connection->getDestinationConnector()->getRepository();
-//        $this->assertCount(
-//            $customersCount,
-//            $connection->getDestinationConnector()->getRepository()->fetchPage(1, 99999)
-//        );
-//    }
     /**
      * @dataProvider  validCountProvider
      */
-    public function testCustomersCountNotWaiting($customers, $customersCount)
+    public function testCustomersCountNotWaitingFullPage($customers, $customersCount, $startPage, $pageSize)
     {
-        $isNeedWaiting = false;
+        $sourceConnectorFactory = $this->getMockBuilder(WooFactory::class)
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->disableArgumentCloning()
+            ->disallowMockingUnknownTypes()
+            ->onlyMethods(['createRepository'])
+            ->getMock();
+        $destConnectorFactory = $this->getMockBuilder(MagentoFactory::class)
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
+            ->disableArgumentCloning()
+            ->disallowMockingUnknownTypes()
+            ->onlyMethods(['createRepository'])
+            ->getMock();
 
-        $this->sourceConnectorMock->getWritingIterator($customers);
-        $connection = new Connection(
-            $this->sourceConnectorMock,
-            $this->destConnectorMock,
-        );
+        $fakeSourceRepository = new CustomerRepositoryStub();
+        $sourceConnectorFactory
+            ->method('createRepository')
+            ->will($this->returnValue($fakeSourceRepository));
+        $fakeDestRepository = new CustomerRepositoryStub();
+        $destConnectorFactory
+            ->method('createRepository')
+            ->will($this->returnValue($fakeDestRepository));
 
-        $strategy = new CustomerTransferStrategy($this->destConnectorMock, $this->entityManagerMock);
+        $sourceConnector = new ConnectorReadType($sourceConnectorFactory, $startPage, $pageSize, false);
+        $destConnector = new ConnectorWriteType($destConnectorFactory);
 
-        $migrationState = new MigrationState(
-            static::class,
-            1,
-            10,
-            $isNeedWaiting,
-        );
+        $fakeSourceRepository->create($customers);
 
         $migration = new Migration(
-            $connection,
-            $strategy,
-            $migrationState,
+            $sourceConnector,
+            $destConnector,
             new BaseHandler()
         );
 
         $migration->start();
-        $connection->getDestinationConnector()->getRepository();
         $this->assertCount(
             $customersCount,
-            $connection->getDestinationConnector()->getRepository()->fetchPage(1, 99999)
+            $fakeDestRepository->fetchPage(1, 99999)
         );
     }
 
 
-    public function testTmp()
+
+    public function Tmp()
     {
         /**
          * Config
@@ -197,13 +156,17 @@ class CustomerTest extends TestBase
         return [
             [
                 [],
-                0
+                0,//will migrated count
+                1,//pageStart
+                5//pageSize
             ],
             [
                 [
                     $this->fixturesWoocommerce->first(),
                 ],
-                1
+                1,
+                1,
+                10
             ],
             [
                 [
@@ -212,7 +175,9 @@ class CustomerTest extends TestBase
                     $this->fixturesWoocommerce->third(),
                     $this->fixturesWoocommerce->fourth(),
                 ],
-                4
+                4,
+                1,
+                2
             ],
             [
                 [
@@ -222,7 +187,9 @@ class CustomerTest extends TestBase
                     $this->fixturesWoocommerce->fourth(),
                     $this->fixturesWoocommerce->fifth(),
                 ],
-                5
+                5,
+                1,
+                2
             ],
         ];
     }

@@ -2,15 +2,15 @@
 
 namespace App\Connector\Woocommerce\Factory;
 
+use App\Connector\AbstractConnectorReadFactory;
 use App\Connector\Woocommerce\Mapper\CustomerMapper;
 use App\Connector\Woocommerce\Repository\CustomerRepository;
-use App\Iterator\ConnectorIterator;
 use Chungachanga\AbstractMigration\Connector\ConnectorFactoryReadInterface;
 use Chungachanga\AbstractMigration\Mapper\MapperReadInterface;
 use Chungachanga\AbstractMigration\Repository\RepositoryReadInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class CustomerConnectorFactory implements ConnectorFactoryReadInterface
+class CustomerConnectorFactory extends AbstractConnectorReadFactory implements ConnectorFactoryReadInterface
 {
     public function __construct(
         private HttpClientInterface $client,
@@ -33,15 +33,5 @@ class CustomerConnectorFactory implements ConnectorFactoryReadInterface
     public function createMapper(): MapperReadInterface
     {
         return new CustomerMapper();
-    }
-
-    public function createIterator($startPage, $pageSize): \Iterator
-    {
-        return new ConnectorIterator(
-            $this->createRepository(),
-            $this->createMapper(),
-            $startPage,
-            $pageSize
-        );
     }
 }

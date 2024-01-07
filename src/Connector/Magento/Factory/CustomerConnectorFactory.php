@@ -2,6 +2,7 @@
 
 namespace App\Connector\Magento\Factory;
 
+use App\Connector\Magento\Mapper\CustomerMapper;
 use App\Connector\Magento\Repository\CustomerRepository;
 use Chungachanga\AbstractMigration\Connector\ConnectorFactoryWriteInterface;
 use Chungachanga\AbstractMigration\Mapper\MapperWriteInterface;
@@ -30,6 +31,6 @@ class CustomerConnectorFactory implements ConnectorFactoryWriteInterface
 
     public function createMapper(): MapperWriteInterface
     {
-        // TODO: Implement createMapper() method.
+        return new CustomerMapper();
     }
 }
