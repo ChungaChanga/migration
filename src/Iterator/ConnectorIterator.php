@@ -43,8 +43,8 @@ class ConnectorIterator implements Iterator
             $this->pageSize
         );
 
-        $this->handleRepeatIterationRule($fetchResult);
         if ($this->isPartialResult($fetchResult)) {
+            $this->handleRepeatIterationRule();
             $this->handleBreakRule();
             $fetchResult = $this->handleReturnPartialResultRule($fetchResult);
         }
@@ -62,6 +62,7 @@ class ConnectorIterator implements Iterator
             sleep($this->delaySeconds);
         }
         if ($this->isNeedRepeatIteration) {
+            $this->isNeedRepeatIteration = false;
             return;
         }
         $this->currentPage++;
@@ -90,10 +91,9 @@ class ConnectorIterator implements Iterator
         return false;
     }
 
-    private function handleRepeatIterationRule(array $fetchResult): void
+    private function handleRepeatIterationRule(): void
     {
-        $this->isNeedRepeatIteration = false;
-        if ($this->isPartialResult($fetchResult) && true === $this->isNeedWaitingFullPage) {
+        if (true === $this->isNeedWaitingFullPage) {
             $this->isNeedRepeatIteration = true;
         }
     }
