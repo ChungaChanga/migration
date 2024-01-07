@@ -33,26 +33,6 @@ class ConnectorIterator implements Iterator
         $this->currentPage = $this->startPage;
     }
 
-    private function handleRepeatIterationRule(): void
-    {
-        $this->isNeedRepeatIteration = false;
-        if (true === $this->isNeedWaitingFullPage) {
-            $this->isNeedRepeatIteration = true;
-        }
-    }
-    private function handleReturnPartialResultRule($fetchResult): array
-    {
-        if (false === $this->isAllowPartialResult) {
-            return [];//waiting for the full page
-        }
-        return $fetchResult;
-    }
-    private function handleBreakRule(): void
-    {
-        if (false === $this->isNeedWaitingFullPage) {
-            $this->isNeedBreak = true;
-        }
-    }
     public function current(): ArrayCollection
     {
         //todo check memory leak
@@ -63,8 +43,8 @@ class ConnectorIterator implements Iterator
             $this->pageSize
         );
 
+        $this->handleRepeatIterationRule($fetchResult);
         if ($this->isPartialResult($fetchResult)) {
-            $this->handleRepeatIterationRule();
             $this->handleBreakRule();
             $fetchResult = $this->handleReturnPartialResultRule($fetchResult);
         }
@@ -108,5 +88,26 @@ class ConnectorIterator implements Iterator
             return true;
         }
         return false;
+    }
+
+    private function handleRepeatIterationRule(array $fetchResult): void
+    {
+        $this->isNeedRepeatIteration = false;
+        if ($this->isPartialResult($fetchResult) && true === $this->isNeedWaitingFullPage) {
+            $this->isNeedRepeatIteration = true;
+        }
+    }
+    private function handleReturnPartialResultRule($fetchResult): array
+    {
+        if (false === $this->isAllowPartialResult) {
+            return [];//waiting for the full page
+        }
+        return $fetchResult;
+    }
+    private function handleBreakRule(): void
+    {
+        if (false === $this->isNeedWaitingFullPage) {
+            $this->isNeedBreak = true;
+        }
     }
 }
