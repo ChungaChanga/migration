@@ -131,8 +131,7 @@ class MigrationTest extends TestBase
 
         $migration->start();
         foreach ($fakeDestRepository->fetchPage(1, 99999) as $k => $customerFromWoocommerce) {
-            $customerFromWoocommerce = $magentoCustomers[$k];
-            $this->assertEquals($customerFromWoocommerce, $magentoCustomers[$k]);
+            $this->assertEquals($customerFromWoocommerce['entity']['email'], $magentoCustomers[$k]['email']);
         }
     }
 
