@@ -2,6 +2,7 @@
 
 namespace App\Connector;
 
+use App\Iterator\ConnectorIterator;
 use Chungachanga\AbstractMigration\Connector\ConnectorFactoryReadInterface;
 use Chungachanga\AbstractMigration\Mapper\MapperReadInterface;
 use Chungachanga\AbstractMigration\Repository\RepositoryReadInterface;
@@ -16,8 +17,9 @@ class ConnectorReadType
         $this->mapper = $factory->createMapper();
     }
 
-    public function getIterator(): \Iterator
+    public function getIterator(int $startPage, int $pageSize): \Iterator
     {
-        // TODO: Implement getReadingIterator() method.
+        $iterator = new ConnectorIterator($this->repository, $startPage, $pageSize);
+        $iterator = new M
     }
 }

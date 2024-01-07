@@ -2,7 +2,7 @@
 
 namespace App\Connector;
 
-use App\Iterator\AwaitingRepositoryIterator;
+use App\Iterator\AwaitingIteratorWrapper;
 use Chungachanga\AbstractMigration\Repository\RepositoryReadInterface;
 
 abstract class RepositoryReadAbstract implements RepositoryReadInterface
@@ -11,9 +11,9 @@ abstract class RepositoryReadAbstract implements RepositoryReadInterface
         int $page,
         int $pageSize = 10,
         int $jumpSize = 0,
-    ): AwaitingRepositoryIterator
+    ): AwaitingIteratorWrapper
     {
-        return new AwaitingRepositoryIterator($this, $page, $pageSize, $jumpSize);
+        return new AwaitingIteratorWrapper($this, $page, $pageSize, $jumpSize);
     }
 
     protected function validatePage(int $page): void

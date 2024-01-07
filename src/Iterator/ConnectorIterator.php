@@ -2,11 +2,12 @@
 
 namespace App\Iterator;
 
+use Chungachanga\AbstractMigration\Mapper\MapperReadInterface;
 use Chungachanga\AbstractMigration\Repository\RepositoryReadInterface;
 use Iterator;
 use InvalidArgumentException;
 
-class AwaitingRepositoryIterator implements Iterator
+class ConnectorIterator implements Iterator
 {
     private int $currentPage;
     private array $currentResult;
@@ -14,9 +15,9 @@ class AwaitingRepositoryIterator implements Iterator
 
     public function __construct(
         private RepositoryReadInterface $repository,
+        private MapperReadInterface $mapper,
         private int $startPage = 1,
         private int $pageSize = 10,
-        private int $jumpSize = 0,
     )
     {
         if ($startPage < 1) {
@@ -25,19 +26,16 @@ class AwaitingRepositoryIterator implements Iterator
         $this->currentPage = $this->startPage;
     }
 
-    public function current(): mixed
+    public function current(): array
     {
         $result = $this->repository->fetchPage(
             $this->currentPage,
             $this->pageSize
         );
-
         if ($this->isPartialResult($result)) {
-            $this->setCurrentResult([]);//waiting for the full page
-        } else {
-            $this->setCurrentResult($result);
+            $result = [];//waiting for the full page
         }
-
+        $this->setCurrentResult($this->mapper->fromState($result));
         return $this->getCurrentResult();
     }
 
@@ -81,5 +79,4 @@ class AwaitingRepositoryIterator implements Iterator
     {
         $this->currentResult = $currentResult;
     }
-
 }

@@ -2,7 +2,7 @@
 
 namespace App\Connector\Woocommerce\Repository;
 
-use App\Iterator\AwaitingRepositoryIterator;
+use App\Iterator\AwaitingIteratorWrapper;
 use App\Connector\RepositoryReadAbstract;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -21,7 +21,7 @@ abstract class AbstractRepository extends RepositoryReadAbstract
         int $startPage,
         int $pageSize = 10,
         int $jumpSize = 0,
-    ): AwaitingRepositoryIterator
+    ): AwaitingIteratorWrapper
     {
         if ($startPage < 1) {
             throw new \InvalidArgumentException('start page is must be more than 0 for Woocommerce api');
