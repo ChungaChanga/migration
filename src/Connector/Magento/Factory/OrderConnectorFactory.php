@@ -9,7 +9,7 @@ use Chungachanga\AbstractMigration\Mapper\MapperWriteInterface;
 use Chungachanga\AbstractMigration\Repository\RepositoryReadInterface;
 use Chungachanga\AbstractMigration\Repository\RepositoryWriteInterface;
 
-class OrderConnectorFactory implements ConnectorFactoryWriteInterface
+class OrderConnectorFactory extends AbstractConnectorFactory
 {
     public function createRepository(): RepositoryWriteInterface
     {
