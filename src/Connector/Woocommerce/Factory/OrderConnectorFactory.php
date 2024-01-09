@@ -5,7 +5,7 @@ namespace App\Connector\Woocommerce\Factory;
 use Chungachanga\AbstractMigration\Mapper\MapperReadInterface;
 use Chungachanga\AbstractMigration\Repository\RepositoryReadInterface;
 
-class OrderConnectorFactory extends AbstractFactory
+class OrderConnectorFactory extends ConnectorFactory
 {
     public function createRepository(): RepositoryReadInterface
     {

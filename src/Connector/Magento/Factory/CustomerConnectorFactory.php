@@ -10,7 +10,7 @@ use Chungachanga\AbstractMigration\Repository\RepositoryWriteInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class CustomerConnectorFactory extends AbstractConnectorFactory
+abstract class CustomerConnectorFactory extends ConnectorFactory
 {
     public function createRepository(): RepositoryWriteInterface
     {

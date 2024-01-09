@@ -18,12 +18,12 @@ class EntitiesCreateAfterEvent extends Event
     {
     }
 
-    public function getEntities()
+    public function getEntities(): Collection
     {
         return $this->entities;
     }
 
-    public function getResult()
+    public function getResult(): array
     {
         return $this->result;
     }

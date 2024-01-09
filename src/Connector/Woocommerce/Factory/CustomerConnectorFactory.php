@@ -9,7 +9,7 @@ use Chungachanga\AbstractMigration\Repository\RepositoryReadInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class CustomerConnectorFactory extends AbstractFactory
+class CustomerConnectorFactory extends ConnectorFactory
 {
     public function __construct(
         private HttpClientInterface $client,

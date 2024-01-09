@@ -76,7 +76,7 @@ class WooToMagentoMigrationTest extends TestBase
             false,
             $isAllowPartialResult
         );
-        $destConnector = new ConnectorWriteType($this->destConnectorFactory);
+        $destConnector = $this->destConnectorFactor->c($this->destConnectorFactory);
 
         $fakeSourceRepository->create($customers);
 

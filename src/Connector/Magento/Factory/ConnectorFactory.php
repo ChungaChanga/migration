@@ -2,14 +2,16 @@
 
 namespace App\Connector\Magento\Factory;
 
+use App\Connector\AbstractConnectorWriteFactory;
 use App\Connector\ConnectorWriteType;
+use App\Connector\Magento\Connector\BaseConnector;
 use App\Event\EntitiesCreateAfterEvent;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class AbstractConnectorFactory extends ConnectorWriteType
+abstract class ConnectorFactory extends AbstractConnectorWriteFactory
 {
     public function __construct(
         protected HttpClientInterface $client,
@@ -20,14 +22,12 @@ class AbstractConnectorFactory extends ConnectorWriteType
     )
     {
     }
-
-    public function create(Collection $entities): void
+    public function createConnector(): ConnectorWriteType
     {
-        foreach ($entities as $entity) {
-            $entityState = $this->mapper->getState($entity);
-            $result = $this->repository->createOne($entityState);
-            $event = new EntitiesCreateAfterEvent(new ArrayCollection([$entity]), $result);
-            $this->eventDispatcher->dispatch($event);
-        }
+        return new BaseConnector(
+            $this->createRepository(),
+            $this->createMapper(),
+            $this->eventDispatcher
+        );
     }
 }
