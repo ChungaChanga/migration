@@ -28,16 +28,16 @@ class CustomerMapper implements MapperReadInterface
     public function validateState(array $state)
     {
         if (!array_key_exists('id', $state)) {
-            throw new InvalidStateException('id is required');
+            throw new InvalidStateException('property id is required');
         }
         if (!array_key_exists('email', $state)) {
-            throw new InvalidStateException('email is required');
+            throw new InvalidStateException('property email is required');
         }
         if (!array_key_exists('first_name', $state)) {
-            throw new InvalidStateException('first_name is required');
+            throw new InvalidStateException('property first_name is required');
         }
         if (!array_key_exists('last_name', $state)) {
-            throw new InvalidStateException('last_name is required');
+            throw new InvalidStateException('property last_name is required');
         }
     }
 }

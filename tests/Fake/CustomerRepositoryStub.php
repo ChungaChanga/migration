@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Tests\Fake\Woocommerce;
+namespace App\Tests\Fake;
 
-use App\Connector\Woocommerce\Repository\CustomerRepository;
+use App\Connector\Woocommerce\Repository\AbstractRepository;
 use Chungachanga\AbstractMigration\Repository\RepositoryFullInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class CustomerRepositoryStub extends CustomerRepository implements RepositoryFullInterface
+class CustomerRepositoryStub extends AbstractRepository implements RepositoryFullInterface
 {
     private array $entities = [];
 
@@ -18,12 +17,6 @@ class CustomerRepositoryStub extends CustomerRepository implements RepositoryFul
     public function create(array $entities)
     {
         $this->entities = array_merge($this->entities, $entities);
-    }
-
-    public function createOne($entity)//todo interface and type
-    {
-        $this->entities[] = $entity;
-        return count($this->entities) - 1;
     }
 
     public function fetch(int $start, int $end): array

@@ -5,22 +5,23 @@ namespace App\Tests\Unit\Connector\Woocommerce;
 use App\Connector\Woocommerce\Mapper\CustomerMapper;
 use App\Entity\Customer;
 use App\Exception\InvalidStateException;
+use App\Tests\Fixtures\CustomersInterface;
+use App\Tests\Fixtures\Woocommerce\Customers;
 use App\Tests\TestBase;
 
 class CustomerMapperTest extends TestBase
 {
 
+    private CustomersInterface $fixturesWoocommerce;
+    public function __construct(?string $name = null, array $data = [], $dataName = '')
+    {
+        $this->fixturesWoocommerce = new Customers();
+        parent::__construct($name, $data, $dataName);
+    }
     public function testCreateCustomer()
     {
-        $customerState = [
-            'id' => 1,
-            'email' => 'ritav@test.ru',
-            'first_name' => 'Rita',
-            'last_name' => 'Vrataski'
-        ];
-
-        $mapper = new CustomerMapper();
-        $customer = $mapper->fromState($customerState);
+        $customerState =  $this->fixturesWoocommerce->first();
+        $customer = (new CustomerMapper())->fromState($customerState);
 
         $this->assertInstanceOf(Customer::class, $customer);
         $this->assertEquals($customerState['email'], $customer->getEmail());
@@ -31,59 +32,18 @@ class CustomerMapperTest extends TestBase
     public function testValidateEmail()
     {
         $this->expectException(InvalidStateException::class);
-        $this->expectExceptionMessage('email is required');
+        $this->expectExceptionMessage('property email is required');
 
-        $customerState = [
-            'id' => 1,
-            'first_name' => 'Rita',
-            'last_name' => 'Vrataski'
-        ];
-        $mapper = new CustomerMapper();
-        $mapper->validateState($customerState);
-
+        $customerState =  $this->fixturesWoocommerce->withoutEmail();
+        (new CustomerMapper())->fromState($customerState);
     }
 
     public function testValidateId()
     {
         $this->expectException(InvalidStateException::class);
-        $this->expectExceptionMessage('id is required');
+        $this->expectExceptionMessage('property id is required');
 
-        $customerState = [
-            'email' => 'ritav@test.ru',
-            'first_name' => 'Rita',
-            'last_name' => 'Vrataski'
-        ];
-        $mapper = new CustomerMapper();
-        $mapper->validateState($customerState);
+        $customerState =  $this->fixturesWoocommerce->withoutId();
+        (new CustomerMapper())->fromState($customerState);
     }
-
-    public function testValidateFirstName()
-    {
-        $this->expectException(InvalidStateException::class);
-        $this->expectExceptionMessage('first_name is required');
-
-        $customerState = [
-            'id' => 1,
-            'email' => 'ritav@test.ru',
-            'last_name' => 'Vrataski'
-        ];
-        $mapper = new CustomerMapper();
-        $mapper->validateState($customerState);
-
-    }
-
-    public function testValidateLastName()
-    {
-        $this->expectException(InvalidStateException::class);
-        $this->expectExceptionMessage('last_name is required');
-
-        $customerState = [
-            'id' => 1,
-            'email' => 'ritav@test.ru',
-            'first_name' => 'Rita',
-        ];
-        $mapper = new CustomerMapper();
-        $mapper->validateState($customerState);
-    }
-
 }

@@ -3,25 +3,22 @@
 /**
  * Test migration from Woocommerce to Magento2
  */
-namespace App\Tests\Unit;
+namespace App\Tests\Unit\Migration;
 
 use App\Connector\ConnectorReadType;
 use App\Connector\ConnectorWriteType;
 use App\Connector\Magento\Factory\CustomerConnectorFactory as MagentoFactory;
 use App\Connector\Woocommerce\Factory\CustomerConnectorFactory as WooFactory;
 use App\Migration\Migration;
-use App\Migration\MigrationState;
-use App\Tests\Fake\Woocommerce\CustomerRepositoryStub;
+use App\Tests\Fake\CustomerRepositoryStub;
 use App\Tests\Fixtures\CustomersInterface;
 use App\Tests\Fixtures\Magento\Customers as MagentoCustomers;
 use App\Tests\Fixtures\Woocommerce\Customers as WoocommerceCustomers;
 use App\Tests\TestBase;
-use App\Tests\Unit\Migration\Woocommerce\Magento\ConnectorReadInterface;
-use App\Tests\Unit\Migration\Woocommerce\Magento\ConnectorWriteInterface;
 use Chungachanga\AbstractMigration\EntityHandler\BaseHandler;
 use Doctrine\ORM\EntityManagerInterface;
 
-class MigrationTest extends TestBase
+class WooToMagentoMigrationTest extends TestBase
 {
     private WooFactory $sourceConnectorFactory;
     private MagentoFactory $destConnectorFactory;

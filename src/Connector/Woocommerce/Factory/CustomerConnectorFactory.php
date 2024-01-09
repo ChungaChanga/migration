@@ -1,16 +1,15 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Connector\Woocommerce\Factory;
 
-use App\Connector\AbstractConnectorReadFactory;
 use App\Connector\Woocommerce\Mapper\CustomerMapper;
 use App\Connector\Woocommerce\Repository\CustomerRepository;
-use Chungachanga\AbstractMigration\Connector\ConnectorFactoryReadInterface;
 use Chungachanga\AbstractMigration\Mapper\MapperReadInterface;
 use Chungachanga\AbstractMigration\Repository\RepositoryReadInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class CustomerConnectorFactory extends AbstractConnectorReadFactory implements ConnectorFactoryReadInterface
+class CustomerConnectorFactory extends AbstractFactory
 {
     public function __construct(
         private HttpClientInterface $client,

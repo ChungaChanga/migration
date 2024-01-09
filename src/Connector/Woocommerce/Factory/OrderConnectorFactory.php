@@ -1,13 +1,11 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Connector\Woocommerce\Factory;
 
-use App\Connector\AbstractConnectorReadFactory;
-use Chungachanga\AbstractMigration\Connector\ConnectorFactoryReadInterface;
 use Chungachanga\AbstractMigration\Mapper\MapperReadInterface;
 use Chungachanga\AbstractMigration\Repository\RepositoryReadInterface;
 
-class OrderConnectorFactory extends AbstractConnectorReadFactory implements ConnectorFactoryReadInterface
+class OrderConnectorFactory extends AbstractFactory
 {
     public function createRepository(): RepositoryReadInterface
     {

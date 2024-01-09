@@ -3,21 +3,26 @@
 namespace App\Connector\Magento\Repository;
 
 
+use App\Event\EntitiesCreateAfterEvent;
 use Chungachanga\AbstractMigration\Repository\RepositoryWriteInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class CustomerRepository implements RepositoryWriteInterface
 {
     public function __construct(
         private HttpClientInterface $client,
+        private EventDispatcher $eventDispatcher,
         private string $url,
     )
     {
     }
-    public function create(array $entitiesData): string
+    public function create(array $entitiesState): string
     {
-        foreach ($entitiesData as $data) {
+        foreach ($entitiesState as $data) {
             $destId = $this->createOne($data);
+            $event = new EntitiesCreateAfterEvent();
+            $this->eventDispatcher->dispatch();
         }
         return 'ok';//fixme
     }
