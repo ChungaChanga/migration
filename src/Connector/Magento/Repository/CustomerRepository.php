@@ -12,31 +12,17 @@ class CustomerRepository implements RepositoryWriteInterface
 {
     public function __construct(
         private HttpClientInterface $client,
-        private EventDispatcher $eventDispatcher,
         private string $url,
     )
     {
     }
-    public function create(array $entitiesState): string
-    {
-        foreach ($entitiesState as $data) {
-            $destId = $this->createOne($data);
-            $event = new EntitiesCreateAfterEvent();
-            $this->eventDispatcher->dispatch();
-        }
-        return 'ok';//fixme
-    }
-
-    public function createOne($data): string
+    public function create(array $data): array
     {
         $response = $this->client->request(
             'POST',
             $this->url,
             [
-                'json' => [
-                    'customer' => $data['entity'],
-                    'password' => $data['password']
-                ],
+                'json' => $data,
             ]
         );
         if (200 !== $response->getStatusCode()) {//fixme
@@ -46,7 +32,7 @@ class CustomerRepository implements RepositoryWriteInterface
                 $response->getContent()
             ));
         }
-        $result = $response->toArray();
-        return $result['id'];
+        return $response->toArray();
     }
+
 }

@@ -2,10 +2,10 @@
 
 namespace App\Connection;
 
-use App\Connector\Magento\Factory\CustomerConnectorFactory as MagentoCustomerConnectorFactory;
-use App\Connector\Magento\Factory\OrderConnectorFactory as MagentoOrderConnectorFactory;
-use App\Connector\Woocommerce\Factory\CustomerConnectorFactory as WooCustomerConnectorFactory;
-use App\Connector\Woocommerce\Factory\OrderConnectorFactory as WooOrderConnectorFactory;
+use App\Connector\Magento\ConnectorBuilder\CustomerConnectorBuilder as MagentoCustomerConnectorFactory;
+use App\Connector\Magento\ConnectorBuilder\OrderConnectorBuilder as MagentoOrderConnectorFactory;
+use App\Connector\Woocommerce\ConnectorBuilder\CustomerConnectorBuilder as WooCustomerConnectorFactory;
+use App\Connector\Woocommerce\ConnectorBuilder\OrderConnectorBuilder as WooOrderConnectorFactory;
 use App\Migration\MigrationType;
 use Chungachanga\AbstractMigration\Connector\ConnectorFactoryReadInterface;
 use Chungachanga\AbstractMigration\Connector\ConnectorFactoryWriteInterface;

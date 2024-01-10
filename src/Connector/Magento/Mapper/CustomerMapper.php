@@ -15,7 +15,7 @@ class CustomerMapper implements MapperWriteInterface
     public function getState($entity): array
     {
         return [
-            'entity' => [
+            'customer' => [
                 'email' => $entity->getEmail(),//required
                 'firstname' => $entity->getFirstName(),//required
                 'lastname' => $entity->getLastName(),//required

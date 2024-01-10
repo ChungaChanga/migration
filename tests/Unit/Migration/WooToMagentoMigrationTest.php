@@ -7,8 +7,8 @@ namespace App\Tests\Unit\Migration;
 
 use App\Connector\ConnectorReadType;
 use App\Connector\ConnectorWriteType;
-use App\Connector\Magento\Factory\CustomerConnectorFactory as MagentoFactory;
-use App\Connector\Woocommerce\Factory\CustomerConnectorFactory as WooFactory;
+use App\Connector\Magento\ConnectorBuilder\CustomerConnectorBuilder as MagentoConnectorBuilder;
+use App\Connector\Woocommerce\ConnectorBuilder\CustomerConnectorBuilder as WooConnectorBuilder;
 use App\Migration\Migration;
 use App\Tests\Fake\CustomerRepositoryStub;
 use App\Tests\Fixtures\CustomersInterface;
@@ -17,11 +17,12 @@ use App\Tests\Fixtures\Woocommerce\Customers as WoocommerceCustomers;
 use App\Tests\TestBase;
 use Chungachanga\AbstractMigration\EntityHandler\BaseHandler;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class WooToMagentoMigrationTest extends TestBase
 {
-    private WooFactory $sourceConnectorFactory;
-    private MagentoFactory $destConnectorFactory;
+    private WooConnectorBuilder $sourceConnectorBuilder;
+    private MagentoConnectorBuilder $destConnectorBuilder;
     private EntityManagerInterface $entityManagerMock;
     private CustomersInterface $fixturesWoocommerce;
     private CustomersInterface $fixturesMagento;
@@ -35,22 +36,23 @@ class WooToMagentoMigrationTest extends TestBase
 
     public function setUp(): void
     {
-        $this->sourceConnectorFactory = $this->getMockBuilder(WooFactory::class)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
-            ->onlyMethods(['createRepository'])
-            ->getMock();
-        $this->destConnectorFactory = $this->getMockBuilder(MagentoFactory::class)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
-            ->onlyMethods(['createRepository'])
-            ->getMock();
+        $httpClientMock = $this->createMock(HttpClientInterface::class);
         $this->entityManagerMock = $this->getMockBuilder(EntityManagerInterface::class)
             ->getMock();
+
+        $fakeSourceRepository = new CustomerRepositoryStub();
+        $fakeDestRepository = new CustomerRepositoryStub();
+        $this->sourceConnectorBuilder = new WooConnectorBuilder();
+        $this->destConnectorBuilder = new MagentoConnectorBuilder();
+
+        $this->sourceConnectorBuilder->reset();
+        $this->sourceConnectorBuilder->createMapper();
+        $this->sourceConnectorBuilder->getConnector()->setRepository($fakeSourceRepository);
+
+
+        $this->destConnectorBuilder->reset();
+        $this->destConnectorBuilder->createMapper();
+        $this->destConnectorBuilder->getConnector()->setRepository($fakeDestRepository);
     }
 
     /**
@@ -60,25 +62,17 @@ class WooToMagentoMigrationTest extends TestBase
         $customers, $customersCount, $startPage, $pageSize, $isAllowPartialResult
     )
     {
-        $fakeSourceRepository = new CustomerRepositoryStub();
-        $this->sourceConnectorFactory
-            ->method('createRepository')
-            ->will($this->returnValue($fakeSourceRepository));
-        $fakeDestRepository = new CustomerRepositoryStub();
-        $this->destConnectorFactory
-            ->method('createRepository')
-            ->will($this->returnValue($fakeDestRepository));
-
-        $sourceConnector = new ConnectorReadType(
-            $this->sourceConnectorFactory,
+        $this->sourceConnectorBuilder->createIterator(
             $startPage,
             $pageSize,
             false,
             $isAllowPartialResult
         );
-        $destConnector = $this->destConnectorFactor->c($this->destConnectorFactory);
 
-        $fakeSourceRepository->create($customers);
+        $sourceConnector = $this->sourceConnectorBuilder->getConnector();
+        $destConnector = $this->destConnectorBuilder->getConnector();
+
+        $sourceConnector->getRepository()->create($customers);
 
         $migration = new Migration(
             $sourceConnector,
@@ -89,7 +83,7 @@ class WooToMagentoMigrationTest extends TestBase
         $migration->start();
         $this->assertCount(
             $customersCount,
-            $fakeDestRepository->fetchPage(1, 99999)
+            $destConnector->getRepository()->fetchPage(1, 99999)
         );
     }
 
@@ -100,25 +94,17 @@ class WooToMagentoMigrationTest extends TestBase
         $woocommerceCustomers, $magentoCustomers, $startPage, $pageSize, $isAllowPartialResult
     )
     {
-        $fakeSourceRepository = new CustomerRepositoryStub();
-        $this->sourceConnectorFactory
-            ->method('createRepository')
-            ->will($this->returnValue($fakeSourceRepository));
-        $fakeDestRepository = new CustomerRepositoryStub();
-        $this->destConnectorFactory
-            ->method('createRepository')
-            ->will($this->returnValue($fakeDestRepository));
-
-        $sourceConnector = new ConnectorReadType(
-            $this->sourceConnectorFactory,
+        $this->sourceConnectorBuilder->createIterator(
             $startPage,
             $pageSize,
             false,
             $isAllowPartialResult
         );
-        $destConnector = new ConnectorWriteType($this->destConnectorFactory);
 
-        $fakeSourceRepository->create($woocommerceCustomers);
+        $sourceConnector = $this->sourceConnectorBuilder->getConnector();
+        $destConnector = $this->destConnectorBuilder->getConnector();
+
+        $sourceConnector->getRepository()->create($woocommerceCustomers);
 
         $migration = new Migration(
             $sourceConnector,
@@ -127,73 +113,10 @@ class WooToMagentoMigrationTest extends TestBase
         );
 
         $migration->start();
-        foreach ($fakeDestRepository->fetchPage(1, 99999) as $k => $customerFromWoocommerce) {
-            $this->assertEquals($customerFromWoocommerce['entity']['email'], $magentoCustomers[$k]['email']);
+        foreach ($destConnector->getRepository()->fetchPage(1, 99999) as $k => $customerFromWoocommerce) {
+            $this->assertEquals($customerFromWoocommerce['customer']['email'], $magentoCustomers[$k]['email']);
         }
     }
-
-
-    public function Tmp()
-    {
-        /**
-         * Config
-         * source
-         * destination
-         * entityType
-         * pageStartNumber
-         * pageSize
-         * pageJump
-         *
-         * ConnectionFactory
-         * createSourceConnectorFactory()
-         * createDestConnectorFactory()
-         *
-         * ConnectorReadType
-         * getReadingIterator()
-         *
-         *  ConnectorWriteType
-         *  //trigger event entity.created
-         *  create($entities)
-         *
-         * MigrationState
-         * name
-         * lastPage
-         * pageSize
-         * pageJump
-         *
-         * Migration
-         * name
-         *
-         * __constructor
-         *      //todo resume?
-         *      name = source + destination + entityType
-         *      if (fetchState)
-         * getName(): string
-         * fetchState(): MigrationState
-         * start()
-         *
-         * $connectionFactory = new ConnectionFactory('woocommerce', 'magento', 'customers');
-         * ReadConnectorFactory $sourceConnectorFactory = $connectionFactory->createSourceConnectorFactory();
-         * WriteConnectorFactory $destConnectorFactory = $connectionFactory->createDestConnectorFactory();
-         * ReadConnectorInterface $sourceConnector = new ConnectorReadType($sourceConnectorFactory)
-         * WriteConnectorInterface $destConnector = new ConnectorWriteType($destConnectorFactory)
-         *
-         * $migration = new Migration($config);
-         *
-         * migration->start($state);
-         *
-         *
-         *
-         *
-         *
-         *
-         *
-         *
-         *
-         *
-         */
-    }
-
 
     public function countProvider()
     {

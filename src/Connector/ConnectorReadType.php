@@ -2,34 +2,50 @@
 
 namespace App\Connector;
 
-use App\Iterator\ConnectorIterator;
-use Chungachanga\AbstractMigration\Connector\ConnectorFactoryReadInterface;
+use App\Null\MapperReadNull;
+use App\Null\RepositoryReadNull;
 use Chungachanga\AbstractMigration\Mapper\MapperReadInterface;
 use Chungachanga\AbstractMigration\Repository\RepositoryReadInterface;
 
 class ConnectorReadType
 {
-    private \Iterator $iterator;
-    public function __construct(
-        ConnectorFactoryReadInterface $factory,
-        int $startPage,
-        int $pageSize,
-        bool $isNeedWaitingFullPage = false,
-        bool $isAllowPartialResult = false,
-        int $delaySeconds = 0
-    )
+    protected RepositoryReadInterface $repository;
+    protected MapperReadInterface $mapper;
+    protected \Iterator $iterator;
+
+    public function __construct()
     {
-        $this->iterator = $factory->createIterator(
-            $startPage,
-            $pageSize,
-            $isNeedWaitingFullPage,
-            $isAllowPartialResult,
-            $delaySeconds
-        );
+        $this->repository = new RepositoryReadNull();
+        $this->mapper = new MapperReadNull();
+    }
+
+    public function getRepository(): RepositoryReadInterface
+    {
+        return $this->repository;
+    }
+
+    public function setRepository(RepositoryReadInterface $repository): void
+    {
+        $this->repository = $repository;
+    }
+
+    public function getMapper(): MapperReadInterface
+    {
+        return $this->mapper;
+    }
+
+    public function setMapper(MapperReadInterface $mapper): void
+    {
+        $this->mapper = $mapper;
     }
 
     public function getIterator(): \Iterator
     {
         return $this->iterator;
+    }
+
+    public function setIterator(\Iterator $iterator): void
+    {
+        $this->iterator = $iterator;
     }
 }

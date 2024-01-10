@@ -6,13 +6,8 @@ use Chungachanga\AbstractMigration\Repository\RepositoryWriteInterface;
 
 class OrderRepository implements RepositoryWriteInterface
 {
-    public function create(array $entities): string
+    public function create(array $entities): array
     {
-        return (string)rand(1000, 5000);
-    }
-
-    public function createOne($entity): string
-    {
-
+        return [];
     }
 }

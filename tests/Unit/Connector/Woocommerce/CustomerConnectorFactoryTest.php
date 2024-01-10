@@ -2,7 +2,7 @@
 
 namespace App\Tests\Unit\Connector\Woocommerce;
 
-use App\Connector\Woocommerce\Factory\CustomerConnectorFactory;
+use App\Connector\Woocommerce\ConnectorBuilder\CustomerConnectorBuilder;
 use App\Connector\Woocommerce\Repository\CustomerRepository;
 use App\Tests\TestBase;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -17,7 +17,7 @@ class CustomerConnectorFactoryTest extends TestBase
     {
         $client = $this->createMock(HttpClientInterface::class);
 
-        $repository = new CustomerConnectorFactory(
+        $repository = new CustomerConnectorBuilder(
             $client,
             'test',
             'test',
@@ -38,7 +38,7 @@ class CustomerConnectorFactoryTest extends TestBase
         $this->markTestSkipped();
         $client = $this->createMock(HttpClientInterface::class);
 
-        $repository = new CustomerConnectorFactory(
+        $repository = new CustomerConnectorBuilder(
             $client,
             'test',
             'test',
