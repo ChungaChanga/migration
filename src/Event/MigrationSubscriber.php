@@ -3,9 +3,9 @@
 namespace App\Event;
 
 use App\EntityTransferStatus;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\KernelEvents;
 
 class MigrationSubscriber implements EventSubscriberInterface
 {
@@ -13,7 +13,6 @@ class MigrationSubscriber implements EventSubscriberInterface
         private EntityManagerInterface $entityManager
     )
     {
-
     }
     public static function getSubscribedEvents()
     {

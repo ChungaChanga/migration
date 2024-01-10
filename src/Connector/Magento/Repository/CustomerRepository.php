@@ -16,13 +16,18 @@ class CustomerRepository implements RepositoryWriteInterface
     )
     {
     }
-    public function create(array $data): array
+    public function create(array $entitiesState): array
+    {
+        return [];//todo
+    }
+
+    public function createOne(array $entityState): array
     {
         $response = $this->client->request(
             'POST',
             $this->url,
             [
-                'json' => $data,
+                'json' => $entityState,
             ]
         );
         if (200 !== $response->getStatusCode()) {//fixme

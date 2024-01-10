@@ -17,6 +17,7 @@ use App\Tests\Fixtures\Woocommerce\Customers as WoocommerceCustomers;
 use App\Tests\TestBase;
 use Chungachanga\AbstractMigration\EntityHandler\BaseHandler;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class WooToMagentoMigrationTest extends TestBase
@@ -91,6 +92,8 @@ class WooToMagentoMigrationTest extends TestBase
         );
     }
 
+
+
     /**
      * @dataProvider  mappingProvider
      */
@@ -102,6 +105,47 @@ class WooToMagentoMigrationTest extends TestBase
         bool $isAllowPartialResult
     ): void
     {
+        $this->sourceConnectorBuilder->createIterator(
+            $startPage,
+            $pageSize,
+            false,
+            $isAllowPartialResult
+        );
+
+        $sourceConnector = $this->sourceConnectorBuilder->getConnector();
+        $destConnector = $this->destConnectorBuilder->getConnector();
+
+        $sourceConnector->getRepository()->create($woocommerceCustomers);
+
+        $migration = new Migration(
+            $sourceConnector,
+            $destConnector,
+            new BaseHandler()
+        );
+
+        $migration->start();
+        foreach ($destConnector->getRepository()->fetchPage(1, 99999) as $k => $customerFromWoocommerce) {
+            $this->assertEquals($customerFromWoocommerce['customer']['email'], $magentoCustomers[$k]['email']);
+        }
+    }
+
+    /**
+     * @dataProvider  mappingProvider
+     */
+    public function testEvents(
+        array $woocommerceCustomers,
+        array $magentoCustomers,
+        int $startPage,
+        int $pageSize,
+        bool $isAllowPartialResult
+    ): void
+    {
+
+        self::bootKernel();
+        $container = static::getContainer();
+        $eventDispatcher = $container->get(EventDispatcherInterface::class);
+        $this->destConnectorBuilder->createEventDispatcher($eventDispatcher);
+
         $this->sourceConnectorBuilder->createIterator(
             $startPage,
             $pageSize,

@@ -1,3 +1,6 @@
 services:
-  App\Connector\WoocommerceDtoApiConnector:
-    public: true
+  _defaults:
+    autowire: true      # Автоматически внедряет зависимости в ваши сервисы.
+    autoconfigure: true
+  App\:
+    resource: '../src/'

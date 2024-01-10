@@ -13,7 +13,6 @@ class EntitiesCreateBeforeEvent extends Event
     public const NAME = 'entities.create.before';
     public function __construct(
         private Collection $entities,
-        private array $result
     )
     {
     }
@@ -21,10 +20,5 @@ class EntitiesCreateBeforeEvent extends Event
     public function getEntities(): Collection
     {
         return $this->entities;
-    }
-
-    public function getResult(): array
-    {
-        return $this->result;
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Connector;
 
 use App\Event\EntitiesCreateAfterEvent;
+use App\Event\EntitiesCreateBeforeEvent;
+use App\Event\EntitiesCreateErrorEvent;
 use App\Null\EventDispatcherNull;
 use App\Null\MapperWriteNull;
 use App\Null\RepositoryWriteNull;
@@ -27,11 +29,23 @@ class ConnectorWriteType
 
     public function create(Collection $entities): void
     {
+        $currentEntitiesCollection = new ArrayCollection();
         foreach ($entities as $entity) {
+            $currentEntitiesCollection->clear();
+            $currentEntitiesCollection->add($entity);
+
             $entityState = $this->mapper->getState($entity);
-            $result = $this->repository->createOne($entityState);
-            $event = new EntitiesCreateAfterEvent(new ArrayCollection([$entity]), $result);
-            $this->eventDispatcher->dispatch($event);
+
+            $beforeEvent = new EntitiesCreateBeforeEvent($currentEntitiesCollection) ;
+            $this->eventDispatcher->dispatch($beforeEvent, EntitiesCreateBeforeEvent::NAME);
+            try {
+                $result = $this->repository->createOne($entityState);
+                $afterEvent = new EntitiesCreateAfterEvent($currentEntitiesCollection, $result) ;
+                $this->eventDispatcher->dispatch($afterEvent, EntitiesCreateAfterEvent::NAME);
+            } catch (\Exception $e) {
+                $event = new EntitiesCreateErrorEvent($currentEntitiesCollection, $result);
+                $this->eventDispatcher->dispatch($event, EntitiesCreateErrorEvent::NAME);
+            }
         }
     }
 
