@@ -20,10 +20,10 @@ abstract class AbstractEntity
     protected EntityTransferStatus $transferStatus;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $destId = null;
+    protected ?string $destId = null;
 
     #[ORM\Column(length: 65000, nullable: true)]
-    private ?string $transferData = null;
+    protected ?string $transferData = null;
 
     public function getTransferStatus(): EntityTransferStatus
     {

@@ -59,8 +59,12 @@ class WooToMagentoMigrationTest extends TestBase
      * @dataProvider  countProvider
      */
     public function testCustomersCountNotWaitingFullPage(
-        $customers, $customersCount, $startPage, $pageSize, $isAllowPartialResult
-    )
+        array $customers,
+        int $customersCount,
+        int $startPage,
+        int $pageSize,
+        bool $isAllowPartialResult
+    ): void
     {
         $this->sourceConnectorBuilder->createIterator(
             $startPage,
@@ -91,8 +95,12 @@ class WooToMagentoMigrationTest extends TestBase
      * @dataProvider  mappingProvider
      */
     public function testCustomersDataNotWaitingFullPage(
-        $woocommerceCustomers, $magentoCustomers, $startPage, $pageSize, $isAllowPartialResult
-    )
+        array $woocommerceCustomers,
+        array $magentoCustomers,
+        int $startPage,
+        int $pageSize,
+        bool $isAllowPartialResult
+    ): void
     {
         $this->sourceConnectorBuilder->createIterator(
             $startPage,
@@ -118,7 +126,7 @@ class WooToMagentoMigrationTest extends TestBase
         }
     }
 
-    public function countProvider()
+    public function countProvider(): array
     {
         return [
             [
@@ -200,7 +208,7 @@ class WooToMagentoMigrationTest extends TestBase
         ];
     }
 
-    public function mappingProvider()
+    public function mappingProvider(): array
     {
         return [
             [

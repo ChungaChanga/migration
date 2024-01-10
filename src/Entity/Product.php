@@ -19,7 +19,6 @@ class Product extends AbstractEntity
 
     public function __construct()
     {
-        $this->orders = new ArrayCollection();
         $this->orderItems = new ArrayCollection();
     }
 

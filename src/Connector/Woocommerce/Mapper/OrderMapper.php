@@ -22,14 +22,14 @@ class OrderMapper implements MapperReadInterface
         return $order;
     }
 
-    public function validateState(array $state)
+    public function validateState(array $state): void
     {
         if (array_key_exists('line_items', $state) && !empty($state['line_items'])) {
             foreach ($state['line_items'] as $itemState) {
                 if (!array_key_exists('product_data', $itemState) ||
                     empty($itemState['product_data']))
                 {
-                    throw new InvalidStateException('product_data is required for line item', $state);
+                    throw new InvalidStateException('product_data is required for line item');
                 }
             }
         }
