@@ -26,6 +26,7 @@ class MigrationSubscriber implements EventSubscriberInterface
     public function onEntitiesCreateBefore(EntitiesCreateBeforeEvent $event)
     {
         foreach ($event->getEntities() as $entity) {
+            $this->entityManager->persist($entity);
             $entity->setTransferStatus(EntityTransferStatus::Processing);
         }
         $this->entityManager->flush();
@@ -34,6 +35,7 @@ class MigrationSubscriber implements EventSubscriberInterface
     public function onEntitiesCreateAfter(EntitiesCreateAfterEvent $event)
     {
         foreach ($event->getEntities() as $entity) {
+            $this->entityManager->persist($entity);
             $entity->setTransferStatus(EntityTransferStatus::Done);
         }
         $this->entityManager->flush();
@@ -42,6 +44,7 @@ class MigrationSubscriber implements EventSubscriberInterface
     public function onEntitiesCreateError(EntitiesCreateErrorEvent $event)
     {
         foreach ($event->getEntities() as $entity) {
+            $this->entityManager->persist($entity);
             $entity->setTransferStatus(EntityTransferStatus::Error);
            // $entity->setTransferData($e->getMessage());//todo
         }

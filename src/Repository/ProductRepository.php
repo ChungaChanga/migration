@@ -32,7 +32,7 @@ class ProductRepository extends ServiceEntityRepository
 //            ->orderBy('p.id', 'ASC')
 //            ->setMaxResults(10)
 //            ->getQuery()
-//            ->getResult()
+//            ->getError()
 //        ;
 //    }
 

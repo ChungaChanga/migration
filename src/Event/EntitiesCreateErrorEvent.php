@@ -13,7 +13,7 @@ class EntitiesCreateErrorEvent extends Event
     public const NAME = 'entities.create.error';
     public function __construct(
         private Collection $entities,
-        private array $result
+        private array $error
     )
     {
     }
@@ -23,8 +23,8 @@ class EntitiesCreateErrorEvent extends Event
         return $this->entities;
     }
 
-    public function getResult(): array
+    public function getError(): string
     {
-        return $this->result;
+        return $this->error;
     }
 }

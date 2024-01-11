@@ -4,13 +4,9 @@ namespace App\Migration;
 
 use App\Connector\ConnectorReadType;
 use App\Connector\ConnectorWriteType;
-use Chungachanga\AbstractMigration\Connection\ConnectionInterface;
 use Chungachanga\AbstractMigration\EntityHandler\HandlerInterface;
 use Chungachanga\AbstractMigration\Migration\MigrationInterface;
-use Chungachanga\AbstractMigration\Migration\TransferStrategyInterface;
-use Chungachanga\AbstractMigration\Repository\RepositoryReadInterface;
 use Doctrine\Common\Collections\ArrayCollection;
-use Iterator;
 
 class Migration implements MigrationInterface
 {

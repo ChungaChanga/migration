@@ -32,7 +32,7 @@ class OrderRepository extends ServiceEntityRepository
 //            ->orderBy('o.id', 'ASC')
 //            ->setMaxResults(10)
 //            ->getQuery()
-//            ->getResult()
+//            ->getError()
 //        ;
 //    }
 

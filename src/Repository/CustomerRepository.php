@@ -32,7 +32,7 @@ class CustomerRepository extends ServiceEntityRepository
 //            ->orderBy('c.id', 'ASC')
 //            ->setMaxResults(10)
 //            ->getQuery()
-//            ->getResult()
+//            ->getError()
 //        ;
 //    }
 

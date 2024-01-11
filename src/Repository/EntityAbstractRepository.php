@@ -32,7 +32,7 @@ class EntityAbstractRepository extends ServiceEntityRepository
 //            ->orderBy('e.id', 'ASC')
 //            ->setMaxResults(10)
 //            ->getQuery()
-//            ->getResult()
+//            ->getError()
 //        ;
 //    }
 
