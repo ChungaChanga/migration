@@ -5,27 +5,20 @@ namespace App\Connector;
 use App\Event\EntitiesCreateAfterEvent;
 use App\Event\EntitiesCreateBeforeEvent;
 use App\Event\EntitiesCreateErrorEvent;
-use App\Null\EventDispatcherNull;
 use App\Null\MapperWriteNull;
-use App\Null\RepositoryWriteNull;
-use Chungachanga\AbstractMigration\Connector\ConnectorWriteInterface;
 use Chungachanga\AbstractMigration\Mapper\MapperWriteInterface;
 use Chungachanga\AbstractMigration\Repository\RepositoryWriteInterface;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-class ConnectorWriteType implements ConnectorWriteInterface
+class ConnectorWriteType
 {
-    protected RepositoryWriteInterface $repository;
-    protected MapperWriteInterface $mapper;
-    protected EventDispatcherInterface $eventDispatcher;
-
-    public function __construct()
+    public function __construct(
+        private RepositoryWriteInterface $repository,
+        private EventDispatcherInterface $eventDispatcher,
+        private ?MapperWriteInterface $mapper = new MapperWriteNull()
+    )
     {
-        $this->repository = new RepositoryWriteNull();
-        $this->mapper = new MapperWriteNull();
-        $this->eventDispatcher = new EventDispatcherNull();
     }
 
     public function create($entities): void
@@ -79,5 +72,4 @@ class ConnectorWriteType implements ConnectorWriteInterface
     {
         $this->eventDispatcher = $eventDispatcher;
     }
-
 }

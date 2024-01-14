@@ -2,22 +2,21 @@
 
 namespace App\Connector;
 
+use App\Iterator\ConnectorIterator;
 use App\Null\MapperReadNull;
-use App\Null\RepositoryReadNull;
-use Chungachanga\AbstractMigration\Connector\ConnectorReadInterface;
 use Chungachanga\AbstractMigration\Mapper\MapperReadInterface;
 use Chungachanga\AbstractMigration\Repository\RepositoryReadInterface;
 
-class ConnectorReadType implements ConnectorReadInterface
+class ConnectorReadType
 {
-    protected RepositoryReadInterface $repository;
-    protected MapperReadInterface $mapper;
-    protected \Iterator $iterator;
+    private \Iterator $iterator;
 
-    public function __construct()
+    public function __construct(
+        private RepositoryReadInterface $repository,
+        private ?MapperReadInterface $mapper =  new MapperReadNull(),
+    )
     {
-        $this->repository = new RepositoryReadNull();
-        $this->mapper = new MapperReadNull();
+        $this->setIterator($this->createIterator(1));
     }
 
     public function getRepository(): RepositoryReadInterface
@@ -48,5 +47,27 @@ class ConnectorReadType implements ConnectorReadInterface
     public function setIterator(\Iterator $iterator): void
     {
         $this->iterator = $iterator;
+    }
+
+    public function createIterator(
+        int $startPage,
+        int $pageSize = 10,
+        bool $isNeedWaitingFullPage = false,
+        bool $isAllowPartialResult = true,
+        int $delaySeconds = 0
+    ): \Iterator
+    {
+        if ($startPage < 1) {
+            throw new \InvalidArgumentException('Start page is must be more than 0');
+        }
+        return new ConnectorIterator(
+            $this->getRepository(),
+            $this->getMapper(),
+            $startPage,
+            $pageSize,
+            $isNeedWaitingFullPage,
+            $isAllowPartialResult,
+            $delaySeconds
+        );
     }
 }

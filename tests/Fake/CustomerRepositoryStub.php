@@ -35,7 +35,6 @@ class CustomerRepositoryStub extends AbstractRepository implements RepositoryFul
 
     public function fetchPage(int $page, int $pageSize): array
     {
-        $this->validatePage($page);
         $res = array_slice($this->entitiesState, ($page - 1) * $pageSize, $pageSize);
         return $res;
     }
