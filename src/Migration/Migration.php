@@ -13,7 +13,6 @@ class Migration implements MigrationInterface
     public function __construct(
         private ConnectorReadType $sourceConnector,
         private ConnectorWriteType $destConnector,
-        private HandlerInterface $entityHandler,
     )
     {
     }
@@ -26,7 +25,6 @@ class Migration implements MigrationInterface
             if ($entities->isEmpty()) {
                 continue;
             }
-            $this->entityHandler->handle($entities);
             $this->destConnector->create($entities);
         }
     }

@@ -5,12 +5,13 @@ namespace App\Connector\Woocommerce\ConnectorBuilder;
 use App\Connector\AbstractConnectorReadBuilder;
 use App\Connector\ConnectorReadType;
 use App\Iterator\ConnectorIterator;
+use Chungachanga\AbstractMigration\Connector\ConnectorBuilderReadInterface;
 use Chungachanga\AbstractMigration\Connector\ConnectorFactoryReadInterface;
 use Chungachanga\AbstractMigration\Mapper\MapperReadInterface;
 use Chungachanga\AbstractMigration\Repository\RepositoryReadInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-abstract class ConnectorBuilder
+abstract class ConnectorBuilder implements ConnectorBuilderReadInterface
 {
     protected ConnectorReadType $connector;
 

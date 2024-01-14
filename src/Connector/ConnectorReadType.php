@@ -4,10 +4,11 @@ namespace App\Connector;
 
 use App\Null\MapperReadNull;
 use App\Null\RepositoryReadNull;
+use Chungachanga\AbstractMigration\Connector\ConnectorReadInterface;
 use Chungachanga\AbstractMigration\Mapper\MapperReadInterface;
 use Chungachanga\AbstractMigration\Repository\RepositoryReadInterface;
 
-class ConnectorReadType
+class ConnectorReadType implements ConnectorReadInterface
 {
     protected RepositoryReadInterface $repository;
     protected MapperReadInterface $mapper;

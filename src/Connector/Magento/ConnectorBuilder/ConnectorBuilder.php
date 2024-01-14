@@ -3,12 +3,13 @@
 namespace App\Connector\Magento\ConnectorBuilder;
 
 use App\Connector\ConnectorWriteType;
+use Chungachanga\AbstractMigration\Connector\ConnectorBuilderWriteInterface;
 use Chungachanga\AbstractMigration\Mapper\MapperWriteInterface;
 use Chungachanga\AbstractMigration\Repository\RepositoryWriteInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-abstract class ConnectorBuilder
+abstract class ConnectorBuilder implements ConnectorBuilderWriteInterface
 {
     protected ConnectorWriteType $connector;
 

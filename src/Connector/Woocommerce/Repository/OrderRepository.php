@@ -2,10 +2,6 @@
 
 namespace App\Connector\Woocommerce\Repository;
 
-use App\Iterator\AwaitingIteratorWrapper;
-use App\Connector\RepositoryReadAbstract;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
-
 class OrderRepository extends AbstractRepository
 {
     public function fetchPage(int $page, int $pageSize): array

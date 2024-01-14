@@ -37,9 +37,8 @@ class WooToMagentoMigrationTest extends TestBase
 
     public function setUp(): void
     {
+        $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
         $httpClientMock = $this->createMock(HttpClientInterface::class);
-        $this->entityManagerMock = $this->getMockBuilder(EntityManagerInterface::class)
-            ->getMock();
 
         $fakeSourceRepository = new CustomerRepositoryStub();
         $fakeDestRepository = new CustomerRepositoryStub();
@@ -54,6 +53,11 @@ class WooToMagentoMigrationTest extends TestBase
         $this->destConnectorBuilder->reset();
         $this->destConnectorBuilder->createMapper();
         $this->destConnectorBuilder->getConnector()->setRepository($fakeDestRepository);
+    }
+
+    public function tearDown(): void
+    {
+        parent::tearDown();
     }
 
     /**
@@ -82,7 +86,6 @@ class WooToMagentoMigrationTest extends TestBase
         $migration = new Migration(
             $sourceConnector,
             $destConnector,
-            new BaseHandler()
         );
 
         $migration->start();
@@ -120,7 +123,6 @@ class WooToMagentoMigrationTest extends TestBase
         $migration = new Migration(
             $sourceConnector,
             $destConnector,
-            new BaseHandler()
         );
 
         $migration->start();
@@ -161,7 +163,6 @@ class WooToMagentoMigrationTest extends TestBase
         $migration = new Migration(
             $sourceConnector,
             $destConnector,
-            new BaseHandler()
         );
 
         $migration->start();
@@ -170,6 +171,95 @@ class WooToMagentoMigrationTest extends TestBase
         }
     }
 
+    /**
+     * @dataProvider doubleProvider
+     * @return void
+     * @throws \Exception
+     */
+    public function testDoubleThrowError($customer1, $customer2)
+    {
+        self::bootKernel();
+        $container = static::getContainer();
+        $eventDispatcher = $container->get(EventDispatcherInterface::class);
+        $this->destConnectorBuilder->createEventDispatcher($eventDispatcher);
+
+        $this->sourceConnectorBuilder->createIterator(
+            1,
+        );
+
+        $sourceConnector = $this->sourceConnectorBuilder->getConnector();
+        $destConnector = $this->destConnectorBuilder->getConnector();
+
+        $sourceConnector->getRepository()->createOne($customer1);
+        $sourceConnector->getRepository()->createOne($customer2);
+
+        $migration = new Migration(
+            $sourceConnector,
+            $destConnector,
+        );
+
+        $this->expectException(\Exception::class);
+        $migration->start();
+    }
+
+    /**
+     * @dataProvider notDoubleProvider
+     * @return void
+     * @throws \Exception
+     */
+    public function testNotDoubleNotThrowError($customer1, $customer2)
+    {
+        self::bootKernel();
+        $container = static::getContainer();
+        $eventDispatcher = $container->get(EventDispatcherInterface::class);
+        $this->destConnectorBuilder->createEventDispatcher($eventDispatcher);
+
+        $this->sourceConnectorBuilder->createIterator(
+            1,
+        );
+
+        $sourceConnector = $this->sourceConnectorBuilder->getConnector();
+        $destConnector = $this->destConnectorBuilder->getConnector();
+
+        $sourceConnector->getRepository()->createOne($customer1);
+        $sourceConnector->getRepository()->createOne($customer2);
+
+        $migration = new Migration(
+            $sourceConnector,
+            $destConnector
+        );
+
+        $this->expectNotToPerformAssertions();
+        $migration->start();
+    }
+
+    public function doubleProvider()
+    {
+        return [
+            'double set 1' => [
+                $this->fixturesWoocommerce->first(),
+                $this->fixturesWoocommerce->first(),
+            ],
+            'double set 2' => [
+                $this->fixturesWoocommerce->second(),
+                $this->fixturesWoocommerce->second(),
+            ],
+        ];
+    }
+
+    public function notDoubleProvider(): array
+    {
+        return [
+            'valid set 1' => [
+                $this->fixturesWoocommerce->first(),
+                $this->fixturesWoocommerce->second(),
+            ],
+            'valid set 2' => [
+                $this->fixturesWoocommerce->first(),
+                $this->fixturesWoocommerce->fourth(),
+            ],
+        ];
+    }
     public function countProvider(): array
     {
         return [

@@ -4,8 +4,17 @@ namespace App\Entity;
 
 use App\EntityTransferStatus;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\MappedSuperclass]
+#[UniqueEntity(
+    'sourceId',
+    message: 'This sourceId is already handled',
+)]
+#[UniqueEntity(
+    'destId',
+    message: 'This destId is already handled',
+)]
 abstract class AbstractEntity
 {
     #[ORM\Id]
@@ -13,13 +22,13 @@ abstract class AbstractEntity
     #[ORM\Column]
     protected ?int $id = null;
 
-    #[ORM\Column]
+    #[ORM\Column(unique: true)]
     protected ?int $sourceId = null;
 
     #[ORM\Column(type: 'string', enumType: EntityTransferStatus::class)]
     protected EntityTransferStatus $transferStatus;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255,  unique: true, nullable: true)]
     protected ?string $destId = null;
 
     #[ORM\Column(length: 65000, nullable: true)]

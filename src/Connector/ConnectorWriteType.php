@@ -8,13 +8,14 @@ use App\Event\EntitiesCreateErrorEvent;
 use App\Null\EventDispatcherNull;
 use App\Null\MapperWriteNull;
 use App\Null\RepositoryWriteNull;
+use Chungachanga\AbstractMigration\Connector\ConnectorWriteInterface;
 use Chungachanga\AbstractMigration\Mapper\MapperWriteInterface;
 use Chungachanga\AbstractMigration\Repository\RepositoryWriteInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-class ConnectorWriteType
+class ConnectorWriteType implements ConnectorWriteInterface
 {
     protected RepositoryWriteInterface $repository;
     protected MapperWriteInterface $mapper;
@@ -27,7 +28,7 @@ class ConnectorWriteType
         $this->eventDispatcher = new EventDispatcherNull();
     }
 
-    public function create(Collection $entities): void
+    public function create($entities): void
     {
         $currentEntitiesCollection = new ArrayCollection();
         foreach ($entities as $entity) {
