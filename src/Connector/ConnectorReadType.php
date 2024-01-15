@@ -3,7 +3,6 @@
 namespace App\Connector;
 
 use App\Iterator\ConnectorIterator;
-use App\Null\MapperReadNull;
 use App\Contract\Connector\Mapper\MapperReadInterface;
 use App\Contract\Connector\Repository\RepositoryReadInterface;
 
@@ -13,7 +12,7 @@ class ConnectorReadType
 
     public function __construct(
         private RepositoryReadInterface $repository,
-        private ?MapperReadInterface $mapper =  new MapperReadNull(),
+        private MapperReadInterface $mapper,
     )
     {
         $this->setIterator($this->createIterator(1));

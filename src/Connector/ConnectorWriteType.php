@@ -5,7 +5,6 @@ namespace App\Connector;
 use App\Event\EntitiesCreateAfterEvent;
 use App\Event\EntitiesCreateBeforeEvent;
 use App\Event\EntitiesCreateErrorEvent;
-use App\Null\MapperWriteNull;
 use App\Contract\Connector\Mapper\MapperWriteInterface;
 use App\Contract\Connector\Repository\RepositoryWriteInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,7 +15,7 @@ class ConnectorWriteType
     public function __construct(
         private RepositoryWriteInterface $repository,
         private EventDispatcherInterface $eventDispatcher,
-        private ?MapperWriteInterface $mapper = new MapperWriteNull()
+        private MapperWriteInterface $mapper,
     )
     {
     }

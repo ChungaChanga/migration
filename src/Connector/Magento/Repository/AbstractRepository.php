@@ -1,7 +1,5 @@
 <?php
-/**
- * https://developer.adobe.com/commerce/webapi/rest/quick-reference/
- */
+
 namespace App\Connector\Magento\Repository;
 
 use App\Contract\Connector\Repository\RepositoryWriteInterface;

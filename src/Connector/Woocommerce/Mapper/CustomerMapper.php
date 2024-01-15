@@ -11,7 +11,7 @@ use App\Contract\Connector\Mapper\MapperReadInterface;
 
 class CustomerMapper implements MapperReadInterface
 {
-    public function fromState(array $state)
+    public function fromState(array $state): Customer
     {
         $this->validateState($state);
 
