@@ -2,7 +2,7 @@
 
 namespace App\Null;
 
-use Chungachanga\AbstractMigration\Mapper\MapperWriteInterface;
+use App\Contract\Connector\Mapper\MapperWriteInterface;
 
 class MapperWriteNull implements MapperWriteInterface
 {

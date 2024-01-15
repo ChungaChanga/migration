@@ -6,8 +6,8 @@ use App\Event\EntitiesCreateAfterEvent;
 use App\Event\EntitiesCreateBeforeEvent;
 use App\Event\EntitiesCreateErrorEvent;
 use App\Null\MapperWriteNull;
-use Chungachanga\AbstractMigration\Mapper\MapperWriteInterface;
-use Chungachanga\AbstractMigration\Repository\RepositoryWriteInterface;
+use App\Contract\Connector\Mapper\MapperWriteInterface;
+use App\Contract\Connector\Repository\RepositoryWriteInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

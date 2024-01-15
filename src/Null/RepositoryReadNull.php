@@ -2,7 +2,7 @@
 
 namespace App\Null;
 
-use Chungachanga\AbstractMigration\Repository\RepositoryReadInterface;
+use App\Contract\Connector\Repository\RepositoryReadInterface;
 
 class RepositoryReadNull implements RepositoryReadInterface
 {

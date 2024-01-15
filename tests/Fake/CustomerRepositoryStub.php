@@ -3,7 +3,7 @@
 namespace App\Tests\Fake;
 
 use App\Connector\Woocommerce\Repository\AbstractRepository;
-use Chungachanga\AbstractMigration\Repository\RepositoryFullInterface;
+use App\Contract\Connector\Repository\RepositoryFullInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class CustomerRepositoryStub extends AbstractRepository implements RepositoryFullInterface

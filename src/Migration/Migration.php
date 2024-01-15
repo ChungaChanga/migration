@@ -4,11 +4,9 @@ namespace App\Migration;
 
 use App\Connector\ConnectorReadType;
 use App\Connector\ConnectorWriteType;
-use Chungachanga\AbstractMigration\EntityHandler\HandlerInterface;
-use Chungachanga\AbstractMigration\Migration\MigrationInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
-class Migration implements MigrationInterface
+class Migration
 {
     public function __construct(
         private ConnectorReadType $sourceConnector,

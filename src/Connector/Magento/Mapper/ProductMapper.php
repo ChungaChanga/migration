@@ -3,7 +3,7 @@
 namespace App\Connector\Magento\Mapper;
 
 use App\Entity\Product;
-use Chungachanga\AbstractMigration\Mapper\MapperWriteInterface;
+use App\Contract\Connector\Mapper\MapperWriteInterface;
 
 class ProductMapper implements MapperWriteInterface
 {

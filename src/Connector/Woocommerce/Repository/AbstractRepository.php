@@ -4,7 +4,7 @@ namespace App\Connector\Woocommerce\Repository;
 
 use App\Iterator\AwaitingIteratorWrapper;
 use App\Connector\AbstractRepositoryRead;
-use Chungachanga\AbstractMigration\Repository\RepositoryReadInterface;
+use App\Contract\Connector\Repository\RepositoryReadInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 

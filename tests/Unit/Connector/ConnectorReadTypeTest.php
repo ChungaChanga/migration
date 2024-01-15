@@ -5,7 +5,7 @@ namespace App\Tests\Unit\Connector;
 use App\Connector\ConnectorReadType;
 use App\Connector\Woocommerce\ConnectorBuilder\CustomerConnectorBuilder;
 use App\Tests\TestBase;
-use Chungachanga\AbstractMigration\Repository\RepositoryReadInterface;
+use App\Contract\Connector\Repository\RepositoryReadInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpClient\MockHttpClient;

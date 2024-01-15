@@ -2,7 +2,7 @@
 
 namespace App\Null;
 
-use Chungachanga\AbstractMigration\Mapper\MapperReadInterface;
+use App\Contract\Connector\Mapper\MapperReadInterface;
 
 class MapperReadNull implements MapperReadInterface
 {

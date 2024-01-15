@@ -6,7 +6,7 @@ use App\Entity\Order;
 use App\Entity\OrderItem;
 use App\Entity\Product;
 use App\Exception\InvalidStateException;
-use Chungachanga\AbstractMigration\Mapper\MapperReadInterface;
+use App\Contract\Connector\Mapper\MapperReadInterface;
 
 class OrderMapper implements MapperReadInterface
 {

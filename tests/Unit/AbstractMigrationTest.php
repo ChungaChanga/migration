@@ -7,10 +7,8 @@ use App\Migration\Migration;
 use App\Migration\MigrationType;
 use App\Tests\Fake\CustomerRepositoryStub;
 use App\Tests\Fixtures\CustomersInterface;
-use App\Tests\Fixtures\Magento\Customers as MagentoCustomers;
 use App\Tests\Fixtures\Woocommerce\Customers as WoocommerceCustomers;
 use App\Tests\TestBase;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpClient\MockHttpClient;
@@ -18,12 +16,10 @@ use Symfony\Component\HttpClient\MockHttpClient;
 class AbstractMigrationTest extends TestBase
 {
     private CustomersInterface $fixturesWoocommerce;
-    private CustomersInterface $fixturesMagento;
 
     public function __construct(?string $name = null, array $data = [], $dataName = '')
     {
         $this->fixturesWoocommerce = new WoocommerceCustomers();
-        $this->fixturesMagento = new MagentoCustomers();
         parent::__construct($name, $data, $dataName);
     }
 
@@ -54,18 +50,18 @@ class AbstractMigrationTest extends TestBase
     }
 
     /**
-     * @dataProvider doubleProvider
+     * @dataProvider customersProvider
      * @return void
      * @throws \Exception
      */
-    public function testDoubleThrowError($customer1, $customer2)
+    public function testDoubleThrowError($customer)
     {
         $iterator = $this->sourceConnector->createIterator(
             1,
         );
         $this->sourceConnector->setIterator($iterator);
-        $this->sourceConnector->getRepository()->createOne($customer1);
-        $this->sourceConnector->getRepository()->createOne($customer2);
+        $this->sourceConnector->getRepository()->createOne($customer);
+        $this->sourceConnector->getRepository()->createOne($customer);
 
         $migration = new Migration(
             $this->sourceConnector,
@@ -77,7 +73,7 @@ class AbstractMigrationTest extends TestBase
     }
 
     /**
-     * @dataProvider notDoubleProvider
+     * @dataProvider customersProvider
      * @return void
      * @throws \Exception
      */
@@ -99,21 +95,7 @@ class AbstractMigrationTest extends TestBase
         $migration->start();
     }
 
-    public function doubleProvider()
-    {
-        return [
-            'double set 1' => [
-                $this->fixturesWoocommerce->first(),
-                $this->fixturesWoocommerce->first(),
-            ],
-            'double set 2' => [
-                $this->fixturesWoocommerce->second(),
-                $this->fixturesWoocommerce->second(),
-            ],
-        ];
-    }
-
-    public function notDoubleProvider(): array
+    public function customersProvider(): array
     {
         return [
             'valid set 1' => [

@@ -72,8 +72,9 @@ class WooToMagentoMigrationTest extends TestBase
         );
         $this->sourceConnector->setIterator($iterator);
 
-
-        $this->sourceConnector->getRepository()->create($customers);
+        foreach ($customers as $customer) {
+            $this->sourceConnector->getRepository()->createOne($customer);
+        }
 
         $migration = new Migration(
             $this->sourceConnector,
@@ -108,7 +109,9 @@ class WooToMagentoMigrationTest extends TestBase
         );
         $this->sourceConnector->setIterator($iterator);
 
-        $this->sourceConnector->getRepository()->create($woocommerceCustomers);
+        foreach ($woocommerceCustomers as $customer) {
+            $this->sourceConnector->getRepository()->createOne($customer);
+        }
 
         $migration = new Migration(
             $this->sourceConnector,

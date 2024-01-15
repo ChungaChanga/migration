@@ -4,7 +4,7 @@ namespace App\Connector\Magento\Mapper;
 
 
 use App\Entity\Customer;
-use Chungachanga\AbstractMigration\Mapper\MapperWriteInterface;
+use App\Contract\Connector\Mapper\MapperWriteInterface;
 
 class CustomerMapper implements MapperWriteInterface
 {

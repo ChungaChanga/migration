@@ -7,7 +7,7 @@ use App\Entity\Customer;
 use App\Entity\Order;
 use App\Entity\Product;
 use App\Exception\InvalidStateException;
-use Chungachanga\AbstractMigration\Mapper\MapperReadInterface;
+use App\Contract\Connector\Mapper\MapperReadInterface;
 
 class CustomerMapper implements MapperReadInterface
 {

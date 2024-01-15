@@ -2,7 +2,7 @@
 
 namespace App\Null;
 
-use Chungachanga\AbstractMigration\Repository\RepositoryWriteInterface;
+use App\Contract\Connector\Repository\RepositoryWriteInterface;
 
 class RepositoryWriteNull implements RepositoryWriteInterface
 {

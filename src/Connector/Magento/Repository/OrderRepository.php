@@ -2,9 +2,9 @@
 
 namespace App\Connector\Magento\Repository;
 
-use Chungachanga\AbstractMigration\Repository\RepositoryWriteInterface;
+use App\Contract\Connector\Repository\RepositoryWriteInterface;
 
-class OrderRepository implements RepositoryWriteInterface
+class OrderRepository extends AbstractRepository
 {
     public function create(array $entitiesState): array
     {

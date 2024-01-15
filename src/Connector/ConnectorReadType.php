@@ -4,8 +4,8 @@ namespace App\Connector;
 
 use App\Iterator\ConnectorIterator;
 use App\Null\MapperReadNull;
-use Chungachanga\AbstractMigration\Mapper\MapperReadInterface;
-use Chungachanga\AbstractMigration\Repository\RepositoryReadInterface;
+use App\Contract\Connector\Mapper\MapperReadInterface;
+use App\Contract\Connector\Repository\RepositoryReadInterface;
 
 class ConnectorReadType
 {
