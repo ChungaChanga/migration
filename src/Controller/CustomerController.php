@@ -19,7 +19,7 @@ class CustomerController extends AbstractController
     {
         return $this->render('customer/index.html.twig', [
             'customers' => $customerRepository->findAll(),
-        ]);
+        ])->setSharedMaxAge(15);
     }
 
     #[Route('/new', name: 'app_customer_new', methods: ['GET', 'POST'])]
