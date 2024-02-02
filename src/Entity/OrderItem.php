@@ -7,7 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\MappedSuperclass]
+#[ORM\Entity(repositoryClass: OrderItemRepository::class)]
+#[ORM\Table(name: '`order_item`')]
 class OrderItem
 {
     #[ORM\Id]

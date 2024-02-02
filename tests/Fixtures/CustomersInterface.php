@@ -16,7 +16,6 @@ interface CustomersInterface
     //invalid
     public function withoutId(): array;
     public function withoutEmail(): array;
-    public function maxIdOver(): array;
-    public function minIdLess(): array;
-    public function double(): array;
+//    public function maxIdOver(): array;
+//    public function minIdLess(): array;
 }

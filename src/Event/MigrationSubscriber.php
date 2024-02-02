@@ -2,10 +2,9 @@
 
 namespace App\Event;
 
-use App\EntityTransferStatus;
+use App\Migration\EntityTransferStatus;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\KernelEvents;
 
 class MigrationSubscriber implements EventSubscriberInterface
 {

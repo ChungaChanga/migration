@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpClient\MockHttpClient;
 
-class WooToMagentoMigrationTest extends TestBase
+class CustomersMigrationTest extends TestBase
 {
     private CustomersInterface $fixturesWoocommerce;
     private CustomersInterface $fixturesMagento;

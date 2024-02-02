@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Tests\Fixtures\Magento;
+namespace App\Tests\Fixtures\Woocommerce;
 
-use App\Tests\Fixtures\CustomersInterface;
+use App\Tests\Fixtures\OrdersInterface;
 
-class Customers implements CustomersInterface
+class Orders implements OrdersInterface
 {
 
     public function first(): array
@@ -12,8 +12,8 @@ class Customers implements CustomersInterface
         return [
             'id' => 1,
             'email' => 'ritav@test.ru',
-            'firstname' => 'Rita',
-            'lastname' => 'Vrataski'
+            'first_name' => 'Rita',
+            'last_name' => 'Vrataski'
         ];
     }
 
@@ -23,8 +23,8 @@ class Customers implements CustomersInterface
        return [
             'id' => 2,
             'email'      => 'john11111111111111111111111111111111111119@test.ru',
-            'firstname' => 'John1111111111111111111111111111111111111111111119',
-            'lastname'  => 'Wick1111111111111111111111111111111111111111111119'
+            'first_name' => 'John1111111111111111111111111111111111111111111119',
+            'last_name'  => 'Wick1111111111111111111111111111111111111111111119'
         ];
     }
 
@@ -33,8 +33,8 @@ class Customers implements CustomersInterface
         return [
             'id' => 3,
             'email' => 'jwick@test.com',
-            'firstname' => 'John',
-            'lastname' => 'Wick'
+            'first_name' => 'John',
+            'last_name' => 'Wick'
         ];
     }
 
@@ -43,8 +43,8 @@ class Customers implements CustomersInterface
         return [
             'id' => 4,
             'email' => 'tsawyer@test.ru',
-            'firstname' => 'Tom',
-            'lastname' => 'Sawyer'
+            'first_name' => 'Tom',
+            'last_name' => 'Sawyer'
         ];
     }
 
@@ -53,8 +53,8 @@ class Customers implements CustomersInterface
         return [
             'id' => 5,
             'email' => 'jsnow@test.ru',
-            'firstname' => 'Jon',
-            'lastname' => 'Snow'
+            'first_name' => 'Jon',
+            'last_name' => 'Snow'
         ];
     }
 
@@ -63,8 +63,8 @@ class Customers implements CustomersInterface
         return [
             'id' => 1,//min valid id
             'email' => 'minid@test.ru',
-            'firstname' => 'minidname',
-            'lastname' => 'minidlastname'
+            'first_name' => 'minidname',
+            'last_name' => 'minidlastname'
         ];
     }
 
@@ -73,8 +73,8 @@ class Customers implements CustomersInterface
         return [
             'id' => 9999999999999999,
             'email' => 'maxid@test.com',
-            'firstname' => 'maxidname',
-            'lastname' => 'maxidlastname'
+            'first_name' => 'maxidname',
+            'last_name' => 'maxidlastname'
         ];
     }
 
@@ -82,8 +82,8 @@ class Customers implements CustomersInterface
     {
         return [
             'email' => 'withoutid@test.com',
-            'firstname' => 'withoutidname',
-            'lastname' => 'withoutidlastname'
+            'first_name' => 'withoutidname',
+            'last_name' => 'withoutidlastname'
         ];
     }
 
@@ -91,8 +91,8 @@ class Customers implements CustomersInterface
     {
         return [
             'id' => 6,
-            'firstname' => 'withoutemailname',
-            'lastname' => 'withoutemaillastname'
+            'first_name' => 'withoutemailname',
+            'last_name' => 'withoutemaillastname'
         ];
     }
 
@@ -101,8 +101,8 @@ class Customers implements CustomersInterface
         return [
             'id' => PHP_INT_MAX * 2,
             'email' => 'maxidover@test.com',
-            'firstname' => 'maxidovername',
-            'lastname' => 'maxidoverlastname'
+            'first_name' => 'maxidovername',
+            'last_name' => 'maxidoverlastname'
         ];
     }
 
@@ -111,8 +111,17 @@ class Customers implements CustomersInterface
         return [
             'id' => 0,
             'email' => 'minidless@test.com',
-            'firstname' => 'minidlessname',
-            'lastname' => 'minidlesslastname'
+            'first_name' => 'minidlessname',
+            'last_name' => 'minidlesslastname'
         ];
     }
+
+    public function double(): array
+    {
+        return [
+            $this->first(),
+            $this->first(),
+        ];
+    }
+
 }

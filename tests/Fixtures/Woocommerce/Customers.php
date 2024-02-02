@@ -95,33 +95,4 @@ class Customers implements CustomersInterface
             'last_name' => 'withoutemaillastname'
         ];
     }
-
-    public function maxIdOver(): array
-    {
-        return [
-            'id' => PHP_INT_MAX * 2,
-            'email' => 'maxidover@test.com',
-            'first_name' => 'maxidovername',
-            'last_name' => 'maxidoverlastname'
-        ];
-    }
-
-    public function minIdLess(): array
-    {
-        return [
-            'id' => 0,
-            'email' => 'minidless@test.com',
-            'first_name' => 'minidlessname',
-            'last_name' => 'minidlesslastname'
-        ];
-    }
-
-    public function double(): array
-    {
-        return [
-            $this->first(),
-            $this->first(),
-        ];
-    }
-
 }
