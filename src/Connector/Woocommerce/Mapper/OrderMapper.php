@@ -13,7 +13,7 @@ class OrderMapper implements MapperReadInterface
     public function fromState(array $state): Order
     {
         $order = new Order();
-        $order->setSourceId($state['Id']);
+        $order->setSourceId($state['id']);
         $order->setTotal($state['total']);
 
         if (array_key_exists('line_items', $state)) {

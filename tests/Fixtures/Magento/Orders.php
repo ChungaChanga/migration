@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Fixtures\Woocommerce;
+namespace App\Tests\Fixtures\Magento;
 
 use App\Tests\Fixtures\CustomersInterface;
 use App\Tests\Fixtures\OrdersInterface;
@@ -16,13 +16,19 @@ class Orders implements OrdersInterface
         $this->products = new Products();
     }
 
+
     public function first(): array
     {
         $customer = $this->customers->first();
         return [
+            //fixme grand_total = current currency grand total
+            //
+            //base_grand_total = store base currency grand total
+            //woo has CAD and USD !!!
             'id' => 1,
-            'total' => 1,
-            'customer_id' => $customer['id'],
+            'base_grand_total' => 1,
+            'grand_total' => 1,
+            'customer_email' => $customer['email'],
             'items' => [
                 [
                     'sku' => $this->products->first()['sku']
@@ -36,8 +42,9 @@ class Orders implements OrdersInterface
         $customer = $this->customers->second();
         return [
             'id' => 2,
-            'total' => 1000,
-            'customer_id' => $customer['id'],
+            'base_grand_total' => 1000,
+            'grand_total' => 1000,
+            'customer_email' => $customer['email'],
             'items' => [
                 [
                     'sku' => $this->products->second()['sku']
@@ -51,8 +58,9 @@ class Orders implements OrdersInterface
         $customer = $this->customers->third();
         return [
             'id' => 3,
-            'total' => 99999999,
-            'customer_id' => $customer['id'],
+            'base_grand_total' => 99999999,
+            'grand_total' => 99999999,
+            'customer_email' => $customer['email'],
             'items' => [
                 [
                     'sku' => $this->products->third()['sku']
