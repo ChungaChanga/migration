@@ -4,13 +4,12 @@ namespace App\Tests\Functional;
 
 use App\Connector\Magento\ConnectorBuilder\CustomerConnectorBuilder as MagentoConnectorBuilder;
 use App\Connector\Woocommerce\ConnectorBuilder\CustomerConnectorBuilder as WooConnectorBuilder;
-use App\Tests\Fake\CustomerRepositoryStub;
+use App\Tests\Fake\Connector\RepositoryStub;
 use App\Tests\Fixtures\CustomersInterface;
 use App\Tests\Fixtures\Magento\Customers as MagentoCustomers;
 use App\Tests\Fixtures\Woocommerce\Customers as WoocommerceCustomers;
 use App\Tests\TestBase;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Config\ConfigCache;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class Migration extends TestBase
@@ -32,8 +31,8 @@ class Migration extends TestBase
     {
         $httpClientMock = $this->createMock(HttpClientInterface::class);
 
-        $fakeSourceRepository = new CustomerRepositoryStub();
-        $fakeDestRepository = new CustomerRepositoryStub();
+        $fakeSourceRepository = new RepositoryStub();
+        $fakeDestRepository = new RepositoryStub();
         $this->sourceConnectorBuilder = new WooConnectorBuilder();
         $this->destConnectorBuilder = new MagentoConnectorBuilder();
 

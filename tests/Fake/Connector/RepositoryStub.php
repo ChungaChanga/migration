@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Tests\Fake;
+namespace App\Tests\Fake\Connector;
 
 use App\Connector\Woocommerce\Repository\AbstractRepository;
 use App\Contract\Connector\Repository\RepositoryFullInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class CustomerRepositoryStub extends AbstractRepository implements RepositoryFullInterface
+class RepositoryStub extends AbstractRepository implements RepositoryFullInterface
 {
     private array $entitiesState = [];
 

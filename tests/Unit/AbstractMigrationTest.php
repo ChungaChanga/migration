@@ -5,7 +5,7 @@ namespace App\Tests\Unit;
 use App\Connector\ConnectorFactory;
 use App\Migration\Migration;
 use App\Migration\MigrationType;
-use App\Tests\Fake\CustomerRepositoryStub;
+use App\Tests\Fake\Connector\RepositoryStub;
 use App\Tests\Fixtures\CustomersInterface;
 use App\Tests\Fixtures\Woocommerce\Customers as WoocommerceCustomers;
 use App\Tests\TestBase;
@@ -33,8 +33,8 @@ class AbstractMigrationTest extends TestBase
         $httpClientMock = new MockHttpClient();
         $paramsMock = $this->createMock(ContainerBagInterface::class);
 
-        $fakeSourceRepository = new CustomerRepositoryStub();
-        $fakeDestRepository = new CustomerRepositoryStub();
+        $fakeSourceRepository = new RepositoryStub();
+        $fakeDestRepository = new RepositoryStub();
 
         $connectorFactory = new ConnectorFactory(
             MigrationType::Customers,
