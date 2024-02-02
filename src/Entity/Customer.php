@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\CustomerRepository;
-use App\Contract\Connector\Entity\EntityInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -18,9 +17,10 @@ class Customer extends AbstractEntity
 
     private ?string $firstName = null;
 
-    private ?string $email = null;
-
     private ?string $lastName = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $email = null;
 
     public function __construct()
     {
@@ -74,18 +74,6 @@ class Customer extends AbstractEntity
         return $this;
     }
 
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): static
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
     public function getLastName(): ?string
     {
         return $this->lastName;
@@ -94,6 +82,18 @@ class Customer extends AbstractEntity
     public function setLastName(string $lastName): static
     {
         $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): static
+    {
+        $this->email = $email;
 
         return $this;
     }
