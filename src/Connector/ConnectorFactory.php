@@ -38,7 +38,6 @@ class ConnectorFactory
                 'test',//todo get from config
             );
             $mapper = new CustomerMapper();
-            $connector = new ConnectorReadType($repository, $mapper);
         } elseif (MigrationType::Orders === $this->entityType) {
             $repository = new OrderRepository(
                 $this->client,
@@ -47,11 +46,11 @@ class ConnectorFactory
                 'test',//todo get from config
             );
             $mapper = new OrderMapper();
-            $connector = new ConnectorReadType($repository, $mapper);
         } else {
             throw new \DomainException('Unexpected entity type ' . $this->entityType->name);
         }
-        return $connector;
+
+        return new ConnectorReadType($repository, $mapper);
     }
 
     public function createDestinationConnector(): ConnectorWriteType
@@ -64,7 +63,6 @@ class ConnectorFactory
                 'test',//todo get from config
             );
             $mapper = new \App\Connector\Magento\Mapper\CustomerMapper();
-            $connector = new ConnectorWriteType($repository, $this->eventDispatcher, $mapper);
         } elseif (MigrationType::Orders === $this->entityType) {
             $repository = new \App\Connector\Magento\Repository\OrderRepository(
                 $this->client,
@@ -73,10 +71,10 @@ class ConnectorFactory
                 'test',//todo get from config
             );
             $mapper = new \App\Connector\Magento\Mapper\OrderMapper();
-            $connector = new ConnectorWriteType($repository, $this->eventDispatcher, $mapper);
         } else {
             throw new \DomainException('Unexpected entity type ' . $this->entityType->name);
         }
-        return $connector;
+
+        return new ConnectorWriteType($repository, $this->eventDispatcher, $mapper);
     }
 }

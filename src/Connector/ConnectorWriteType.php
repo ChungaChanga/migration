@@ -20,7 +20,7 @@ class ConnectorWriteType
     {
     }
 
-    public function create($entities): void
+    public function create(ArrayCollection $entities): void
     {
         $currentEntitiesCollection = new ArrayCollection();
         foreach ($entities as $entity) {
