@@ -10,6 +10,7 @@ use App\Connector\Woocommerce\Repository\CustomerRepository;
 use App\Connector\Woocommerce\Repository\OrderRepository;
 use App\Migration\MigrationType;
 use App\Tests\TestBase;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpClient\MockHttpClient;
@@ -30,12 +31,12 @@ class ConnectorFactoryTest extends TestBase
     )
     {
         $httpClientMock = new MockHttpClient();
-        $eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
+        $entityManagerMock = $this->createMock(EntityManagerInterface::class);
         $paramsMock = $this->createMock(ContainerBagInterface::class);
         $factory = new ConnectorFactory(
             $entityType,
             $httpClientMock,
-            $eventDispatcherMock,
+            $entityManagerMock,
             $paramsMock
         );
 

@@ -2,19 +2,22 @@
 
 namespace App\Connector;
 
+use App\Entity\AbstractEntity;
 use App\Event\EntitiesCreateAfterEvent;
 use App\Event\EntitiesCreateBeforeEvent;
 use App\Event\EntitiesCreateErrorEvent;
 use App\Contract\Connector\Mapper\MapperWriteInterface;
 use App\Contract\Connector\Repository\RepositoryWriteInterface;
+use App\Migration\EntityTransferStatus;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ConnectorWriteType
 {
     public function __construct(
         private RepositoryWriteInterface $repository,
-        private EventDispatcherInterface $eventDispatcher,
+        private EntityManagerInterface $entityManager,
         private MapperWriteInterface $mapper,
     )
     {
@@ -22,24 +25,26 @@ class ConnectorWriteType
 
     public function create(ArrayCollection $entities): void
     {
-        $currentEntitiesCollection = new ArrayCollection();
+        /** @var AbstractEntity $entity */
         foreach ($entities as $entity) {
-            $currentEntitiesCollection->clear();
-            $currentEntitiesCollection->add($entity);
-
+            $this->entityManager->persist($entity);
             $entityState = $this->mapper->getState($entity);
-
-            $beforeEvent = new EntitiesCreateBeforeEvent($currentEntitiesCollection) ;
-            $this->eventDispatcher->dispatch($beforeEvent, EntitiesCreateBeforeEvent::NAME);
             try {
+                $this->saveEntityTransferStatus($entity, EntityTransferStatus::Processing);
                 $result = $this->repository->createOne($entityState);
-                $afterEvent = new EntitiesCreateAfterEvent($currentEntitiesCollection, $result) ;
-                $this->eventDispatcher->dispatch($afterEvent, EntitiesCreateAfterEvent::NAME);
+                $entity->setDestId($result['id']);
+                $entity->setTransferStatus(EntityTransferStatus::Done);
+                $this->entityManager->flush();
             } catch (\Exception $e) {
-                $event = new EntitiesCreateErrorEvent($currentEntitiesCollection, $result);
-                $this->eventDispatcher->dispatch($event, EntitiesCreateErrorEvent::NAME);
+                $this->saveEntityTransferStatus($entity, EntityTransferStatus::Error);
             }
         }
+    }
+
+    private function saveEntityTransferStatus(AbstractEntity $entity, EntityTransferStatus $status)
+    {
+        $entity->setTransferStatus($status);
+        $this->entityManager->flush();
     }
 
     public function getRepository(): RepositoryWriteInterface
@@ -60,15 +65,5 @@ class ConnectorWriteType
     public function setMapper(MapperWriteInterface $mapper): void
     {
         $this->mapper = $mapper;
-    }
-
-    public function getEventDispatcher(): EventDispatcherInterface
-    {
-        return $this->eventDispatcher;
-    }
-
-    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher): void
-    {
-        $this->eventDispatcher = $eventDispatcher;
     }
 }

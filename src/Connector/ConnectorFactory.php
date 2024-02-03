@@ -2,20 +2,14 @@
 
 namespace App\Connector;
 
-use App\Connector\Magento\ConnectorBuilder\CustomerConnectorBuilder as MagentoCustomerConnectorBuilder;
-use App\Connector\Magento\ConnectorBuilder\OrderConnectorBuilder as MagentoOrderConnectorBuilder;
-use App\Connector\Woocommerce\ConnectorBuilder\CustomerConnectorBuilder as WooCustomerConnectorBuilder;
-use App\Connector\Woocommerce\ConnectorBuilder\OrderConnectorBuilder as WooOrderConnectorBuilder;
+
 use App\Connector\Woocommerce\Mapper\CustomerMapper;
 use App\Connector\Woocommerce\Mapper\OrderMapper;
 use App\Connector\Woocommerce\Repository\CustomerRepository;
 use App\Connector\Woocommerce\Repository\OrderRepository;
 use App\Migration\MigrationType;
-use App\Contract\Connector\Connector\ConnectorBuilderReadInterface;
-use App\Contract\Connector\Connector\ConnectorBuilderWriteInterface;
-use App\Contract\Connector\Connector\ConnectorReadInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class ConnectorFactory
@@ -23,7 +17,7 @@ class ConnectorFactory
     public function __construct(
         private MigrationType $entityType,
         private HttpClientInterface $client,
-        private EventDispatcherInterface $eventDispatcher,
+        private EntityManagerInterface $entityManager,
         private ContainerBagInterface $params
     )
     {
@@ -75,6 +69,6 @@ class ConnectorFactory
             throw new \DomainException('Unexpected entity type ' . $this->entityType->name);
         }
 
-        return new ConnectorWriteType($repository, $this->eventDispatcher, $mapper);
+        return new ConnectorWriteType($repository, $this->entityManager, $mapper);
     }
 }

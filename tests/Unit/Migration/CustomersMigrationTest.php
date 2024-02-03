@@ -13,6 +13,7 @@ use App\Tests\Fixtures\CustomersInterface;
 use App\Tests\Fixtures\Magento\Customers as MagentoCustomers;
 use App\Tests\Fixtures\Woocommerce\Customers as WoocommerceCustomers;
 use App\Tests\TestBase;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpClient\MockHttpClient;
@@ -32,7 +33,7 @@ class CustomersMigrationTest extends TestBase
     public function setUp(): void
     {
         $httpClientMock = new MockHttpClient();
-        $eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
+        $entityManagerMock = $this->createMock(EntityManagerInterface::class);
         $paramsMock = $this->createMock(ContainerBagInterface::class);
 
         $fakeSourceRepository = new RepositoryStub();
@@ -41,7 +42,7 @@ class CustomersMigrationTest extends TestBase
         $connectorFactory = new ConnectorFactory(
             MigrationType::Customers,
             $httpClientMock,
-            $eventDispatcherMock,
+            $entityManagerMock,
             $paramsMock
         );
         $this->sourceConnector = $connectorFactory->createSourceConnector();

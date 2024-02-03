@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Unit;
+namespace App\Tests\Functional;
 
 use App\Connector\ConnectorFactory;
 use App\Migration\Migration;
@@ -9,11 +9,12 @@ use App\Tests\Fake\Connector\RepositoryStub;
 use App\Tests\Fixtures\CustomersInterface;
 use App\Tests\Fixtures\Woocommerce\Customers as WoocommerceCustomers;
 use App\Tests\TestBase;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpClient\MockHttpClient;
 
-class AbstractMigrationTest extends TestBase
+class MigrationTest extends TestBase
 {
     private CustomersInterface $fixturesWoocommerce;
 
@@ -28,7 +29,7 @@ class AbstractMigrationTest extends TestBase
         self::bootKernel();
         $container = static::getContainer();
 
-        $eventDispatcher = $container->get(EventDispatcherInterface::class);
+        $entityManager = $container->get(EntityManagerInterface::class);
 
         $httpClientMock = new MockHttpClient();
         $paramsMock = $this->createMock(ContainerBagInterface::class);
@@ -39,7 +40,7 @@ class AbstractMigrationTest extends TestBase
         $connectorFactory = new ConnectorFactory(
             MigrationType::Customers,
             $httpClientMock,
-            $eventDispatcher,
+            $entityManager,
             $paramsMock
         );
         $this->sourceConnector = $connectorFactory->createSourceConnector();
