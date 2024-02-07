@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Iterator;
 use InvalidArgumentException;
 
-class ConnectorIterator implements Iterator
+class RepositoryIterator implements Iterator
 {
     private int $currentPage;
     private bool $isNeedRepeatIteration = false;
@@ -16,7 +16,6 @@ class ConnectorIterator implements Iterator
 
     public function __construct(
         private RepositoryReadInterface $repository,
-        private MapperReadInterface $mapper,
         private int $startPage = 1,
         private int $pageSize = 10,
         private bool $isNeedWaitingFullPage = false,
@@ -35,9 +34,6 @@ class ConnectorIterator implements Iterator
 
     public function current(): ArrayCollection
     {
-        //todo check memory leak
-        $result = new ArrayCollection();
-
         $fetchResult = $this->repository->fetchPage(
             $this->currentPage,
             $this->pageSize
@@ -49,11 +45,7 @@ class ConnectorIterator implements Iterator
             $fetchResult = $this->handleReturnPartialResultRule($fetchResult);
         }
 
-        foreach ($fetchResult as $entityState) {
-            $result->add($this->mapper->fromState($entityState));
-        }
-
-        return $result;
+        return new ArrayCollection($fetchResult);
     }
 
     public function next(): void

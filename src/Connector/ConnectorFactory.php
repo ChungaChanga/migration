@@ -39,7 +39,7 @@ class ConnectorFactory
                 'test',
                 'test',//todo get from config
             );
-            $mapper = new OrderMapper();
+            $mapper = new OrderMapper($this->entityManager);
         } else {
             throw new \DomainException('Unexpected entity type ' . $this->entityType->name);
         }

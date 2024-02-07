@@ -2,9 +2,11 @@
 
 namespace App\Connector;
 
-use App\Iterator\ConnectorIterator;
+use App\Iterator\MappingRepositoryIteratorIterator;
+use App\Iterator\RepositoryIterator;
 use App\Contract\Connector\Mapper\MapperReadInterface;
 use App\Contract\Connector\Repository\RepositoryReadInterface;
+use Doctrine\ORM\EntityManagerInterface;
 
 class ConnectorReadType
 {
@@ -59,14 +61,14 @@ class ConnectorReadType
         if ($startPage < 1) {
             throw new \InvalidArgumentException('Start page is must be more than 0');
         }
-        return new ConnectorIterator(
+        $repositoryIterator =  new RepositoryIterator(
             $this->getRepository(),
-            $this->getMapper(),
             $startPage,
             $pageSize,
             $isNeedWaitingFullPage,
             $isAllowPartialResult,
             $delaySeconds
         );
+        return new MappingRepositoryIteratorIterator(iterator: $repositoryIterator, mapper: $this->getMapper());
     }
 }
