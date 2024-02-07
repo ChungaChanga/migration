@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpClient\MockHttpClient;
 
-class MigrationTest extends TestBase
+class AbstractMigrationTest extends TestBase
 {
     private CustomersInterface $fixturesWoocommerce;
 

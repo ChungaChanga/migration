@@ -3,46 +3,48 @@
 /**
  * Test migration from Woocommerce to Magento2
  */
-namespace App\Tests\Unit\Migration;
+namespace App\Tests\Functional;
 
 use App\Connector\ConnectorFactory;
 use App\Migration\Migration;
 use App\Migration\MigrationType;
 use App\Tests\Fake\Connector\RepositoryStub;
-use App\Tests\Fixtures\CustomersInterface;
-use App\Tests\Fixtures\Magento\Customers as MagentoCustomers;
-use App\Tests\Fixtures\Woocommerce\Customers as WoocommerceCustomers;
+use App\Tests\Fixtures\Magento\Orders as MagentoOrders;
+use App\Tests\Fixtures\OrdersInterface;
+use App\Tests\Fixtures\Woocommerce\Orders as WoocommerceOrders;
 use App\Tests\TestBase;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpClient\MockHttpClient;
 
-class CustomersMigrationTest extends TestBase
+class OrdersMigrationTest extends TestBase
 {
-    private CustomersInterface $fixturesWoocommerce;
-    private CustomersInterface $fixturesMagento;
+    private OrdersInterface $woocommerceOrders;
+    private OrdersInterface $magentoOrders;
 
     public function __construct(?string $name = null, array $data = [], $dataName = '')
     {
-        $this->fixturesWoocommerce = new WoocommerceCustomers();
-        $this->fixturesMagento = new MagentoCustomers();
+        $this->woocommerceOrders = new WoocommerceOrders();
+        $this->magentoOrders = new MagentoOrders();
         parent::__construct($name, $data, $dataName);
     }
 
     public function setUp(): void
     {
+        self::bootKernel();
+        $container = static::getContainer();
+        $entityManager = $container->get(EntityManagerInterface::class);
+
         $httpClientMock = new MockHttpClient();
-        $entityManagerMock = $this->createMock(EntityManagerInterface::class);
         $paramsMock = $this->createMock(ContainerBagInterface::class);
 
         $fakeSourceRepository = new RepositoryStub();
         $fakeDestRepository = new RepositoryStub();
 
         $connectorFactory = new ConnectorFactory(
-            MigrationType::Customers,
+            MigrationType::Orders,
             $httpClientMock,
-            $entityManagerMock,
+            $entityManager,
             $paramsMock
         );
         $this->sourceConnector = $connectorFactory->createSourceConnector();
@@ -55,9 +57,9 @@ class CustomersMigrationTest extends TestBase
     /**
      * @dataProvider  countProvider
      */
-    public function testCustomersCountNotWaitingNewCustomers(
-        array $customers,
-        int $customersCount,
+    public function testEntityCountNotWaitingNewEntities(
+        array $entities,
+        int $entitiesCount,
         int $startPage,
         int $pageSize,
         bool $isAllowPartialResult
@@ -72,8 +74,8 @@ class CustomersMigrationTest extends TestBase
         );
         $this->sourceConnector->setIterator($iterator);
 
-        foreach ($customers as $customer) {
-            $this->sourceConnector->getRepository()->createOne($customer);
+        foreach ($entities as $entity) {
+            $this->sourceConnector->getRepository()->createOne($entity);
         }
 
         $migration = new Migration(
@@ -83,7 +85,7 @@ class CustomersMigrationTest extends TestBase
 
         $migration->start();
         $this->assertCount(
-            $customersCount,
+            $entitiesCount,
             $this->destConnector->getRepository()->fetchPage(1, 99999)
         );
     }
@@ -93,9 +95,9 @@ class CustomersMigrationTest extends TestBase
     /**
      * @dataProvider  mappingProvider
      */
-    public function testCustomersDataNotWaitingNewCustomers(
-        array $woocommerceCustomers,
-        array $magentoCustomers,
+    public function testEntitiesDataNotWaitingFullPage(
+        array $woocommerceEntities,
+        array $magentoEntities,
         int $startPage,
         int $pageSize,
         bool $isAllowPartialResult
@@ -109,8 +111,8 @@ class CustomersMigrationTest extends TestBase
         );
         $this->sourceConnector->setIterator($iterator);
 
-        foreach ($woocommerceCustomers as $customer) {
-            $this->sourceConnector->getRepository()->createOne($customer);
+        foreach ($woocommerceEntities as $entity) {
+            $this->sourceConnector->getRepository()->createOne($entity);
         }
 
         $migration = new Migration(
@@ -119,8 +121,8 @@ class CustomersMigrationTest extends TestBase
         );
 
         $migration->start();
-        foreach ($this->destConnector->getRepository()->fetchPage(1, 99999) as $k => $customerFromWoocommerce) {
-            $this->assertEquals($customerFromWoocommerce['customer']['email'], $magentoCustomers[$k]['email']);
+        foreach ($this->destConnector->getRepository()->fetchPage(1, 99999) as $k => $entityFromWoocommerce) {
+            $this->assertEquals($entityFromWoocommerce['base_grand_total'], $magentoEntities[$k]['base_grand_total']);
         }
     }
 
@@ -136,7 +138,7 @@ class CustomersMigrationTest extends TestBase
             ],
             [
                 [
-                    $this->fixturesWoocommerce->first(),
+                    $this->woocommerceOrders->first(),
                 ],
                 1,
                 1,
@@ -145,19 +147,18 @@ class CustomersMigrationTest extends TestBase
             ],
             [
                 [
-                    $this->fixturesWoocommerce->first(),
-                    $this->fixturesWoocommerce->second(),
-                    $this->fixturesWoocommerce->third(),
-                    $this->fixturesWoocommerce->fourth(),
+                    $this->woocommerceOrders->first(),
+                    $this->woocommerceOrders->second(),
+                    $this->woocommerceOrders->third(),
                 ],
-                4,
+                3,
                 1,
                 2,
                 true,//isAllowPartialResult
             ],
             [
                 [
-                    $this->fixturesWoocommerce->first(),
+                    $this->woocommerceOrders->first(),
                 ],
                 0,
                 1,
@@ -166,8 +167,8 @@ class CustomersMigrationTest extends TestBase
             ],
             [
                 [
-                    $this->fixturesWoocommerce->first(),
-                    $this->fixturesWoocommerce->second(),
+                    $this->woocommerceOrders->first(),
+                    $this->woocommerceOrders->second(),
                 ],
                 2,
                 1,
@@ -176,9 +177,9 @@ class CustomersMigrationTest extends TestBase
             ],
             [
                 [
-                    $this->fixturesWoocommerce->first(),
-                    $this->fixturesWoocommerce->second(),
-                    $this->fixturesWoocommerce->third(),
+                    $this->woocommerceOrders->first(),
+                    $this->woocommerceOrders->second(),
+                    $this->woocommerceOrders->third(),
                 ],
                 2,
                 1,
@@ -193,10 +194,10 @@ class CustomersMigrationTest extends TestBase
         return [
             [
                 [
-                    $this->fixturesWoocommerce->first(),
+                    $this->woocommerceOrders->first(),
                 ],
                 [
-                    $this->fixturesMagento->first(),
+                    $this->magentoOrders->first(),
                 ],
                 1,
                 10,
@@ -204,27 +205,12 @@ class CustomersMigrationTest extends TestBase
             ],
             [
                 [
-                    $this->fixturesWoocommerce->first(),
-                    $this->fixturesWoocommerce->second(),
+                    $this->woocommerceOrders->first(),
+                    $this->woocommerceOrders->second(),
                 ],
                 [
-                    $this->fixturesMagento->first(),
-                    $this->fixturesMagento->second(),
-                ],
-                1,
-                2,
-                true,//isAllowPartialResult
-            ],
-            [
-                [
-                    $this->fixturesWoocommerce->first(),
-                    $this->fixturesWoocommerce->second(),
-                    $this->fixturesWoocommerce->third(),
-                ],
-                [
-                    $this->fixturesMagento->first(),
-                    $this->fixturesMagento->second(),
-                    $this->fixturesMagento->third(),
+                    $this->magentoOrders->first(),
+                    $this->magentoOrders->second(),
                 ],
                 1,
                 2,
@@ -232,12 +218,27 @@ class CustomersMigrationTest extends TestBase
             ],
             [
                 [
-                    $this->fixturesWoocommerce->first(),
-                    $this->fixturesWoocommerce->second(),
+                    $this->woocommerceOrders->first(),
+                    $this->woocommerceOrders->second(),
+                    $this->woocommerceOrders->third(),
                 ],
                 [
-                    $this->fixturesMagento->first(),
-                    $this->fixturesMagento->second(),
+                    $this->magentoOrders->first(),
+                    $this->magentoOrders->second(),
+                    $this->magentoOrders->third(),
+                ],
+                1,
+                2,
+                true,//isAllowPartialResult
+            ],
+            [
+                [
+                    $this->woocommerceOrders->first(),
+                    $this->woocommerceOrders->second(),
+                ],
+                [
+                    $this->magentoOrders->first(),
+                    $this->magentoOrders->second(),
                 ],
                 1,
                 2,
