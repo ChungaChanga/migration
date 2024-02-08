@@ -38,26 +38,6 @@ class Customers implements CustomersInterface
         ];
     }
 
-    public function fourth(): array
-    {
-        return [
-            'id' => 4,
-            'email' => 'tsawyer@test.ru',
-            'firstname' => 'Tom',
-            'lastname' => 'Sawyer'
-        ];
-    }
-
-    public function fifth(): array
-    {
-        return [
-            'id' => 5,
-            'email' => 'jsnow@test.ru',
-            'firstname' => 'Jon',
-            'lastname' => 'Snow'
-        ];
-    }
-
     public function minId(): array
     {
         return [

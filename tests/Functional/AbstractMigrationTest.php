@@ -105,7 +105,7 @@ class AbstractMigrationTest extends TestBase
             ],
             'valid set 2' => [
                 $this->fixturesWoocommerce->first(),
-                $this->fixturesWoocommerce->fourth(),
+                $this->fixturesWoocommerce->third(),
             ],
         ];
     }

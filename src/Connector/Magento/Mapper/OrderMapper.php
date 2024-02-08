@@ -16,7 +16,7 @@ class OrderMapper implements MapperWriteInterface
         return [
             'base_grand_total' => $entity->getTotal(),//required
             'grand_total' => $entity->getTotal(),//required
-//            'customer_email' //required
+            'customer_email' => $entity->getCustomer()->getEmail(),//required
 //            'items'        //required
         ];
     }

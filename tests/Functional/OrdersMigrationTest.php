@@ -9,23 +9,33 @@ use App\Connector\ConnectorFactory;
 use App\Migration\Migration;
 use App\Migration\MigrationType;
 use App\Tests\Fake\Connector\RepositoryStub;
+use App\Tests\Fixtures\CustomersInterface;
+use App\Tests\Fixtures\Magento\Customers as MagentoCustomers;
 use App\Tests\Fixtures\Magento\Orders as MagentoOrders;
 use App\Tests\Fixtures\OrdersInterface;
+use App\Tests\Fixtures\Woocommerce\Customers as WoocommerceCustomers;
 use App\Tests\Fixtures\Woocommerce\Orders as WoocommerceOrders;
 use App\Tests\TestBase;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class OrdersMigrationTest extends TestBase
 {
     private OrdersInterface $woocommerceOrders;
     private OrdersInterface $magentoOrders;
+    private CustomersInterface $woocommerceCustomers;
+    private CustomersInterface $magentoCustomers;
 
     public function __construct(?string $name = null, array $data = [], $dataName = '')
     {
         $this->woocommerceOrders = new WoocommerceOrders();
         $this->magentoOrders = new MagentoOrders();
+
+        $this->woocommerceCustomers = new WoocommerceCustomers();
+        $this->magentoCustomers = new MagentoCustomers();
+
         parent::__construct($name, $data, $dataName);
     }
 
@@ -38,8 +48,13 @@ class OrdersMigrationTest extends TestBase
         $httpClientMock = new MockHttpClient();
         $paramsMock = $this->createMock(ContainerBagInterface::class);
 
-        $fakeSourceRepository = new RepositoryStub();
-        $fakeDestRepository = new RepositoryStub();
+        //prepare customers for orders migration
+        $this->migrateFakeCustomers($httpClientMock, $entityManager, $paramsMock);
+
+        //prepare orders migration
+
+        $fakeOrdersSourceRepository = new RepositoryStub();
+        $fakeOrdersDestRepository = new RepositoryStub();
 
         $connectorFactory = new ConnectorFactory(
             MigrationType::Orders,
@@ -50,8 +65,8 @@ class OrdersMigrationTest extends TestBase
         $this->sourceConnector = $connectorFactory->createSourceConnector();
         $this->destConnector = $connectorFactory->createDestinationConnector();
 
-        $this->sourceConnector->setRepository($fakeSourceRepository);
-        $this->destConnector->setRepository($fakeDestRepository);
+        $this->sourceConnector->setRepository($fakeOrdersSourceRepository);
+        $this->destConnector->setRepository($fakeOrdersDestRepository);
     }
 
     /**
@@ -245,5 +260,40 @@ class OrdersMigrationTest extends TestBase
                 false,//isAllowPartialResult
             ],
         ];
+    }
+
+    /**
+     * @param HttpClientInterface $httpClient
+     * @param EntityManagerInterface $entityManager
+     * @param ContainerBagInterface $containerBag
+     * @return void
+     */
+    private function migrateFakeCustomers(
+        HttpClientInterface $httpClient,
+        EntityManagerInterface $entityManager,
+        ContainerBagInterface $containerBag
+    )
+    {
+        $connectorFactory = new ConnectorFactory(
+            MigrationType::Customers,
+            $httpClient,
+            $entityManager,
+            $containerBag
+        );
+        $customersSourceConnector = $connectorFactory->createSourceConnector();
+        $customersDestConnector = $connectorFactory->createDestinationConnector();
+        $customersSourceConnector->setRepository(new RepositoryStub());
+        $customersDestConnector->setRepository(new RepositoryStub());
+        $customersSourceConnector->setIterator($customersSourceConnector->createIterator());
+
+        $customersSourceConnector->getRepository()->createOne($this->woocommerceCustomers->first());
+        $customersSourceConnector->getRepository()->createOne($this->woocommerceCustomers->second());
+        $customersSourceConnector->getRepository()->createOne($this->woocommerceCustomers->third());
+        $migration = new Migration(
+            $customersSourceConnector,
+            $customersDestConnector,
+        );
+
+        $migration->start();
     }
 }

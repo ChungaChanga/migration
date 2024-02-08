@@ -17,7 +17,7 @@ class ConnectorReadType
         private MapperReadInterface $mapper,
     )
     {
-        $this->setIterator($this->createIterator(1));
+        $this->setIterator($this->createIterator());
     }
 
     public function getRepository(): RepositoryReadInterface
@@ -51,7 +51,7 @@ class ConnectorReadType
     }
 
     public function createIterator(
-        int $startPage,
+        int $startPage = 1,
         int $pageSize = 10,
         bool $isNeedWaitingFullPage = false,
         bool $isAllowPartialResult = true,

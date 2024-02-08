@@ -148,9 +148,8 @@ class CustomersMigrationTest extends TestBase
                     $this->fixturesWoocommerce->first(),
                     $this->fixturesWoocommerce->second(),
                     $this->fixturesWoocommerce->third(),
-                    $this->fixturesWoocommerce->fourth(),
                 ],
-                4,
+                3,
                 1,
                 2,
                 true,//isAllowPartialResult
