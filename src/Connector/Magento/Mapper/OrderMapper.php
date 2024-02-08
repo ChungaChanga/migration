@@ -8,15 +8,15 @@ use App\Contract\Connector\Mapper\MapperWriteInterface;
 class OrderMapper implements MapperWriteInterface
 {
     /**
-     * @param Order $entity
+     * @param Order $order
      * @return array
      */
-    public function getState($entity): array
+    public function getState($order): array
     {
         return [
-            'base_grand_total' => $entity->getTotal(),//required
-            'grand_total' => $entity->getTotal(),//required
-            'customer_email' => $entity->getCustomer()->getEmail(),//required
+            'base_grand_total' => $order->getTotal(),//required
+            'grand_total' => $order->getTotal(),//required
+            'customer_email' => $order->getCustomer()->getEmail(),//required
 //            'items'        //required
         ];
     }
