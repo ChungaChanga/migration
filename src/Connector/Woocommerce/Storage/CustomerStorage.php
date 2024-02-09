@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Connector\Woocommerce\Repository;
+namespace App\Connector\Woocommerce\Storage;
 
-class OrderRepository extends AbstractRepository
+class CustomerStorage extends AbstractStorage
 {
     public function fetchPage(int $page, int $pageSize): array
     {
@@ -21,6 +21,6 @@ class OrderRepository extends AbstractRepository
         if (empty($result)) {
             return [];
         }
-        return $result['orders'];
+        return $result['customers'];
     }
 }

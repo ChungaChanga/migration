@@ -2,10 +2,10 @@
 
 namespace App\Tests\Fake\Connector;
 
-use App\Connector\Woocommerce\Repository\AbstractRepository;
-use App\Contract\Connector\Repository\RepositoryFullInterface;
+use App\Connector\Woocommerce\Storage\AbstractStorage;
+use App\Contract\Connector\Repository\StorageFullInterface;
 
-class RepositoryStub extends AbstractRepository implements RepositoryFullInterface
+class StorageStub extends AbstractStorage implements StorageFullInterface
 {
     private array $entitiesState = [];
 

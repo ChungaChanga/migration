@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Connector\Magento\Repository;
+namespace App\Connector\Magento\Storage;
 
-use App\Contract\Connector\Repository\RepositoryWriteInterface;
+use App\Contract\Connector\Repository\StorageWriteInterface;
 
-class OrderRepository extends AbstractRepository
+class OrderStorage extends AbstractStorage
 {
     public function create(array $entitiesState): array
     {

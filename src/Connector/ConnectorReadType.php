@@ -5,7 +5,7 @@ namespace App\Connector;
 use App\Iterator\MappingRepositoryIteratorIterator;
 use App\Iterator\RepositoryIterator;
 use App\Contract\Connector\Mapper\MapperReadInterface;
-use App\Contract\Connector\Repository\RepositoryReadInterface;
+use App\Contract\Connector\Repository\StorageReadInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ConnectorReadType
@@ -13,21 +13,21 @@ class ConnectorReadType
     private \Iterator $iterator;
 
     public function __construct(
-        private RepositoryReadInterface $repository,
-        private MapperReadInterface $mapper,
+        private StorageReadInterface $storage,
+        private MapperReadInterface  $mapper,
     )
     {
         $this->setIterator($this->createIterator());
     }
 
-    public function getRepository(): RepositoryReadInterface
+    public function getStorage(): StorageReadInterface
     {
-        return $this->repository;
+        return $this->storage;
     }
 
-    public function setRepository(RepositoryReadInterface $repository): void
+    public function setStorage(StorageReadInterface $storage): void
     {
-        $this->repository = $repository;
+        $this->storage = $storage;
     }
 
     public function getMapper(): MapperReadInterface
@@ -62,7 +62,7 @@ class ConnectorReadType
             throw new \InvalidArgumentException('Start page is must be more than 0');
         }
         $repositoryIterator =  new RepositoryIterator(
-            $this->getRepository(),
+            $this->getStorage(),
             $startPage,
             $pageSize,
             $isNeedWaitingFullPage,

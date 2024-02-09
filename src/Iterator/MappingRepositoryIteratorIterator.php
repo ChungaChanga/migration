@@ -3,7 +3,7 @@
 namespace App\Iterator;
 
 use App\Contract\Connector\Mapper\MapperReadInterface;
-use App\Contract\Connector\Repository\RepositoryReadInterface;
+use App\Contract\Connector\Repository\StorageReadInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Iterator;
 use InvalidArgumentException;

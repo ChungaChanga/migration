@@ -5,7 +5,7 @@ namespace App\Tests\Functional;
 use App\Connector\ConnectorFactory;
 use App\Migration\Migration;
 use App\Migration\MigrationType;
-use App\Tests\Fake\Connector\RepositoryStub;
+use App\Tests\Fake\Connector\StorageStub;
 use App\Tests\Fixtures\CustomersInterface;
 use App\Tests\Fixtures\Woocommerce\Customers as WoocommerceCustomers;
 use App\Tests\TestBase;
@@ -34,8 +34,8 @@ class AbstractMigrationTest extends TestBase
         $httpClientMock = new MockHttpClient();
         $paramsMock = $this->createMock(ContainerBagInterface::class);
 
-        $fakeSourceRepository = new RepositoryStub();
-        $fakeDestRepository = new RepositoryStub();
+        $fakeSourceRepository = new StorageStub();
+        $fakeDestRepository = new StorageStub();
 
         $connectorFactory = new ConnectorFactory(
             MigrationType::Customers,
@@ -46,8 +46,8 @@ class AbstractMigrationTest extends TestBase
         $this->sourceConnector = $connectorFactory->createSourceConnector();
         $this->destConnector = $connectorFactory->createDestinationConnector();
 
-        $this->sourceConnector->setRepository($fakeSourceRepository);
-        $this->destConnector->setRepository($fakeDestRepository);
+        $this->sourceConnector->setStorage($fakeSourceRepository);
+        $this->destConnector->setStorage($fakeDestRepository);
     }
 
     /**
@@ -61,8 +61,8 @@ class AbstractMigrationTest extends TestBase
             1,
         );
         $this->sourceConnector->setIterator($iterator);
-        $this->sourceConnector->getRepository()->createOne($customer);
-        $this->sourceConnector->getRepository()->createOne($customer);
+        $this->sourceConnector->getStorage()->createOne($customer);
+        $this->sourceConnector->getStorage()->createOne($customer);
 
         $migration = new Migration(
             $this->sourceConnector,
@@ -84,8 +84,8 @@ class AbstractMigrationTest extends TestBase
             1,
         );
         $this->sourceConnector->setIterator($iterator);
-        $this->sourceConnector->getRepository()->createOne($customer1);
-        $this->sourceConnector->getRepository()->createOne($customer2);
+        $this->sourceConnector->getStorage()->createOne($customer1);
+        $this->sourceConnector->getStorage()->createOne($customer2);
 
         $migration = new Migration(
             $this->sourceConnector,

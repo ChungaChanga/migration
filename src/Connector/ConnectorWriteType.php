@@ -7,7 +7,7 @@ use App\Event\EntitiesCreateAfterEvent;
 use App\Event\EntitiesCreateBeforeEvent;
 use App\Event\EntitiesCreateErrorEvent;
 use App\Contract\Connector\Mapper\MapperWriteInterface;
-use App\Contract\Connector\Repository\RepositoryWriteInterface;
+use App\Contract\Connector\Repository\StorageWriteInterface;
 use App\Migration\EntityTransferStatus;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,9 +16,9 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 class ConnectorWriteType
 {
     public function __construct(
-        private RepositoryWriteInterface $repository,
+        private StorageWriteInterface  $storage,
         private EntityManagerInterface $entityManager,
-        private MapperWriteInterface $mapper,
+        private MapperWriteInterface   $mapper,
     )
     {
     }
@@ -31,7 +31,7 @@ class ConnectorWriteType
             $entityState = $this->mapper->getState($entity);
             try {
                 $this->saveEntityTransferStatus($entity, EntityTransferStatus::Processing);
-                $result = $this->repository->createOne($entityState);
+                $result = $this->storage->createOne($entityState);
                 $entity->setDestId($result['id']);
                 $entity->setTransferStatus(EntityTransferStatus::Done);
                 $this->entityManager->flush();
@@ -47,14 +47,14 @@ class ConnectorWriteType
         $this->entityManager->flush();
     }
 
-    public function getRepository(): RepositoryWriteInterface
+    public function getStorage(): StorageWriteInterface
     {
-        return $this->repository;
+        return $this->storage;
     }
 
-    public function setRepository(RepositoryWriteInterface $repository): void
+    public function setStorage(StorageWriteInterface $storage): void
     {
-        $this->repository = $repository;
+        $this->storage = $storage;
     }
 
     public function getMapper(): MapperWriteInterface

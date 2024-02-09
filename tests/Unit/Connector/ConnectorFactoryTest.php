@@ -6,8 +6,8 @@ use App\Connector\ConnectorFactory;
 use App\Connector\ConnectorReadType;
 use App\Connector\ConnectorWriteType;
 use App\Connector\Woocommerce\Mapper\CustomerMapper;
-use App\Connector\Woocommerce\Repository\CustomerRepository;
-use App\Connector\Woocommerce\Repository\OrderRepository;
+use App\Connector\Woocommerce\Storage\CustomerStorage;
+use App\Connector\Woocommerce\Storage\OrderStorage;
 use App\Migration\MigrationType;
 use App\Tests\TestBase;
 use Doctrine\ORM\EntityManagerInterface;
@@ -42,12 +42,12 @@ class ConnectorFactoryTest extends TestBase
 
         $sourceConnector = $factory->createSourceConnector();
         $this->assertInstanceOf($source['connector'], $sourceConnector);
-        $this->assertInstanceOf($source['repository'], $sourceConnector->getRepository());
+        $this->assertInstanceOf($source['repository'], $sourceConnector->getStorage());
         $this->assertInstanceOf($source['mapper'], $sourceConnector->getMapper());
 
         $destConnector = $factory->createDestinationConnector();
         $this->assertInstanceOf($dest['connector'], $destConnector);
-        $this->assertInstanceOf($dest['repository'], $destConnector->getRepository());
+        $this->assertInstanceOf($dest['repository'], $destConnector->getStorage());
         $this->assertInstanceOf($dest['mapper'], $destConnector->getMapper());
     }
 
@@ -58,12 +58,12 @@ class ConnectorFactoryTest extends TestBase
                 MigrationType::Customers,
                 'source' => [
                     'connector' => ConnectorReadType::class,
-                    'repository' => CustomerRepository::class,
+                    'repository' => CustomerStorage::class,
                     'mapper' => CustomerMapper::class,
                 ],
                 'dest' => [
                     'connector' => ConnectorWriteType::class,
-                    'repository' => \App\Connector\Magento\Repository\CustomerRepository::class,
+                    'repository' => \App\Connector\Magento\Storage\CustomerStorage::class,
                     'mapper' => \App\Connector\Magento\Mapper\CustomerMapper::class,
                 ]
             ],
@@ -71,12 +71,12 @@ class ConnectorFactoryTest extends TestBase
                 MigrationType::Orders,
                 'source' => [
                     'connector' => ConnectorReadType::class,
-                    'repository' => OrderRepository::class,
+                    'repository' => OrderStorage::class,
                     'mapper' => \App\Connector\Woocommerce\Mapper\OrderMapper::class,
                 ],
                 'dest' => [
                     'connector' => ConnectorWriteType::class,
-                    'repository' => \App\Connector\Magento\Repository\OrderRepository::class,
+                    'repository' => \App\Connector\Magento\Storage\OrderStorage::class,
                     'mapper' => \App\Connector\Magento\Mapper\OrderMapper::class,
                 ]
             ],

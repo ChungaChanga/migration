@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Connector\Magento\Repository;
+namespace App\Connector\Magento\Storage;
 
 
 use App\Event\EntitiesCreateAfterEvent;
-use App\Contract\Connector\Repository\RepositoryWriteInterface;
+use App\Contract\Connector\Repository\StorageWriteInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class CustomerRepository extends AbstractRepository
+class CustomerStorage extends AbstractStorage
 {
     public function create(array $entitiesState): array
     {

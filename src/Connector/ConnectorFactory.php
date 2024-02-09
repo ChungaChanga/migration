@@ -5,8 +5,8 @@ namespace App\Connector;
 
 use App\Connector\Woocommerce\Mapper\CustomerMapper;
 use App\Connector\Woocommerce\Mapper\OrderMapper;
-use App\Connector\Woocommerce\Repository\CustomerRepository;
-use App\Connector\Woocommerce\Repository\OrderRepository;
+use App\Connector\Woocommerce\Storage\CustomerStorage;
+use App\Connector\Woocommerce\Storage\OrderStorage;
 use App\Migration\MigrationType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
@@ -25,7 +25,7 @@ class ConnectorFactory
     public function createSourceConnector(): ConnectorReadType
     {
         if (MigrationType::Customers === $this->entityType) {
-            $repository = new CustomerRepository(
+            $storage = new CustomerStorage(
                 $this->client,
                 'test',
                 'test',
@@ -33,7 +33,7 @@ class ConnectorFactory
             );
             $mapper = new CustomerMapper();
         } elseif (MigrationType::Orders === $this->entityType) {
-            $repository = new OrderRepository(
+            $storage = new OrderStorage(
                 $this->client,
                 'test',
                 'test',
@@ -44,13 +44,13 @@ class ConnectorFactory
             throw new \DomainException('Unexpected entity type ' . $this->entityType->name);
         }
 
-        return new ConnectorReadType($repository, $mapper);
+        return new ConnectorReadType($storage, $mapper);
     }
 
     public function createDestinationConnector(): ConnectorWriteType
     {
         if (MigrationType::Customers === $this->entityType) {
-            $repository = new \App\Connector\Magento\Repository\CustomerRepository(
+            $storage = new \App\Connector\Magento\Storage\CustomerStorage(
                 $this->client,
                 'test',
                 'test',
@@ -58,7 +58,7 @@ class ConnectorFactory
             );
             $mapper = new \App\Connector\Magento\Mapper\CustomerMapper();
         } elseif (MigrationType::Orders === $this->entityType) {
-            $repository = new \App\Connector\Magento\Repository\OrderRepository(
+            $storage = new \App\Connector\Magento\Storage\OrderStorage(
                 $this->client,
                 'test',
                 'test',
@@ -69,6 +69,6 @@ class ConnectorFactory
             throw new \DomainException('Unexpected entity type ' . $this->entityType->name);
         }
 
-        return new ConnectorWriteType($repository, $this->entityManager, $mapper);
+        return new ConnectorWriteType($storage, $this->entityManager, $mapper);
     }
 }

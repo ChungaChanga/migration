@@ -2,7 +2,7 @@
 
 namespace App\Contract\Connector\Repository;
 
-interface RepositoryWriteInterface
+interface StorageWriteInterface
 {
     public function createOne(array $entityState): array;
 }

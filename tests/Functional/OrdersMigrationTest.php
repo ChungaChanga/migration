@@ -8,7 +8,7 @@ namespace App\Tests\Functional;
 use App\Connector\ConnectorFactory;
 use App\Migration\Migration;
 use App\Migration\MigrationType;
-use App\Tests\Fake\Connector\RepositoryStub;
+use App\Tests\Fake\Connector\StorageStub;
 use App\Tests\Fixtures\CustomersInterface;
 use App\Tests\Fixtures\Magento\Customers as MagentoCustomers;
 use App\Tests\Fixtures\Magento\Orders as MagentoOrders;
@@ -53,8 +53,8 @@ class OrdersMigrationTest extends TestBase
 
         //prepare orders migration
 
-        $fakeOrdersSourceRepository = new RepositoryStub();
-        $fakeOrdersDestRepository = new RepositoryStub();
+        $fakeOrdersSourceRepository = new StorageStub();
+        $fakeOrdersDestRepository = new StorageStub();
 
         $connectorFactory = new ConnectorFactory(
             MigrationType::Orders,
@@ -65,8 +65,8 @@ class OrdersMigrationTest extends TestBase
         $this->sourceConnector = $connectorFactory->createSourceConnector();
         $this->destConnector = $connectorFactory->createDestinationConnector();
 
-        $this->sourceConnector->setRepository($fakeOrdersSourceRepository);
-        $this->destConnector->setRepository($fakeOrdersDestRepository);
+        $this->sourceConnector->setStorage($fakeOrdersSourceRepository);
+        $this->destConnector->setStorage($fakeOrdersDestRepository);
     }
 
     /**
@@ -90,7 +90,7 @@ class OrdersMigrationTest extends TestBase
         $this->sourceConnector->setIterator($iterator);
 
         foreach ($entities as $entity) {
-            $this->sourceConnector->getRepository()->createOne($entity);
+            $this->sourceConnector->getStorage()->createOne($entity);
         }
 
         $migration = new Migration(
@@ -101,7 +101,7 @@ class OrdersMigrationTest extends TestBase
         $migration->start();
         $this->assertCount(
             $entitiesCount,
-            $this->destConnector->getRepository()->fetchPage(1, 99999)
+            $this->destConnector->getStorage()->fetchPage(1, 99999)
         );
     }
 
@@ -127,7 +127,7 @@ class OrdersMigrationTest extends TestBase
         $this->sourceConnector->setIterator($iterator);
 
         foreach ($woocommerceEntities as $entity) {
-            $this->sourceConnector->getRepository()->createOne($entity);
+            $this->sourceConnector->getStorage()->createOne($entity);
         }
 
         $migration = new Migration(
@@ -136,7 +136,7 @@ class OrdersMigrationTest extends TestBase
         );
 
         $migration->start();
-        foreach ($this->destConnector->getRepository()->fetchPage(1, 99999) as $k => $entityFromWoocommerce) {
+        foreach ($this->destConnector->getStorage()->fetchPage(1, 99999) as $k => $entityFromWoocommerce) {
             $this->assertEquals($entityFromWoocommerce['base_grand_total'], $magentoEntities[$k]['base_grand_total']);
         }
     }
@@ -282,13 +282,13 @@ class OrdersMigrationTest extends TestBase
         );
         $customersSourceConnector = $connectorFactory->createSourceConnector();
         $customersDestConnector = $connectorFactory->createDestinationConnector();
-        $customersSourceConnector->setRepository(new RepositoryStub());
-        $customersDestConnector->setRepository(new RepositoryStub());
+        $customersSourceConnector->setStorage(new StorageStub());
+        $customersDestConnector->setStorage(new StorageStub());
         $customersSourceConnector->setIterator($customersSourceConnector->createIterator());
 
-        $customersSourceConnector->getRepository()->createOne($this->woocommerceCustomers->first());
-        $customersSourceConnector->getRepository()->createOne($this->woocommerceCustomers->second());
-        $customersSourceConnector->getRepository()->createOne($this->woocommerceCustomers->third());
+        $customersSourceConnector->getStorage()->createOne($this->woocommerceCustomers->first());
+        $customersSourceConnector->getStorage()->createOne($this->woocommerceCustomers->second());
+        $customersSourceConnector->getStorage()->createOne($this->woocommerceCustomers->third());
         $migration = new Migration(
             $customersSourceConnector,
             $customersDestConnector,

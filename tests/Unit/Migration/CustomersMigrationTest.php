@@ -8,7 +8,7 @@ namespace App\Tests\Unit\Migration;
 use App\Connector\ConnectorFactory;
 use App\Migration\Migration;
 use App\Migration\MigrationType;
-use App\Tests\Fake\Connector\RepositoryStub;
+use App\Tests\Fake\Connector\StorageStub;
 use App\Tests\Fixtures\CustomersInterface;
 use App\Tests\Fixtures\Magento\Customers as MagentoCustomers;
 use App\Tests\Fixtures\Woocommerce\Customers as WoocommerceCustomers;
@@ -36,8 +36,8 @@ class CustomersMigrationTest extends TestBase
         $entityManagerMock = $this->createMock(EntityManagerInterface::class);
         $paramsMock = $this->createMock(ContainerBagInterface::class);
 
-        $fakeSourceRepository = new RepositoryStub();
-        $fakeDestRepository = new RepositoryStub();
+        $fakeSourceRepository = new StorageStub();
+        $fakeDestRepository = new StorageStub();
 
         $connectorFactory = new ConnectorFactory(
             MigrationType::Customers,
@@ -48,8 +48,8 @@ class CustomersMigrationTest extends TestBase
         $this->sourceConnector = $connectorFactory->createSourceConnector();
         $this->destConnector = $connectorFactory->createDestinationConnector();
 
-        $this->sourceConnector->setRepository($fakeSourceRepository);
-        $this->destConnector->setRepository($fakeDestRepository);
+        $this->sourceConnector->setStorage($fakeSourceRepository);
+        $this->destConnector->setStorage($fakeDestRepository);
     }
 
     /**
@@ -73,7 +73,7 @@ class CustomersMigrationTest extends TestBase
         $this->sourceConnector->setIterator($iterator);
 
         foreach ($customers as $customer) {
-            $this->sourceConnector->getRepository()->createOne($customer);
+            $this->sourceConnector->getStorage()->createOne($customer);
         }
 
         $migration = new Migration(
@@ -84,7 +84,7 @@ class CustomersMigrationTest extends TestBase
         $migration->start();
         $this->assertCount(
             $customersCount,
-            $this->destConnector->getRepository()->fetchPage(1, 99999)
+            $this->destConnector->getStorage()->fetchPage(1, 99999)
         );
     }
 
@@ -110,7 +110,7 @@ class CustomersMigrationTest extends TestBase
         $this->sourceConnector->setIterator($iterator);
 
         foreach ($woocommerceCustomers as $customer) {
-            $this->sourceConnector->getRepository()->createOne($customer);
+            $this->sourceConnector->getStorage()->createOne($customer);
         }
 
         $migration = new Migration(
@@ -119,7 +119,7 @@ class CustomersMigrationTest extends TestBase
         );
 
         $migration->start();
-        foreach ($this->destConnector->getRepository()->fetchPage(1, 99999) as $k => $customerFromWoocommerce) {
+        foreach ($this->destConnector->getStorage()->fetchPage(1, 99999) as $k => $customerFromWoocommerce) {
             $this->assertEquals($customerFromWoocommerce['customer']['email'], $magentoCustomers[$k]['email']);
         }
     }
