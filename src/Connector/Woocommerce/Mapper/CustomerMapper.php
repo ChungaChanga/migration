@@ -17,27 +17,20 @@ class CustomerMapper implements MapperReadInterface
 
         $customer = new Customer();
 
-        $customer->setSourceId($state['id']);
-        $customer->setFirstName($state['first_name']);
-        $customer->setLastName($state['last_name']);//todo
-        $customer->setEmail($state['email']);//todo
+        $customer->setSourceId($state['Id']);
+        $customer->setFirstName($state['Fullname']);
+        $customer->setEmail($state['Email']);//todo
 
         return $customer;
     }
 
     public function validateState(array $state)
     {
-        if (!array_key_exists('id', $state)) {
+        if (!array_key_exists('Id', $state)) {
             throw new InvalidStateException('property id is required');
         }
-        if (!array_key_exists('email', $state)) {
+        if (!array_key_exists('Email', $state)) {
             throw new InvalidStateException('property email is required');
-        }
-        if (!array_key_exists('first_name', $state)) {
-            throw new InvalidStateException('property first_name is required');
-        }
-        if (!array_key_exists('last_name', $state)) {
-            throw new InvalidStateException('property last_name is required');
         }
     }
 }

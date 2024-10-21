@@ -55,7 +55,8 @@ class ConnectorReadType
         int $pageSize = 10,
         bool $isNeedWaitingFullPage = false,
         bool $isAllowPartialResult = true,
-        int $delaySeconds = 0
+        int $delaySeconds = 0,
+        int $jumpSize = 1
     ): \Iterator
     {
         if ($startPage < 1) {
@@ -67,7 +68,8 @@ class ConnectorReadType
             $pageSize,
             $isNeedWaitingFullPage,
             $isAllowPartialResult,
-            $delaySeconds
+            $delaySeconds,
+            $jumpSize
         );
         return new MappingRepositoryIteratorIterator(iterator: $repositoryIterator, mapper: $this->getMapper());
     }

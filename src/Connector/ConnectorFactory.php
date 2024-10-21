@@ -11,6 +11,7 @@ use App\Migration\MigrationType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
 
 class ConnectorFactory
 {
@@ -27,9 +28,13 @@ class ConnectorFactory
         if (MigrationType::Customers === $this->entityType) {
             $storage = new CustomerStorage(
                 $this->client,
-                'test',
-                'test',
-                'test',//todo get from config
+//                env('WOOCOMMERCE_API_URL_CUSTOMERS'),
+//                env('WOOCOMMERCE_API_KEY'),
+//                env('WOOCOMMERCE_API_SECRET'),
+                'https://dl.loc/wc-api/v3/customers',
+                'ck_4ff7fa13fb22c7de2b2ec11b1730fd4e742e3e50',
+                'cs_fa1488c47696ab78b1bce373358ee653e9e510dd'
+
             );
             $mapper = new CustomerMapper();
         } elseif (MigrationType::Orders === $this->entityType) {
@@ -50,21 +55,17 @@ class ConnectorFactory
     public function createDestinationConnector(): ConnectorWriteType
     {
         if (MigrationType::Customers === $this->entityType) {
-            $storage = new \App\Connector\Magento\Storage\CustomerStorage(
+            $storage = new Magento\Storage\CustomerStorage(
                 $this->client,
                 'test',
-                'test',
-                'test',//todo get from config
             );
-            $mapper = new \App\Connector\Magento\Mapper\CustomerMapper();
+            $mapper = new Magento\Mapper\CustomerMapper();
         } elseif (MigrationType::Orders === $this->entityType) {
-            $storage = new \App\Connector\Magento\Storage\OrderStorage(
+            $storage = new Magento\Storage\OrderStorage(
                 $this->client,
                 'test',
-                'test',
-                'test',//todo get from config
             );
-            $mapper = new \App\Connector\Magento\Mapper\OrderMapper();
+            $mapper = new Magento\Mapper\OrderMapper();
         } else {
             throw new \DomainException('Unexpected entity type ' . $this->entityType->name);
         }

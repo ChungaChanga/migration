@@ -16,11 +16,12 @@ class RepositoryIterator implements Iterator
 
     public function __construct(
         private StorageReadInterface $repository,
-        private int                  $startPage = 1,
-        private int                  $pageSize = 10,
-        private bool                 $isNeedWaitingFullPage = false,
-        private bool                 $isAllowPartialResult = false,
-        private int                  $delaySeconds = 0
+        private int                  $startPage,
+        private int                  $pageSize,
+        private bool                 $isNeedWaitingFullPage,
+        private bool                 $isAllowPartialResult,
+        private int                  $delaySeconds,
+        private int                  $jumpSize
     )
     {
         if (true === $isNeedWaitingFullPage && true === $isAllowPartialResult) {
@@ -28,6 +29,9 @@ class RepositoryIterator implements Iterator
         }
         if ($startPage < 1) {
             throw new InvalidArgumentException('Start Page can not be less than 1');
+        }
+        if ($this->jumpSize < 0) {
+            throw new InvalidArgumentException('Jump size must be greater than 0');
         }
         $this->currentPage = $this->startPage;
     }
@@ -57,7 +61,7 @@ class RepositoryIterator implements Iterator
             $this->isNeedRepeatIteration = false;
             return;
         }
-        $this->currentPage++;
+        $this->currentPage = $this->currentPage + 1 + $this->jumpSize;
     }
 
     public function key(): mixed

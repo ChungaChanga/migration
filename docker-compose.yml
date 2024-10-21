@@ -1,18 +1,19 @@
 version: '3.7'
 
 services:
-  web:
-    image: nginx:alpine
-    ports:
-      - "80:80"
-    volumes:
-      - ./docker/nginx/sites-available/:/etc/nginx/conf.d/
-      - ./logs/nginx:/var/log/nginx
-      - ./:/var/www/project/
-    networks:
-      - internal
+#  web:
+#    image: nginx:alpine
+#    ports:
+#      - "8082:80"
+#    volumes:
+#      - ./docker/nginx/sites-available/:/etc/nginx/conf.d/
+#      - ./logs/nginx:/var/log/nginx
+#      - ./:/var/www/project/
+#    networks:
+#      - internal
   php:
 #    image: php:8.2-fpm
+    container_name: migration_php
     build:
       context: ./docker/php
     cap_add:
@@ -22,12 +23,15 @@ services:
       - ./logs/php:/var/log/php
     networks:
       - internal
+    hostname: migration_php
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 ###> doctrine/doctrine-bundle ###
   database:
     container_name: database
     image: postgres:${POSTGRES_VERSION:-15}-alpine
     ports:
-      - "5432:5432"
+      - "54321:5432"
     networks:
       - internal
     environment:
@@ -44,7 +48,6 @@ networks:
   internal:
     name: internal
     driver: bridge
-
 volumes:
 ###> doctrine/doctrine-bundle ###
   database_data:

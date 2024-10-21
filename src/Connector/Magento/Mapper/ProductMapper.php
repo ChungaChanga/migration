@@ -8,13 +8,13 @@ use App\Contract\Connector\Mapper\MapperWriteInterface;
 class ProductMapper implements MapperWriteInterface
 {
     /**
-     * @param Product $order
+     * @param Product $entity
      * @return array
      */
-    public function getState($order): array
+    public function getState($entity): array
     {
         return [
-            'sku' => $order->getDestSku()//required
+            'sku' => $entity->getDestSku()//required
         ];
     }
 }

@@ -9,16 +9,16 @@ use App\Contract\Connector\Mapper\MapperWriteInterface;
 class CustomerMapper implements MapperWriteInterface
 {
     /**
-     * @param Customer $order
+     * @param Customer $entity
      * @return array
      */
-    public function getState($order): array
+    public function getState($entity): array
     {
         return [
             'customer' => [
-                'email' => $order->getEmail(),//required
-                'firstname' => $order->getFirstName(),//required
-                'lastname' => $order->getLastName(),//required
+                'email' => $entity->getEmail(),//required
+                'firstname' => $entity->getFirstName(),//required
+                'lastname' => $entity->getLastName(),//required
             ],
             'password' => 'password123Q',
         ];

@@ -13,7 +13,7 @@ class CustomerStorage extends AbstractStorage
                 'auth_basic' => [$this->key, $this->secret],
                 'query' => [
                     'page' => $page,
-                    'per_page' => $pageSize,
+                    'limit' => $pageSize,
                 ],
             ]
         );
